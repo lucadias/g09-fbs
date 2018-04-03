@@ -15,6 +15,7 @@
 
     <modules>
         <module>fbs-client</module>
+        <module>fbs-remote</module>
         <module>fbs-business</module>
         <module>fbs-data</module>
         <module>fbs-model</module>
