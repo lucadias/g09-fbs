@@ -62,9 +62,9 @@ public class Bill implements Serializable {
     @JoinColumn(name = "Client_idClients", referencedColumnName = "idClients")
     @ManyToOne(optional = false)
     private Client clientidClients;
-    @JoinColumn(name = "Order_idOrders", referencedColumnName = "idOrders")
+    @JoinColumn(name = "Orders_idOrders", referencedColumnName = "idOrders")
     @ManyToOne(optional = false)
-    private Order1 orderidOrders;
+    private Orders ordersidOrders;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "billidBill")
     private Collection<Overdue> overdueCollection;
 
@@ -123,12 +123,12 @@ public class Bill implements Serializable {
         this.clientidClients = clientidClients;
     }
 
-    public Order1 getOrderidOrders() {
-        return orderidOrders;
+    public Orders getOrdersidOrders() {
+        return ordersidOrders;
     }
 
-    public void setOrderidOrders(Order1 orderidOrders) {
-        this.orderidOrders = orderidOrders;
+    public void setOrdersidOrders(Orders ordersidOrders) {
+        this.ordersidOrders = ordersidOrders;
     }
 
     @XmlTransient

@@ -22,13 +22,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author luca_
  */
 @Entity
-@Table(name = "Group")
+@Table(name = "Groups")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Group1.findAll", query = "SELECT g FROM Group1 g")
-    , @NamedQuery(name = "Group1.findByIdGroups", query = "SELECT g FROM Group1 g WHERE g.idGroups = :idGroups")
-    , @NamedQuery(name = "Group1.findByName", query = "SELECT g FROM Group1 g WHERE g.name = :name")})
-public class Group1 implements Serializable {
+    @NamedQuery(name = "Groups.findAll", query = "SELECT g FROM Groups g")
+    , @NamedQuery(name = "Groups.findByIdGroups", query = "SELECT g FROM Groups g WHERE g.idGroups = :idGroups")
+    , @NamedQuery(name = "Groups.findByName", query = "SELECT g FROM Groups g WHERE g.name = :name")})
+public class Groups implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,10 +39,10 @@ public class Group1 implements Serializable {
     @Column(name = "Name")
     private String name;
 
-    public Group1() {
+    public Groups() {
     }
 
-    public Group1(Integer idGroups) {
+    public Groups(Integer idGroups) {
         this.idGroups = idGroups;
     }
 
@@ -72,10 +72,10 @@ public class Group1 implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Group1)) {
+        if (!(object instanceof Groups)) {
             return false;
         }
-        Group1 other = (Group1) object;
+        Groups other = (Groups) object;
         if ((this.idGroups == null && other.idGroups != null) || (this.idGroups != null && !this.idGroups.equals(other.idGroups))) {
             return false;
         }
@@ -84,7 +84,7 @@ public class Group1 implements Serializable {
 
     @Override
     public String toString() {
-        return "ch.hslu.appe.fbs.model.entities.Group1[ idGroups=" + idGroups + " ]";
+        return "ch.hslu.appe.fbs.model.entities.Groups[ idGroups=" + idGroups + " ]";
     }
     
 }

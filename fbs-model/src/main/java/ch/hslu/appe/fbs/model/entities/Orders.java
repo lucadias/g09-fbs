@@ -31,14 +31,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author luca_
  */
 @Entity
-@Table(name = "Order")
+@Table(name = "Orders")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o")
-    , @NamedQuery(name = "Order1.findByIdOrders", query = "SELECT o FROM Order1 o WHERE o.idOrders = :idOrders")
-    , @NamedQuery(name = "Order1.findByDate", query = "SELECT o FROM Order1 o WHERE o.date = :date")
-    , @NamedQuery(name = "Order1.findByTotalPrice", query = "SELECT o FROM Order1 o WHERE o.totalPrice = :totalPrice")})
-public class Order1 implements Serializable {
+    @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o")
+    , @NamedQuery(name = "Orders.findByIdOrders", query = "SELECT o FROM Orders o WHERE o.idOrders = :idOrders")
+    , @NamedQuery(name = "Orders.findByDate", query = "SELECT o FROM Orders o WHERE o.date = :date")
+    , @NamedQuery(name = "Orders.findByTotalPrice", query = "SELECT o FROM Orders o WHERE o.totalPrice = :totalPrice")})
+public class Orders implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -57,13 +57,13 @@ public class Order1 implements Serializable {
     @JoinColumn(name = "OrderState_idOrderState", referencedColumnName = "idOrderState")
     @ManyToOne(optional = false)
     private OrderState orderStateidOrderState;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderidOrders")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordersidOrders")
     private Collection<Bill> billCollection;
 
-    public Order1() {
+    public Orders() {
     }
 
-    public Order1(Integer idOrders) {
+    public Orders(Integer idOrders) {
         this.idOrders = idOrders;
     }
 
@@ -126,10 +126,10 @@ public class Order1 implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Order1)) {
+        if (!(object instanceof Orders)) {
             return false;
         }
-        Order1 other = (Order1) object;
+        Orders other = (Orders) object;
         if ((this.idOrders == null && other.idOrders != null) || (this.idOrders != null && !this.idOrders.equals(other.idOrders))) {
             return false;
         }
@@ -138,7 +138,7 @@ public class Order1 implements Serializable {
 
     @Override
     public String toString() {
-        return "ch.hslu.appe.fbs.model.entities.Order1[ idOrders=" + idOrders + " ]";
+        return "ch.hslu.appe.fbs.model.entities.Orders[ idOrders=" + idOrders + " ]";
     }
     
 }

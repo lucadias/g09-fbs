@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Article.findByDescription", query = "SELECT a FROM Article a WHERE a.description = :description")
     , @NamedQuery(name = "Article.findByInStock", query = "SELECT a FROM Article a WHERE a.inStock = :inStock")
     , @NamedQuery(name = "Article.findByPrice", query = "SELECT a FROM Article a WHERE a.price = :price")
-    , @NamedQuery(name = "Article.findByMinInStock", query = "SELECT a FROM Article a WHERE a.minInStock = :minInStock")})
+    , @NamedQuery(name = "Article.findByMinInStock", query = "SELECT a FROM Article a WHERE a.minInStock = :minInStock")
+    , @NamedQuery(name = "Article.findByAvailable", query = "SELECT a FROM Article a WHERE a.available = :available")})
 public class Article implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,6 +58,8 @@ public class Article implements Serializable {
     private Long price;
     @Column(name = "MinInStock")
     private Integer minInStock;
+    @Column(name = "Available")
+    private Boolean available;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "articleidArticle")
     private Collection<Reorder> reorderCollection;
 
@@ -121,6 +124,14 @@ public class Article implements Serializable {
 
     public void setMinInStock(Integer minInStock) {
         this.minInStock = minInStock;
+    }
+
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
     }
 
     @XmlTransient

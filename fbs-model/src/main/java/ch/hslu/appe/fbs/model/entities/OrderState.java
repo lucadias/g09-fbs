@@ -43,7 +43,7 @@ public class OrderState implements Serializable {
     @Column(name = "State")
     private String state;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderStateidOrderState")
-    private Collection<Order1> order1Collection;
+    private Collection<Orders> ordersCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderStateidOrderState")
     private Collection<Reorder> reorderCollection;
 
@@ -71,12 +71,12 @@ public class OrderState implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Order1> getOrder1Collection() {
-        return order1Collection;
+    public Collection<Orders> getOrdersCollection() {
+        return ordersCollection;
     }
 
-    public void setOrder1Collection(Collection<Order1> order1Collection) {
-        this.order1Collection = order1Collection;
+    public void setOrdersCollection(Collection<Orders> ordersCollection) {
+        this.ordersCollection = ordersCollection;
     }
 
     @XmlTransient

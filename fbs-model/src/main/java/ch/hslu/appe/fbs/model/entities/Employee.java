@@ -55,7 +55,7 @@ public class Employee implements Serializable {
     @Column(name = "Active")
     private Boolean active;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employeeidEmployee")
-    private Collection<Order1> order1Collection;
+    private Collection<Orders> ordersCollection;
 
     public Employee() {
     }
@@ -113,12 +113,12 @@ public class Employee implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Order1> getOrder1Collection() {
-        return order1Collection;
+    public Collection<Orders> getOrdersCollection() {
+        return ordersCollection;
     }
 
-    public void setOrder1Collection(Collection<Order1> order1Collection) {
-        this.order1Collection = order1Collection;
+    public void setOrdersCollection(Collection<Orders> ordersCollection) {
+        this.ordersCollection = ordersCollection;
     }
 
     @Override
