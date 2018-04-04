@@ -1,11 +1,13 @@
 package ch.hslu.appe.fbs.remote;
 
+import java.io.Serializable;
+
 /**
  * Article DTO
  *
  * @author Mischa Gruber
  */
-public class ArticleDTO {
+public class ArticleDTO implements Serializable{
 
     private int id;
     private String name = "";
