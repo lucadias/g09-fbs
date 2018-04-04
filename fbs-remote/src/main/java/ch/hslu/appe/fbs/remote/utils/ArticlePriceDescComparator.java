@@ -9,9 +9,9 @@ import java.util.Comparator;
  *
  * @author Mischa Gruber
  */
-public class ArticlePriceDescComparator implements Comparator<ArticleDTO> {
+public final class ArticlePriceDescComparator implements Comparator<ArticleDTO> {
     @Override
-    public int compare(ArticleDTO o1, ArticleDTO o2) {
+    public int compare(final ArticleDTO o1, final ArticleDTO o2) {
         return Float.compare(o2.getPrice(), o1.getPrice());
     }
 }

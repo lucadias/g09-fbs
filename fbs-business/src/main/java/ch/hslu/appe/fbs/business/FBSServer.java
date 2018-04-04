@@ -19,7 +19,7 @@ public final class FBSServer {
     public static final int REGISTRY_PORT = 1099;
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
 
-    public static void main(final String[] args) {
+    protected FBSServer() {
         Registry registry;
 
         try {
@@ -49,5 +49,9 @@ public final class FBSServer {
         } catch (AlreadyBoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(final String[] args) {
+        new FBSServer();
     }
 }

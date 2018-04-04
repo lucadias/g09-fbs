@@ -10,9 +10,15 @@ import ch.hslu.appe.fbs.remote.utils.ArticleNameDescComparator;
 import ch.hslu.appe.fbs.remote.utils.ArticlePriceAscComparator;
 import ch.hslu.appe.fbs.remote.utils.ArticlePriceDescComparator;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Collections;
+import java.util.Date;
 
 /**
  * JavaDoc
@@ -21,16 +27,23 @@ import java.util.*;
  */
 public final class ArticleManager {
     private static ArticleManager instance = null;
+    private static Object mutex = new Object();
 
     private ArticlePersistor articlePersistor;
     private HashMap<String, String> lockpool;
     private MessageDigest sha256Digest;
 
     public static ArticleManager getInstance() {
-        if (instance == null) {
-            instance = new ArticleManager();
+        ArticleManager result = instance;
+        if (result == null) {
+            synchronized (mutex) {
+                result = instance;
+                if (result == null) {
+                    instance = result = new ArticleManager();
+                }
+            }
         }
-        return instance;
+        return result;
     }
 
     private ArticleManager() {
@@ -138,7 +151,8 @@ public final class ArticleManager {
                 String toHash = String.valueOf(id) + (new Date()).toString();
                 String hash = "";
                 if (sha256Digest != null) {
-                    hash = (sha256Digest.digest(toHash.getBytes())).toString();
+                    byte[] hashBytes = sha256Digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
+                    hash = String.valueOf(hashBytes);
                 } else {
                     hash = toHash;
                 }
@@ -156,7 +170,7 @@ public final class ArticleManager {
 
             if (lockpool.containsKey(String.valueOf(id))) {
 
-                if (lockpool.get(String.valueOf(id)) == hash) {
+                if (lockpool.get(String.valueOf(id)).equals(hash)) {
                     lockpool.remove(String.valueOf(id), hash);
                     return FBSFeedback.SUCCESS;
                 } else {
@@ -174,7 +188,7 @@ public final class ArticleManager {
         synchronized (lockpool) {
 
             if (lockpool.containsKey(String.valueOf(id))) {
-                if (lockpool.get(String.valueOf(id)) != hash) {
+                if (!lockpool.get(String.valueOf(id)).equals(hash)) {
                     return FBSFeedback.MISMATCHING_HASH;
                 } else {
                     return FBSFeedback.SUCCESS;
