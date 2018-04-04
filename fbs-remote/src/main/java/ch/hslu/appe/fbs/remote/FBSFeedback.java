@@ -7,5 +7,9 @@ package ch.hslu.appe.fbs.remote;
  */
 public enum FBSFeedback {
     SUCCESS,
-    UNKNOWN_ERROR
+    UNKNOWN_ERROR,
+    LOCK_LOST,
+    MISMATCHING_HASH,
+    ARTICLE_NOT_LOCKED,
+
 }

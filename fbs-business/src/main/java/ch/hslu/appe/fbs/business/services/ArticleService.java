@@ -1,5 +1,6 @@
 package ch.hslu.appe.fbs.business.services;
 
+import ch.hslu.appe.fbs.business.ArticleManager;
 import ch.hslu.appe.fbs.remote.ArticleDTO;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.RemoteArticleService;
@@ -17,67 +18,71 @@ import java.util.List;
 public class ArticleService extends UnicastRemoteObject implements RemoteArticleService{
 
 
-    protected ArticleService() throws RemoteException {
+    private ArticleManager articleManager;
+
+    public ArticleService() throws RemoteException {
         super();
+
+        articleManager = ArticleManager.getInstance();
     }
 
     @Override
-    public ArticleDTO getById(int id) {
-        return null;
+    public ArticleDTO getById(int id) throws RemoteException {
+        return articleManager.getById(id);
     }
 
     @Override
-    public ArticleDTO getByArticleNr(int artNr) {
-        return null;
+    public ArticleDTO getByArticleNr(int artNr) throws RemoteException {
+        return articleManager.getByArticleNr(artNr);
     }
 
     @Override
-    public List<ArticleDTO> getList() {
-        return null;
+    public List<ArticleDTO> getList() throws RemoteException {
+        return articleManager.getList();
     }
 
     @Override
-    public List<ArticleDTO> getList(String regEx) {
-        return null;
+    public List<ArticleDTO> getList(String regEx) throws RemoteException {
+        return articleManager.getList(regEx);
     }
 
     @Override
-    public FBSFeedback updateStockById(int id, int amount) {
-        return null;
+    public FBSFeedback updateStockById(int id, int amount, String hash) throws RemoteException {
+        return articleManager.updateStockById(id, amount, hash);
     }
 
     @Override
-    public List<ArticleDTO> sortList(SortingType type) {
-        return null;
+    public List<ArticleDTO> sortList(SortingType type) throws RemoteException {
+        return articleManager.sortList(type);
     }
 
     @Override
-    public List<ArticleDTO> sortList(List<ArticleDTO> articles, SortingType type) {
-        return null;
+    public List<ArticleDTO> sortList(List<ArticleDTO> articleDTOs, SortingType type) throws RemoteException {
+        return articleManager.sortList(articleDTOs, type);
     }
 
     @Override
-    public List<ArticleDTO> search(String regEx) {
-        return null;
+    public List<ArticleDTO> search(String regEx) throws RemoteException {
+        return articleManager.search(regEx);
     }
 
     @Override
-    public FBSFeedback save(ArticleDTO article) {
-        return null;
+    public FBSFeedback save(ArticleDTO articleDTO, String hash) throws RemoteException {
+        return articleManager.save(articleDTO, hash);
     }
 
     @Override
-    public FBSFeedback delete(ArticleDTO article) {
-        return null;
+    public FBSFeedback delete(ArticleDTO articleDTO, String hash) throws RemoteException {
+        return articleManager.delete(articleDTO, hash);
     }
 
     @Override
-    public String lock(ArticleDTO article) {
-        return null;
+    public String lock(ArticleDTO articleDTO) throws RemoteException {
+        return articleManager.lock(articleDTO.getId());
     }
 
     @Override
-    public FBSFeedback release(ArticleDTO article, String hash) {
-        return null;
+    public FBSFeedback release(ArticleDTO articleDTO, String hash) throws RemoteException {
+        return articleManager.release(articleDTO.getId(), hash);
     }
 }
