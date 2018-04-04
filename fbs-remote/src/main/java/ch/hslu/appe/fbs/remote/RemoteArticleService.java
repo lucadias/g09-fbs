@@ -17,8 +17,6 @@ public interface RemoteArticleService extends Remote{
 
     List<ArticleDTO> getList() throws RemoteException;
 
-    List<ArticleDTO> getList(String regEx) throws RemoteException;
-
     FBSFeedback updateStockById(int id, int amount, String hash) throws RemoteException;
 
     List<ArticleDTO> sortList(SortingType type) throws RemoteException;

@@ -31,4 +31,8 @@ public class ArticlePersistor {
         list.add(new Article(1));
         return list;
     }
+
+    public List<Article> search(String regEx) {
+        return getList();
+    }
 }

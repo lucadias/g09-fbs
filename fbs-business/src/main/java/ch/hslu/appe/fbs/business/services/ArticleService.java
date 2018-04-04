@@ -42,11 +42,6 @@ public class ArticleService extends UnicastRemoteObject implements RemoteArticle
     }
 
     @Override
-    public List<ArticleDTO> getList(String regEx) throws RemoteException {
-        return articleManager.getList(regEx);
-    }
-
-    @Override
     public FBSFeedback updateStockById(int id, int amount, String hash) throws RemoteException {
         return articleManager.updateStockById(id, amount, hash);
     }

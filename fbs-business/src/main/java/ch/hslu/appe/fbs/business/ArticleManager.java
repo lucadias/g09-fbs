@@ -56,11 +56,6 @@ public class ArticleManager {
     }
 
     public List<ArticleDTO> getList() {
-        return getList("");
-    }
-
-    public List<ArticleDTO> getList(String regEx) {
-        // TODO: implement regular expression
         List<Article> articleList = articlePersistor.getList();
         return convertToDTO(articleList);
     }
@@ -108,7 +103,7 @@ public class ArticleManager {
     }
 
     public List<ArticleDTO> search(String regEx) {
-        return convertToDTO(articlePersistor.getList());
+        return convertToDTO(articlePersistor.search(regEx));
     }
 
     public String lock(int id) {
