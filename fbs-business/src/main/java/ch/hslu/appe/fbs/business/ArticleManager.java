@@ -5,23 +5,21 @@ import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.remote.ArticleDTO;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
+import ch.hslu.appe.fbs.remote.utils.ArticleNameAscComparator;
+import ch.hslu.appe.fbs.remote.utils.ArticleNameDescComparator;
+import ch.hslu.appe.fbs.remote.utils.ArticlePriceAscComparator;
+import ch.hslu.appe.fbs.remote.utils.ArticlePriceDescComparator;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * JavaDoc
  *
  * @author Mischa Gruber
  */
-public class ArticleManager {
-    //TODO: implement search, sortList
-
-
+public final class ArticleManager {
     private static ArticleManager instance = null;
 
     private ArticlePersistor articlePersistor;
@@ -47,11 +45,11 @@ public class ArticleManager {
         }
     }
 
-    public ArticleDTO getById(int id) {
+    public ArticleDTO getById(final int id) {
         return convertToDTO(articlePersistor.getById(id));
     }
 
-    public ArticleDTO getByArticleNr(int artNr) {
+    public ArticleDTO getByArticleNr(final int artNr) {
         return convertToDTO(articlePersistor.getByArticleNr(artNr));
     }
 
@@ -60,7 +58,7 @@ public class ArticleManager {
         return convertToDTO(articleList);
     }
 
-    public FBSFeedback save(ArticleDTO articleDTO, String hash) {
+    public FBSFeedback save(final ArticleDTO articleDTO, final String hash) {
         FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
         if (lockCheck == FBSFeedback.SUCCESS) {
@@ -71,7 +69,7 @@ public class ArticleManager {
         }
     }
 
-    public FBSFeedback delete(ArticleDTO articleDTO, String hash) {
+    public FBSFeedback delete(final ArticleDTO articleDTO, final String hash) {
         FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
         if (lockCheck == FBSFeedback.SUCCESS) {
@@ -84,7 +82,7 @@ public class ArticleManager {
         }
     }
 
-    public FBSFeedback updateStockById(int id, int amount, String hash) {
+    public FBSFeedback updateStockById(final int id, final int amount, final String hash) {
         FBSFeedback lockCheck = checkLock(id, hash);
 
         if (lockCheck == FBSFeedback.SUCCESS) {
@@ -94,19 +92,42 @@ public class ArticleManager {
         }
     }
 
-    public List<ArticleDTO> sortList(SortingType type) {
-        return convertToDTO(articlePersistor.getList());
+    public List<ArticleDTO> sortList(final SortingType type) {
+        return sortList(convertToDTO(articlePersistor.getList()), type);
     }
 
-    public List<ArticleDTO> sortList(List<ArticleDTO> articleDTOs, SortingType type) {
+    public List<ArticleDTO> sortList(final List<ArticleDTO> articleDTOs, final SortingType type) {
+
+        Comparator<ArticleDTO> comparator;
+
+        switch (type) {
+            case ARTICLE_NAME_ASC:
+                comparator = new ArticleNameAscComparator();
+                break;
+            case ARTICLE_NAME_DESC:
+                comparator = new ArticleNameDescComparator();
+                break;
+            case ARTICLE_PRICE_ASC:
+                comparator = new ArticlePriceAscComparator();
+                break;
+            case ARTICLE_PRICE_DESC:
+                comparator = new ArticlePriceDescComparator();
+                break;
+            default:
+                comparator = new ArticleNameAscComparator();
+                break;
+        }
+
+        Collections.sort(articleDTOs, comparator);
+
         return articleDTOs;
     }
 
-    public List<ArticleDTO> search(String regEx) {
+    public List<ArticleDTO> search(final String regEx) {
         return convertToDTO(articlePersistor.search(regEx));
     }
 
-    public String lock(int id) {
+    public String lock(final int id) {
 
         synchronized (lockpool) {
 
@@ -116,7 +137,7 @@ public class ArticleManager {
             } else {
                 String toHash = String.valueOf(id) + (new Date()).toString();
                 String hash = "";
-                if(sha256Digest != null) {
+                if (sha256Digest != null) {
                     hash = (sha256Digest.digest(toHash.getBytes())).toString();
                 } else {
                     hash = toHash;
@@ -129,7 +150,7 @@ public class ArticleManager {
         }
     }
 
-    public FBSFeedback release(int id, String hash) {
+    public FBSFeedback release(final int id, final String hash) {
 
         synchronized (lockpool) {
 
@@ -149,7 +170,7 @@ public class ArticleManager {
         }
     }
 
-    private FBSFeedback checkLock(int id, String hash) {
+    private FBSFeedback checkLock(final int id, final String hash) {
         synchronized (lockpool) {
 
             if (lockpool.containsKey(String.valueOf(id))) {
@@ -164,7 +185,7 @@ public class ArticleManager {
         }
     }
 
-    private ArticleDTO convertToDTO(Article article) {
+    private ArticleDTO convertToDTO(final Article article) {
         ArticleDTO articleDTO = new ArticleDTO(article.getId());
         articleDTO.setName(article.getName());
         articleDTO.setArticleNumber(article.getArticleNumber());
@@ -177,7 +198,7 @@ public class ArticleManager {
         return articleDTO;
     }
 
-    private List<ArticleDTO> convertToDTO(List<Article> articleList) {
+    private List<ArticleDTO> convertToDTO(final List<Article> articleList) {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         for (Article article : articleList) {
             articleDTOList.add(convertToDTO(article));
@@ -186,7 +207,7 @@ public class ArticleManager {
         return articleDTOList;
     }
 
-    private Article convertToEntity(ArticleDTO articleDTO) {
+    private Article convertToEntity(final ArticleDTO articleDTO) {
         Article article = new Article(articleDTO.getId());
         article.setName(articleDTO.getName());
         article.setArticleNumber(articleDTO.getArticleNumber());

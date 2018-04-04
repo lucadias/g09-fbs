@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Mischa Gruber
  */
-public class ArticleService extends UnicastRemoteObject implements RemoteArticleService{
+public final class ArticleService extends UnicastRemoteObject implements RemoteArticleService {
 
 
     private ArticleManager articleManager;
@@ -27,12 +27,12 @@ public class ArticleService extends UnicastRemoteObject implements RemoteArticle
     }
 
     @Override
-    public ArticleDTO getById(int id) throws RemoteException {
+    public ArticleDTO getById(final int id) throws RemoteException {
         return articleManager.getById(id);
     }
 
     @Override
-    public ArticleDTO getByArticleNr(int artNr) throws RemoteException {
+    public ArticleDTO getByArticleNr(final int artNr) throws RemoteException {
         return articleManager.getByArticleNr(artNr);
     }
 
@@ -42,42 +42,42 @@ public class ArticleService extends UnicastRemoteObject implements RemoteArticle
     }
 
     @Override
-    public FBSFeedback updateStockById(int id, int amount, String hash) throws RemoteException {
+    public FBSFeedback updateStockById(final int id, final int amount, final String hash) throws RemoteException {
         return articleManager.updateStockById(id, amount, hash);
     }
 
     @Override
-    public List<ArticleDTO> sortList(SortingType type) throws RemoteException {
+    public List<ArticleDTO> sortList(final SortingType type) throws RemoteException {
         return articleManager.sortList(type);
     }
 
     @Override
-    public List<ArticleDTO> sortList(List<ArticleDTO> articleDTOs, SortingType type) throws RemoteException {
+    public List<ArticleDTO> sortList(final List<ArticleDTO> articleDTOs, final SortingType type) throws RemoteException {
         return articleManager.sortList(articleDTOs, type);
     }
 
     @Override
-    public List<ArticleDTO> search(String regEx) throws RemoteException {
+    public List<ArticleDTO> search(final String regEx) throws RemoteException {
         return articleManager.search(regEx);
     }
 
     @Override
-    public FBSFeedback save(ArticleDTO articleDTO, String hash) throws RemoteException {
+    public FBSFeedback save(final ArticleDTO articleDTO, final String hash) throws RemoteException {
         return articleManager.save(articleDTO, hash);
     }
 
     @Override
-    public FBSFeedback delete(ArticleDTO articleDTO, String hash) throws RemoteException {
+    public FBSFeedback delete(final ArticleDTO articleDTO, final String hash) throws RemoteException {
         return articleManager.delete(articleDTO, hash);
     }
 
     @Override
-    public String lock(ArticleDTO articleDTO) throws RemoteException {
+    public String lock(final ArticleDTO articleDTO) throws RemoteException {
         return articleManager.lock(articleDTO.getId());
     }
 
     @Override
-    public FBSFeedback release(ArticleDTO articleDTO, String hash) throws RemoteException {
+    public FBSFeedback release(final ArticleDTO articleDTO, final String hash) throws RemoteException {
         return articleManager.release(articleDTO.getId(), hash);
     }
 }
