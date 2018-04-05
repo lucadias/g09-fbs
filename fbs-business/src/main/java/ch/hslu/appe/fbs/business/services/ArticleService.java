@@ -18,7 +18,7 @@ import java.util.List;
 public final class ArticleService extends UnicastRemoteObject implements RemoteArticleService {
 
 
-    private ArticleManager articleManager;
+    transient private ArticleManager articleManager;
 
     public ArticleService() throws RemoteException {
         super();
