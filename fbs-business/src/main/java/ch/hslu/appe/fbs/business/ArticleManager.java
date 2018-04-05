@@ -200,14 +200,14 @@ public final class ArticleManager {
     }
 
     private ArticleDTO convertToDTO(final Article article) {
-        ArticleDTO articleDTO = new ArticleDTO(article.getId());
+        ArticleDTO articleDTO = new ArticleDTO(article.getIdArticle());
         articleDTO.setName(article.getName());
-        articleDTO.setArticleNumber(article.getArticleNumber());
+        articleDTO.setArticleNumber(article.getArticlenumber());
         articleDTO.setDescription(article.getDescription());
         articleDTO.setInStock(article.getInStock());
         articleDTO.setMinInStock(article.getMinInStock());
         articleDTO.setPrice(article.getPrice());
-        articleDTO.setAvailable(article.isAvailable());
+        articleDTO.setAvailable(article.getAvailable());
 
         return articleDTO;
     }
@@ -222,13 +222,14 @@ public final class ArticleManager {
     }
 
     private Article convertToEntity(final ArticleDTO articleDTO) {
-        Article article = new Article(articleDTO.getId());
+        Article article = new Article();
+        article.setIdArticle(articleDTO.getId());
         article.setName(articleDTO.getName());
-        article.setArticleNumber(articleDTO.getArticleNumber());
+        article.setArticlenumber(articleDTO.getArticleNumber());
         article.setDescription(articleDTO.getDescription());
         article.setInStock(articleDTO.getInStock());
         article.setMinInStock(articleDTO.getMinInStock());
-        article.setPrice(articleDTO.getPrice());
+        article.setPrice((int) articleDTO.getPrice());
         article.setAvailable(articleDTO.isAvailable());
 
         return article;

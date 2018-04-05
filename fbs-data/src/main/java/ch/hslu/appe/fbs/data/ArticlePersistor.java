@@ -40,7 +40,7 @@ public class ArticlePersistor {
         return article;
     }
 
-   // public Article getByArticleNr(int artNr) { return new Article(0);}
+    public Article getByArticleNr(int artNr) { return null;}
 
     public FBSFeedback save(Article article) { return FBSFeedback.SUCCESS; }
 
