@@ -1,29 +1,34 @@
 package ch.hslu.appe.fbs.model.entities;
 
-/**
- * Article DTO
- *
- * @author Mischa Gruber
- */
-public class Article{
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.Objects;
 
-    private int id;
-    private String name = "";
-    private int articleNumber = 0;
-    private String description = "";
-    private int inStock = 0;
-    private int minInStock = 0;
-    private float price = 0f;
-    private boolean available = true;
+@Entity
+public class Article {
+    private int idArticle;
+    private String name;
+    private Integer articlenumber;
+    private String description;
+    private Integer inStock;
+    private Integer price;
+    private Integer minInStock;
+    private Boolean available;
 
-    public Article(int id) {
-        this.id = id;
+    @Id
+    @Column(name = "idArticle", nullable = false)
+    public int getIdArticle() {
+        return idArticle;
     }
 
-    public int getId() {
-        return id;
+    public void setIdArticle(int idArticle) {
+        this.idArticle = idArticle;
     }
 
+    @Basic
+    @Column(name = "Name", nullable = true, length = 45)
     public String getName() {
         return name;
     }
@@ -32,14 +37,18 @@ public class Article{
         this.name = name;
     }
 
-    public int getArticleNumber() {
-        return articleNumber;
+    @Basic
+    @Column(name = "Articlenumber", nullable = true)
+    public Integer getArticlenumber() {
+        return articlenumber;
     }
 
-    public void setArticleNumber(int articleNumber) {
-        this.articleNumber = articleNumber;
+    public void setArticlenumber(Integer articlenumber) {
+        this.articlenumber = articlenumber;
     }
 
+    @Basic
+    @Column(name = "Description", nullable = true, length = 1000)
     public String getDescription() {
         return description;
     }
@@ -48,35 +57,64 @@ public class Article{
         this.description = description;
     }
 
-    public int getInStock() {
+    @Basic
+    @Column(name = "InStock", nullable = true)
+    public Integer getInStock() {
         return inStock;
     }
 
-    public void setInStock(int inStock) {
+    public void setInStock(Integer inStock) {
         this.inStock = inStock;
     }
 
-    public int getMinInStock() {
-        return minInStock;
-    }
-
-    public void setMinInStock(int minInStock) {
-        this.minInStock = minInStock;
-    }
-
-    public float getPrice() {
+    @Basic
+    @Column(name = "Price", nullable = true, precision = 0)
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
-    public boolean isAvailable() {
+    @Basic
+    @Column(name = "MinInStock", nullable = true)
+    public Integer getMinInStock() {
+        return minInStock;
+    }
+
+    public void setMinInStock(Integer minInStock) {
+        this.minInStock = minInStock;
+    }
+
+    @Basic
+    @Column(name = "Available", nullable = true)
+    public Boolean getAvailable() {
         return available;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(Boolean available) {
         this.available = available;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return idArticle == article.idArticle &&
+                Objects.equals(name, article.name) &&
+                Objects.equals(articlenumber, article.articlenumber) &&
+                Objects.equals(description, article.description) &&
+                Objects.equals(inStock, article.inStock) &&
+                Objects.equals(price, article.price) &&
+                Objects.equals(minInStock, article.minInStock) &&
+                Objects.equals(available, article.available);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(idArticle, name, articlenumber, description, inStock, price, minInStock, available);
     }
 }
