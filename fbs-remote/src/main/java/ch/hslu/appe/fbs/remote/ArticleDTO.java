@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  * @author Mischa Gruber
  */
-public class ArticleDTO implements Serializable{
+public final class ArticleDTO implements Serializable {
 
     private int id;
     private String name = "";
@@ -18,7 +18,7 @@ public class ArticleDTO implements Serializable{
     private float price = 0f;
     private boolean available = true;
 
-    public ArticleDTO(int id) {
+    public ArticleDTO(final int id) {
         this.id = id;
     }
 
@@ -30,7 +30,7 @@ public class ArticleDTO implements Serializable{
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -38,7 +38,7 @@ public class ArticleDTO implements Serializable{
         return articleNumber;
     }
 
-    public void setArticleNumber(int articleNumber) {
+    public void setArticleNumber(final int articleNumber) {
         this.articleNumber = articleNumber;
     }
 
@@ -46,7 +46,7 @@ public class ArticleDTO implements Serializable{
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -54,7 +54,7 @@ public class ArticleDTO implements Serializable{
         return inStock;
     }
 
-    public void setInStock(int inStock) {
+    public void setInStock(final int inStock) {
         this.inStock = inStock;
     }
 
@@ -62,7 +62,7 @@ public class ArticleDTO implements Serializable{
         return minInStock;
     }
 
-    public void setMinInStock(int minInStock) {
+    public void setMinInStock(final int minInStock) {
         this.minInStock = minInStock;
     }
 
@@ -70,7 +70,7 @@ public class ArticleDTO implements Serializable{
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(final float price) {
         this.price = price;
     }
 
@@ -78,7 +78,7 @@ public class ArticleDTO implements Serializable{
         return available;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(final boolean available) {
         this.available = available;
     }
 }

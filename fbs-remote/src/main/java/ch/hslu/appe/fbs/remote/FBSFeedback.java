@@ -1,7 +1,7 @@
 package ch.hslu.appe.fbs.remote;
 
 /**
- * Enum with feedback codes in FBS
+ * Enum with feedback codes in FBS.
  *
  * @author Mischa Gruber
  */

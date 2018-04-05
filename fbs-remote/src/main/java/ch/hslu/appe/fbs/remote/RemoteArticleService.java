@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Mischa Gruber
  */
-public interface RemoteArticleService extends Remote{
+public interface RemoteArticleService extends Remote {
 
     ArticleDTO getById(int id) throws RemoteException;
 

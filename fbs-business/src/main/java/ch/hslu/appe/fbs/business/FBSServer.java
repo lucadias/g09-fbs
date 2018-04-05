@@ -14,12 +14,12 @@ import java.rmi.registry.Registry;
  *
  * @author Mischa Gruber
  */
-public class FBSServer {
+public final class FBSServer {
 
     public static final int REGISTRY_PORT = 1099;
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
 
-    public static void main(String[] args) {
+    protected FBSServer() {
         Registry registry;
 
         try {
@@ -49,5 +49,9 @@ public class FBSServer {
         } catch (AlreadyBoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(final String[] args) {
+        new FBSServer();
     }
 }
