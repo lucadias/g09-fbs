@@ -1,12 +1,10 @@
 package ch.hslu.appe.fbs.model.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Client")
 public class Client {
     private int idClients;
     private String surname;

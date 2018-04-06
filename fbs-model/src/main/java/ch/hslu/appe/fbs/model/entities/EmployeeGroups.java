@@ -1,12 +1,10 @@
 package ch.hslu.appe.fbs.model.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "EmployeeGroups")
 @IdClass(EmployeeGroupsPK.class)
 public class EmployeeGroups {
     private int employeeIdEmployees;

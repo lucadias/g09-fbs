@@ -1,13 +1,11 @@
 package ch.hslu.appe.fbs.model.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Orders")
 public class Orders {
     private int idOrders;
     private int employeeIdEmployee;

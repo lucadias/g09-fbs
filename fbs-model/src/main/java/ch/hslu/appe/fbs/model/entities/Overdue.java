@@ -1,13 +1,11 @@
 package ch.hslu.appe.fbs.model.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Overdue")
 public class Overdue {
     private int idOverdue;
     private int billIdBill;

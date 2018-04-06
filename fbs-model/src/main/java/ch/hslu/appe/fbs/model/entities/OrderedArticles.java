@@ -1,12 +1,10 @@
 package ch.hslu.appe.fbs.model.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "OrderedArticles")
 public class OrderedArticles {
     private int idOrderedArticles;
     private int ordersIdOrder;
