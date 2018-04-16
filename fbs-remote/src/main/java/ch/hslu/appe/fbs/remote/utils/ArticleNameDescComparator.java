@@ -1,6 +1,6 @@
 package ch.hslu.appe.fbs.remote.utils;
 
-import ch.hslu.appe.fbs.remote.ArticleDTO;
+import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 
 import java.util.Comparator;
 

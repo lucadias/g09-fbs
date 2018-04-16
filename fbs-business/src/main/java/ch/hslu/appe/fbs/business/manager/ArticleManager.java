@@ -1,8 +1,9 @@
-package ch.hslu.appe.fbs.business;
+package ch.hslu.appe.fbs.business.manager;
 
+import ch.hslu.appe.fbs.business.utils.ArticleConverter;
 import ch.hslu.appe.fbs.data.ArticlePersistor;
 import ch.hslu.appe.fbs.model.entities.Article;
-import ch.hslu.appe.fbs.remote.ArticleDTO;
+import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
 import ch.hslu.appe.fbs.remote.utils.ArticleNameAscComparator;
@@ -27,11 +28,14 @@ import java.util.Date;
  */
 public final class ArticleManager {
     private static ArticleManager instance = null;
+
     private static Object mutex = new Object();
+    private HashMap<String, String> lockpool;
 
     private ArticlePersistor articlePersistor;
-    private HashMap<String, String> lockpool;
     private MessageDigest sha256Digest;
+
+    private ArticleConverter articleConverter;
 
     public static ArticleManager getInstance() {
         ArticleManager result = instance;
@@ -50,6 +54,7 @@ public final class ArticleManager {
 
         this.articlePersistor = new ArticlePersistor();
         this.lockpool = new HashMap<>();
+        this.articleConverter = new ArticleConverter();
 
         try {
             this.sha256Digest = MessageDigest.getInstance("SHA-256");
@@ -59,23 +64,23 @@ public final class ArticleManager {
     }
 
     public ArticleDTO getById(final int id) {
-        return convertToDTO(articlePersistor.getById(id));
+        return articleConverter.convertToDTO(articlePersistor.getById(id));
     }
 
     public ArticleDTO getByArticleNr(final int artNr) {
-        return convertToDTO(articlePersistor.getByArticleNr(artNr));
+        return articleConverter.convertToDTO(articlePersistor.getByArticleNr(artNr));
     }
 
     public List<ArticleDTO> getList() {
         List<Article> articleList = articlePersistor.getList();
-        return convertToDTO(articleList);
+        return articleConverter.convertToDTO(articleList);
     }
 
     public FBSFeedback save(final ArticleDTO articleDTO, final String hash) {
         FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
         if (lockCheck == FBSFeedback.SUCCESS) {
-            Article article = convertToEntity(articleDTO);
+            Article article = articleConverter.convertToEntity(articleDTO);
             return articlePersistor.save(article);
         } else {
             return lockCheck;
@@ -86,7 +91,7 @@ public final class ArticleManager {
         FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
         if (lockCheck == FBSFeedback.SUCCESS) {
-            Article article = convertToEntity(articleDTO);
+            Article article = articleConverter.convertToEntity(articleDTO);
             article.setAvailable(false);
 
             return articlePersistor.save(article);
@@ -106,7 +111,7 @@ public final class ArticleManager {
     }
 
     public List<ArticleDTO> sortList(final SortingType type) {
-        return sortList(convertToDTO(articlePersistor.getList()), type);
+        return sortList(articleConverter.convertToDTO(articlePersistor.getList()), type);
     }
 
     public List<ArticleDTO> sortList(final List<ArticleDTO> articleDTOs, final SortingType type) {
@@ -137,7 +142,7 @@ public final class ArticleManager {
     }
 
     public List<ArticleDTO> search(final String regEx) {
-        return convertToDTO(articlePersistor.search(regEx));
+        return articleConverter.convertToDTO(articlePersistor.search(regEx));
     }
 
     public String lock(final int id) {
@@ -197,41 +202,5 @@ public final class ArticleManager {
                 return FBSFeedback.ARTICLE_NOT_LOCKED;
             }
         }
-    }
-
-    private ArticleDTO convertToDTO(final Article article) {
-        ArticleDTO articleDTO = new ArticleDTO(article.getIdArticle());
-        articleDTO.setName(article.getName());
-        articleDTO.setArticleNumber(article.getArticlenumber());
-        articleDTO.setDescription(article.getDescription());
-        articleDTO.setInStock(article.getInStock());
-        articleDTO.setMinInStock(article.getMinInStock());
-        articleDTO.setPrice(article.getPrice());
-        articleDTO.setAvailable(article.getAvailable());
-
-        return articleDTO;
-    }
-
-    private List<ArticleDTO> convertToDTO(final List<Article> articleList) {
-        List<ArticleDTO> articleDTOList = new ArrayList<>();
-        for (Article article : articleList) {
-            articleDTOList.add(convertToDTO(article));
-        }
-
-        return articleDTOList;
-    }
-
-    private Article convertToEntity(final ArticleDTO articleDTO) {
-        Article article = new Article();
-        article.setIdArticle(articleDTO.getId());
-        article.setName(articleDTO.getName());
-        article.setArticlenumber(articleDTO.getArticleNumber());
-        article.setDescription(articleDTO.getDescription());
-        article.setInStock(articleDTO.getInStock());
-        article.setMinInStock(articleDTO.getMinInStock());
-        article.setPrice((int) articleDTO.getPrice());
-        article.setAvailable(articleDTO.isAvailable());
-
-        return article;
     }
 }

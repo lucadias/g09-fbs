@@ -1,4 +1,4 @@
-package ch.hslu.appe.fbs.remote;
+package ch.hslu.appe.fbs.remote.dtos;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public final class ArticleDTO implements Serializable {
     private String description = "";
     private int inStock = 0;
     private int minInStock = 0;
-    private float price = 0f;
+    private double price = 0;
     private boolean available = true;
 
     public ArticleDTO(final int id) {
@@ -66,11 +66,11 @@ public final class ArticleDTO implements Serializable {
         this.minInStock = minInStock;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(final float price) {
+    public void setPrice(final double price) {
         this.price = price;
     }
 
