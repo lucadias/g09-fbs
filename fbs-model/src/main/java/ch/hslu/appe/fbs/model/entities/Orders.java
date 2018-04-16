@@ -10,8 +10,9 @@ public class Orders {
     private int idOrders;
     private int employeeIdEmployee;
     private Timestamp date;
-    private Integer totalPrice;
+    private Double totalPrice;
     private int orderStateIdOrderState;
+    private int clientIdClients;
 
     @Id
     @Column(name = "idOrders", nullable = false)
@@ -45,11 +46,11 @@ public class Orders {
 
     @Basic
     @Column(name = "TotalPrice", nullable = true, precision = 0)
-    public Integer getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -63,6 +64,16 @@ public class Orders {
         this.orderStateIdOrderState = orderStateIdOrderState;
     }
 
+    @Basic
+    @Column(name = "Client_idClients", nullable = false)
+    public int getClientIdClients() {
+        return clientIdClients;
+    }
+
+    public void setClientIdClients(int clientIdClients) {
+        this.clientIdClients = clientIdClients;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,6 +82,7 @@ public class Orders {
         return idOrders == orders.idOrders &&
                 employeeIdEmployee == orders.employeeIdEmployee &&
                 orderStateIdOrderState == orders.orderStateIdOrderState &&
+                clientIdClients == orders.clientIdClients &&
                 Objects.equals(date, orders.date) &&
                 Objects.equals(totalPrice, orders.totalPrice);
     }
@@ -78,6 +90,6 @@ public class Orders {
     @Override
     public int hashCode() {
 
-        return Objects.hash(idOrders, employeeIdEmployee, date, totalPrice, orderStateIdOrderState);
+        return Objects.hash(idOrders, employeeIdEmployee, date, totalPrice, orderStateIdOrderState, clientIdClients);
     }
 }

@@ -9,7 +9,7 @@ public class Client {
     private int idClients;
     private String surname;
     private String firstname;
-    private String adress;
+    private String address;
     private Boolean active;
 
     @Id
@@ -43,13 +43,13 @@ public class Client {
     }
 
     @Basic
-    @Column(name = "Adress", nullable = true, length = 200)
-    public String getAdress() {
-        return adress;
+    @Column(name = "Address", nullable = true, length = 200)
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Basic
@@ -70,13 +70,13 @@ public class Client {
         return idClients == client.idClients &&
                 Objects.equals(surname, client.surname) &&
                 Objects.equals(firstname, client.firstname) &&
-                Objects.equals(adress, client.adress) &&
+                Objects.equals(address, client.address) &&
                 Objects.equals(active, client.active);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(idClients, surname, firstname, adress, active);
+        return Objects.hash(idClients, surname, firstname, address, active);
     }
 }
