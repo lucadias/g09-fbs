@@ -3,13 +3,13 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
     <persistence-unit name="Glp9Pu" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
         <class>ch.hslu.appe.fbs.model.entities.Article</class>
         <class>ch.hslu.appe.fbs.model.entities.Bill</class>
         <class>ch.hslu.appe.fbs.model.entities.Client</class>
         <class>ch.hslu.appe.fbs.model.entities.Employee</class>
         <class>ch.hslu.appe.fbs.model.entities.EmployeeGroups</class>
         <class>ch.hslu.appe.fbs.model.entities.Groups</class>
-        <class>ch.hslu.appe.fbs.model.entities.Log</class>
         <class>ch.hslu.appe.fbs.model.entities.OrderState</class>
         <class>ch.hslu.appe.fbs.model.entities.OrderedArticles</class>
         <class>ch.hslu.appe.fbs.model.entities.Orders</class>

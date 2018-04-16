@@ -1,7 +1,7 @@
 package ch.hslu.appe.fbs.business.services;
 
-import ch.hslu.appe.fbs.business.ArticleManager;
-import ch.hslu.appe.fbs.remote.ArticleDTO;
+import ch.hslu.appe.fbs.business.manager.ArticleManager;
+import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.RemoteArticleService;
 import ch.hslu.appe.fbs.remote.SortingType;
@@ -18,7 +18,7 @@ import java.util.List;
 public final class ArticleService extends UnicastRemoteObject implements RemoteArticleService {
 
 
-    transient private ArticleManager articleManager;
+    private transient ArticleManager articleManager;
 
     public ArticleService() throws RemoteException {
         super();

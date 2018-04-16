@@ -1,19 +1,17 @@
 package ch.hslu.appe.fbs.model.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Article")
 public class Article {
     private int idArticle;
     private String name;
     private Integer articlenumber;
     private String description;
     private Integer inStock;
-    private Integer price;
+    private Double price;
     private Integer minInStock;
     private Boolean available;
 
@@ -69,11 +67,11 @@ public class Article {
 
     @Basic
     @Column(name = "Price", nullable = true, precision = 0)
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

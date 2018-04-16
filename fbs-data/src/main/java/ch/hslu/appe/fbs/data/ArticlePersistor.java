@@ -48,10 +48,7 @@ public class ArticlePersistor {
     public FBSFeedback updateStockById(int id, int amount) { return FBSFeedback.SUCCESS; }
 
     public List<Article> getList() {
-        List<Article> list = new ArrayList<>();
-        //list.add(new Article(0));
-        //list.add(new Article(1));
-        return list;
+        return this.entitymanager.createQuery("Select a From Article a").getResultList();
     }
 
     public List<Article> search(String regEx) {

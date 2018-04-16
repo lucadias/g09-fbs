@@ -1,9 +1,7 @@
 package ch.hslu.appe.fbs.data;
 
-import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.model.entities.Orders;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
-import org.hibernate.criterion.Order;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -35,8 +33,8 @@ public class OrderPersistor {
 
 
     public FBSFeedback save(Orders order) {
-        transactionBegin();
-        Orders oldOrder = entitymanager.find(Orders.class, order.getIdOrders());
+        this.transactionBegin();
+        Orders oldOrder = this.entitymanager.find(Orders.class, order.getIdOrders());
 
         if (oldOrder != null){
             if (oldOrder.equals(order)){
@@ -44,11 +42,16 @@ public class OrderPersistor {
                 return FBSFeedback.SUCCESS;
             }
             oldOrder = order;
-            oldOrder.
-            transactionClose();
+        }else{
+            this.entitymanager.persist(order);
         }
 
+        this.transactionClose();
         return FBSFeedback.SUCCESS;
+    }
+
+    public List getAll(){
+        return this.entitymanager.createQuery("Select o From Orders o").getResultList();
     }
 
 

@@ -1,18 +1,16 @@
 package ch.hslu.appe.fbs.model.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "OrderedArticles")
 public class OrderedArticles {
     private int idOrderedArticles;
     private int ordersIdOrder;
     private int articleIdArticle;
     private Integer amount;
-    private Integer totalPrice;
+    private Double totalPrice;
 
     @Id
     @Column(name = "idOrderedArticles", nullable = false)
@@ -56,11 +54,11 @@ public class OrderedArticles {
 
     @Basic
     @Column(name = "TotalPrice", nullable = true, precision = 0)
-    public Integer getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

@@ -1,5 +1,7 @@
 package ch.hslu.appe.fbs.remote;
 
+import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;

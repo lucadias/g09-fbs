@@ -6,7 +6,7 @@ package ch.hslu.appe.fbs.client;
  */
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ARTICLE_SERVICE_NAME;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.REGISTRY_PORT;
-import ch.hslu.appe.fbs.remote.ArticleDTO;
+import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import ch.hslu.appe.fbs.remote.RemoteArticleService;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
