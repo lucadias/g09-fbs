@@ -1,7 +1,11 @@
 package ch.hslu.appe.fbs.business.utils;
 
-import ch.hslu.appe.fbs.model.entities.*;
-import ch.hslu.appe.fbs.remote.dtos.*;
+import ch.hslu.appe.fbs.model.entities.Orders;
+import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
+import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
+import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
+import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
+import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
 
 import java.util.List;
 

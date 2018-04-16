@@ -8,7 +8,7 @@ import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
  *
  * @author Mischa Gruber
  */
-public class EmployeeConverter {
+public final class EmployeeConverter {
 
     public EmployeeDTO convertToDTO(final Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO(employee.getIdEmployees());

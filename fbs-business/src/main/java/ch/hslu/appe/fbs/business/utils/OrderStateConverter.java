@@ -8,7 +8,7 @@ import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
  *
  * @author Mischa Gruber
  */
-public class OrderStateConverter {
+public final class OrderStateConverter {
 
     public OrderStateDTO convertToDTO(final OrderState orderState) {
         OrderStateDTO orderStateDTO = new OrderStateDTO(orderState.getIdOrderState());

@@ -17,7 +17,7 @@ import java.util.List;
  */
 public final class OrderService extends UnicastRemoteObject implements RemoteOrderService {
 
-    transient private OrderManager orderManager;
+    private transient OrderManager orderManager;
 
     public OrderService() throws RemoteException {
         super();

@@ -9,7 +9,7 @@ import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
  *
  * @author Mischa Gruber
  */
-public class OrderedArticleConverter {
+public final class OrderedArticleConverter {
 
     private ArticleConverter articleConverter;
 

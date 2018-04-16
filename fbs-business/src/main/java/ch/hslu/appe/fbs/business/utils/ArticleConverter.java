@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Mischa Gruber
  */
-public class ArticleConverter {
+public final class ArticleConverter {
 
     public ArticleDTO convertToDTO(final Article article) {
         ArticleDTO articleDTO = new ArticleDTO(article.getIdArticle());

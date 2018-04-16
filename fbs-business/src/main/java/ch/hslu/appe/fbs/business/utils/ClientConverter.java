@@ -8,7 +8,7 @@ import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
  *
  * @author Mischa Gruber
  */
-public class ClientConverter {
+public final class ClientConverter {
 
     public ClientDTO convertToDTO(final Client client) {
         ClientDTO clientDTO = new ClientDTO(client.getIdClients());
@@ -20,7 +20,7 @@ public class ClientConverter {
         return clientDTO;
     }
 
-    public Client convertToEntity (final ClientDTO clientDTO) {
+    public Client convertToEntity(final ClientDTO clientDTO) {
         Client client = new Client();
         client.setIdClients(clientDTO.getId());
         client.setSurname(clientDTO.getSurname());

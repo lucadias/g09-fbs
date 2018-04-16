@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  * @author Mischa Gruber
  */
-public class OrderedArticleDTO implements Serializable {
+public final class OrderedArticleDTO implements Serializable {
 
     private int id;
     private ArticleDTO articleDTO;
