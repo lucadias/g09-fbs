@@ -23,7 +23,7 @@ public class ArticlePersistor {
     private final EntityManager entitymanager;
 
     public ArticlePersistor() {
-        this.emfactory = Persistence.createEntityManagerFactory("luca");
+        this.emfactory = Persistence.createEntityManagerFactory("Glp9Pu");
 
         this.entitymanager = emfactory.createEntityManager();
         }
@@ -32,6 +32,7 @@ public class ArticlePersistor {
         transactionBegin();
 
         Article article = entitymanager.find(Article.class, id);
+
 
         //code
 
