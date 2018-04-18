@@ -1,40 +1,47 @@
 package ch.hslu.appe.fbs.client;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
+import javafx.scene.Node;
 
 /**
  * JavaDoc
  */
-public class JavaFXViewController extends Application {
-    public static final int REGISTRY_PORT = 1099;
+public final class JavaFXViewController  {
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
+    public static final String LOGIN_SERVICE_NAME = "LoginService";
+    private FBSView currentView;
+    
 
     public JavaFXViewController() {
-        
+        //create loginView
+        //ToDo: Implement logged in check
+        LoginView loginView = new LoginView();
+        this.setView(loginView);
     }
     
-    public static void main(final String[] args) {
-        launch(args);
+    public void setView(FBSView view) {
+        this.currentView = view;
     }
     
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Artikel Detailansicht");
-        ArticleDetailView detail = new ArticleDetailView();
-        BorderPane border = new BorderPane();
-        HBox hboxTop = detail.addHBoxTop();
-        GridPane grid = detail.addGridPaneCenter();
-        border.setTop(hboxTop);
-        border.setCenter(grid);
+    public Node getTopPane() {
+        return null;
+    }
+    
+    public Node getCenterPane() {
+        return this.currentView.getCenterPane();
+    }
+    
+    public Node getRightPane() {
         
-        Scene scene = new Scene(border, 700, 500);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        return null;
+    }
+    
+    public Node getLeftPane() {
+        
+        return null;
+    }
+    
+    public Node getBottomPane() {
+        return this.currentView.getBottomPane();
     }
 
 }

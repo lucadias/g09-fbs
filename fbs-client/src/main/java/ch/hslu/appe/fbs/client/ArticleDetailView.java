@@ -5,7 +5,7 @@ package ch.hslu.appe.fbs.client;
  * @author salzm
  */
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ARTICLE_SERVICE_NAME;
-import static ch.hslu.appe.fbs.client.JavaFXViewController.REGISTRY_PORT;
+import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import ch.hslu.appe.fbs.remote.RemoteArticleService;
 import java.net.MalformedURLException;
@@ -13,6 +13,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -21,7 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
  
-public class ArticleDetailView {
+public final class ArticleDetailView implements FBSView {
     private ArticleDTO articleDTO;
     
     public ArticleDetailView () {
@@ -58,7 +59,13 @@ public class ArticleDetailView {
         return hbox;
     }
     
-    public GridPane addGridPaneCenter() {
+    @Override
+    public Node getBottomPane() {
+        return null;
+    }
+    
+    @Override
+    public Node getCenterPane() {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
