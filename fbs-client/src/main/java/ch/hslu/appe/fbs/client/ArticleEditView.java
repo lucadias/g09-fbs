@@ -110,14 +110,14 @@ public final class ArticleEditView implements FBSView {
         
         grid.add(this.addHBoxTop(), 1, 0);
         
-        TextField articleName = new TextField();
+        this.articleName = new TextField();
         articleName.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         //ToDo: remove this check if is handled on lower level
         String name = this.articleDTO.getName() != null ? this.articleDTO.getName() : "";
         articleName.setText(name);
         grid.add(articleName, 1, 1);
         
-        TextField articleDescription = new TextField();
+        this.articleDescription = new TextField();
         articleDescription.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         //ToDo: remove this check if is handled on lower level
         String description = this.articleDTO.getDescription()!= null ? this.articleDTO.getDescription(): "";
@@ -128,7 +128,7 @@ public final class ArticleEditView implements FBSView {
         articleNumber.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         grid.add(articleNumber, 2, 2);
         
-        TextField articleNumberValue = new TextField();
+        this.articleNumberValue = new TextField();
         articleNumberValue.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         articleNumberValue.setText(Integer.toString(this.articleDTO.getArticleNumber()));
         grid.add(articleNumberValue, 2, 3);
@@ -137,7 +137,7 @@ public final class ArticleEditView implements FBSView {
         articleStock.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         grid.add(articleStock, 2, 4);
         
-        TextField articleStockValue = new TextField();
+        this.articleStockValue = new TextField();
         articleStockValue.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         articleStockValue.setText(Integer.toString(this.articleDTO.getInStock()));
         grid.add(articleStockValue, 2, 5);
@@ -146,7 +146,7 @@ public final class ArticleEditView implements FBSView {
         articleMinStock.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         grid.add(articleMinStock, 2, 6);
         
-        TextField articleMinStockValue = new TextField();
+        this.articleMinStockValue = new TextField();
         articleMinStockValue.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         articleMinStockValue.setText(Integer.toString(this.articleDTO.getMinInStock()));
         grid.add(articleMinStockValue, 2, 7);
