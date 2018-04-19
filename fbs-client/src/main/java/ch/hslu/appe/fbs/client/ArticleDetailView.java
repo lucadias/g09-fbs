@@ -71,46 +71,48 @@ public final class ArticleDetailView implements FBSView {
         grid.setVgap(10);
         grid.setPadding(new Insets(0, 10, 0, 10));
         
+        grid.add(this.addHBoxTop(), 1, 0);
+        
         TextField articleName = new TextField();
         articleName.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         //ToDo: remove this check if is handled on lower level
         String name = this.articleDTO.getName() != null ? this.articleDTO.getName() : "";
         articleName.setText(name);
-        grid.add(articleName, 1, 0);
+        grid.add(articleName, 1, 1);
         
         TextField articleDescription = new TextField();
         articleDescription.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         //ToDo: remove this check if is handled on lower level
         String description = this.articleDTO.getDescription()!= null ? this.articleDTO.getDescription(): "";
         articleDescription.setText(description);
-        grid.add(articleDescription, 1, 1, 1, 6);
+        grid.add(articleDescription, 1, 2, 1, 7);
         
         Text articleNumber = new Text("Artikelnummer");
         articleNumber.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
-        grid.add(articleNumber, 2, 1);
+        grid.add(articleNumber, 2, 2);
         
         TextField articleNumberValue = new TextField();
         articleNumberValue.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         articleNumberValue.setText(Integer.toString(this.articleDTO.getArticleNumber()));
-        grid.add(articleNumberValue, 2, 2);
+        grid.add(articleNumberValue, 2, 3);
         
         Text articleStock = new Text("Lager");
         articleStock.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
-        grid.add(articleStock, 2, 3);
+        grid.add(articleStock, 2, 4);
         
         TextField articleStockValue = new TextField();
         articleStockValue.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         articleStockValue.setText(Integer.toString(this.articleDTO.getInStock()));
-        grid.add(articleStockValue, 2, 4);
+        grid.add(articleStockValue, 2, 5);
         
         Text articleMinStock = new Text("Min-Bestellung");
         articleMinStock.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
-        grid.add(articleMinStock, 2, 5);
+        grid.add(articleMinStock, 2, 6);
         
         TextField articleMinStockValue = new TextField();
         articleMinStockValue.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
         articleMinStockValue.setText(Integer.toString(this.articleDTO.getMinInStock()));
-        grid.add(articleMinStockValue, 2, 6);
+        grid.add(articleMinStockValue, 2, 7);
         
         return grid;
     }    
