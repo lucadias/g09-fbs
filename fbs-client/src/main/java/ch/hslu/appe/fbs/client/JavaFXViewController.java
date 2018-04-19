@@ -1,22 +1,38 @@
 package ch.hslu.appe.fbs.client;
 
+import java.util.ArrayList;
 import javafx.scene.Node;
 
 /**
  * JavaDoc
  */
-public final class JavaFXViewController  {
+public final class JavaFXViewController {
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
     public static final String LOGIN_SERVICE_NAME = "LoginService";
     private FBSView currentView;
+//    private ArrayList<RepaintRequestListener> repaintRequestListeners;
     
 
     public JavaFXViewController() {
-        //create loginView
-        //ToDo: Implement logged in check
-        LoginView loginView = new LoginView();
-        this.setView(loginView);
+        
     }
+    
+    public void start() {
+//        //create loginView
+//        //ToDo: Implement logged in check
+//        LoginView loginView = new LoginView();
+////        loginView.addLoginButtonListener(this);
+//        this.setView(loginView);
+        
+//        ArticleDetailView adv = new ArticleDetailView();
+//        this.setView(adv);
+
+        ArticleListView alv = new ArticleListView();
+    }
+    
+//    public void addRepaintRequestListener(RepaintRequestListener listener) {
+//        this.repaintRequestListeners.add(listener);
+//    }
     
     public void setView(FBSView view) {
         this.currentView = view;

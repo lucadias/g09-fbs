@@ -61,7 +61,7 @@ public final class ArticleDetailView implements FBSView {
     
     @Override
     public Node getBottomPane() {
-        return null;
+        return new GridPane();
     }
     
     @Override
