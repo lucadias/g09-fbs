@@ -26,27 +26,14 @@ public class OrderPersistor {
 
         //code
 
-        transactionClose();
-
         return order;
     }
 
 
     public FBSFeedback save(Orders order) {
         this.transactionBegin();
-        Orders oldOrder = this.entitymanager.find(Orders.class, order.getIdOrders());
-
-        if (oldOrder != null){
-            if (oldOrder.equals(order)){
-                transactionClose();
-                return FBSFeedback.SUCCESS;
-            }
-            oldOrder = order;
-        }else{
-            this.entitymanager.persist(order);
-        }
-
-        this.transactionClose();
+        this.entitymanager.persist(order);
+        this.entitymanager.getTransaction().commit();
         return FBSFeedback.SUCCESS;
     }
 
@@ -57,12 +44,5 @@ public class OrderPersistor {
 
     private void transactionBegin(){
         entitymanager.getTransaction().begin();
-
-    }
-
-    private void transactionClose(){
-        entitymanager.close();
-        emfactory.close();
-
     }
 }
