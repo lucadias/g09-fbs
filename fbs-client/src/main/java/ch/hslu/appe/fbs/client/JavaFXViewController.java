@@ -26,9 +26,12 @@ public final class JavaFXViewController {
         
 //        ArticleDetailView adv = new ArticleDetailView();
 //        this.setView(adv);
+        
+        ArticleEditView aev = new ArticleEditView();
+        this.setView(aev);
 
-        ArticleListView alv = new ArticleListView();
-        this.setView(alv);
+//        ArticleListView alv = new ArticleListView();
+//        this.setView(alv);
     }
     
 //    public void addRepaintRequestListener(RepaintRequestListener listener) {
