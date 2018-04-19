@@ -10,13 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderPersistor {
-    private final EntityManagerFactory emfactory;
     private final EntityManager entitymanager;
 
     public OrderPersistor() {
-        this.emfactory = Persistence.createEntityManagerFactory("Glp9Pu");
 
-        this.entitymanager = emfactory.createEntityManager();
+        this.entitymanager = DBEntityManager.em;
     }
 
     public Orders getById(int id) {
@@ -31,9 +29,13 @@ public class OrderPersistor {
 
 
     public FBSFeedback save(Orders order) {
-        this.transactionBegin();
-        this.entitymanager.persist(order);
-        this.entitymanager.getTransaction().commit();
+        try {
+            transactionBegin();
+            entitymanager.merge(order);
+            entitymanager.flush();
+        } finally {
+            entitymanager.getTransaction().commit();
+        }
         return FBSFeedback.SUCCESS;
     }
 
@@ -45,4 +47,5 @@ public class OrderPersistor {
     private void transactionBegin(){
         entitymanager.getTransaction().begin();
     }
+
 }
