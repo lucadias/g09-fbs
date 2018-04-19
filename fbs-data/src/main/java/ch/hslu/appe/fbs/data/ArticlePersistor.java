@@ -43,7 +43,18 @@ public class ArticlePersistor {
 
     public Article getByArticleNr(int artNr) { return this.getById(artNr);}
 
-    public FBSFeedback save(Article article) { return FBSFeedback.SUCCESS; }
+    public FBSFeedback save(Article article) {
+        try {
+            entitymanager.getTransaction().begin();
+            entitymanager.merge(article);
+            entitymanager.flush();
+        } catch (Exception ex){
+            return FBSFeedback.UNKNOWN_ERROR;
+        }finally {
+            entitymanager.getTransaction().commit();
+        }
+        return FBSFeedback.SUCCESS;
+    }
 
     public FBSFeedback updateStockById(int id, int amount) { return FBSFeedback.SUCCESS; }
 
@@ -61,16 +72,17 @@ public class ArticlePersistor {
     }
 
     private void transactionClose(){
-        entitymanager.close();
-        emfactory.close();
+        entitymanager.getTransaction().commit();
+
+        // entitymanager.close();
+        //emfactory.close();
 
     }
 
 
 
 
-    //entitymanager.persist( article );
-    //entitymanager.getTransaction( ).commit( );
+    //
 
 
 }
