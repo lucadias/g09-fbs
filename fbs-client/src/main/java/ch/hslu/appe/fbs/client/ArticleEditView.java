@@ -89,6 +89,7 @@ public final class ArticleEditView implements FBSView {
             this.articleDTO.setInStock(Integer.valueOf(this.articleStockValue.getText()));
             this.articleDTO.setMinInStock(Integer.valueOf(this.articleMinStockValue.getText()));
             this.articleService.save(this.articleDTO, hash);
+            this.articleService.release(this.articleDTO, hash);
         } catch (RemoteException e) {
             this.articleDTO.setDescription("Error in RMI: "+e);
             System.out.println("Error in RMI: "+e);
