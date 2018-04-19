@@ -1,6 +1,7 @@
 package ch.hslu.appe.fbs.business;
 
 import ch.hslu.appe.fbs.business.services.ArticleService;
+import ch.hslu.appe.fbs.business.services.OrderService;
 
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
@@ -18,6 +19,7 @@ public final class FBSServer {
 
     public static final int REGISTRY_PORT = 1099;
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
+    public static final String ORDER_SERVICE_NAME = "OrderService";
 
     protected FBSServer() {
         Registry registry;
@@ -40,8 +42,13 @@ public final class FBSServer {
 
         try {
             final ArticleService articleService = new ArticleService();
-            final String url = "rmi://localhost:" + String.valueOf(REGISTRY_PORT) + "/" + ARTICLE_SERVICE_NAME;
-            Naming.bind(url, articleService);
+            final String urlArticleService = "rmi://localhost:" + String.valueOf(REGISTRY_PORT) + "/" + ARTICLE_SERVICE_NAME;
+            Naming.bind(urlArticleService, articleService);
+
+            final OrderService orderService = new OrderService();
+            final String urlOrderService = "rmi://localhost:" + String.valueOf(REGISTRY_PORT) + "/" + ORDER_SERVICE_NAME;
+            Naming.bind(urlOrderService, orderService);
+
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {

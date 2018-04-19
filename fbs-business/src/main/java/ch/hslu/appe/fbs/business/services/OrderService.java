@@ -26,17 +26,17 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
     }
 
     /**
-     * TODO: implement methods
+     * TODO: implement getListByClientId, delete
      */
 
     @Override
     public OrderDTO getById(final int id) throws RemoteException {
-        return null;
+        return orderManager.getById(id);
     }
 
     @Override
     public List<OrderDTO> getList() throws RemoteException {
-        return null;
+        return orderManager.getList();
     }
 
     @Override
@@ -46,12 +46,12 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
 
     @Override
     public List<OrderDTO> search(final String regEx) throws RemoteException {
-        return null;
+        return orderManager.getList(regEx);
     }
 
     @Override
     public FBSFeedback save(final OrderDTO orderDTO, final String hash) throws RemoteException {
-        return null;
+        return orderManager.save(orderDTO, hash);
     }
 
     @Override
@@ -61,21 +61,21 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
 
     @Override
     public String lock(final OrderDTO orderDTO) throws RemoteException {
-        return null;
+        return orderManager.lock(orderDTO.getId());
     }
 
     @Override
     public FBSFeedback release(final OrderDTO orderDTO, final String hash) throws RemoteException {
-        return null;
+        return orderManager.release(orderDTO.getId(), hash);
     }
 
     @Override
     public List<OrderDTO> sortList(final SortingType type) throws RemoteException {
-        return null;
+        return orderManager.sortList(type);
     }
 
     @Override
     public List<OrderDTO> sortList(final List<OrderDTO> orderDTOs, final SortingType type) throws RemoteException {
-        return null;
+        return orderManager.sortList(orderDTOs, type);
     }
 }

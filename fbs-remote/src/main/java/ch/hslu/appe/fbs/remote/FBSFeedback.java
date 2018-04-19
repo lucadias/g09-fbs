@@ -11,5 +11,6 @@ public enum FBSFeedback {
     LOCK_LOST,
     MISMATCHING_HASH,
     ARTICLE_NOT_LOCKED,
+    ORDER_NOT_LOCKED,
 
 }
