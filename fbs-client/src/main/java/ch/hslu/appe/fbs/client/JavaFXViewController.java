@@ -9,6 +9,7 @@ import javafx.scene.Node;
 public final class JavaFXViewController {
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
     public static final String LOGIN_SERVICE_NAME = "LoginService";
+    public static final String ORDER_SERVICE_NAME = "OrderService";
     private FBSView currentView;
 //    private ArrayList<RepaintRequestListener> repaintRequestListeners;
     
