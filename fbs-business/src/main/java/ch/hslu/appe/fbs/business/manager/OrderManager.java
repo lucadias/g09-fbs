@@ -155,7 +155,7 @@ public final class OrderManager {
 
 
     /**
-     * TODO: lock, release, check -> as interface
+     * TODO: lock, release, check - as interface
      */
 
     public String lock(final int id) {
