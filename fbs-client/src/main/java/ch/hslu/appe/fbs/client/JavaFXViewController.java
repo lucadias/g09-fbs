@@ -28,8 +28,11 @@ public final class JavaFXViewController {
 //        ArticleDetailView adv = new ArticleDetailView();
 //        this.setView(adv);
         
-        ArticleEditView aev = new ArticleEditView();
-        this.setView(aev);
+//        ArticleEditView aev = new ArticleEditView();
+//        this.setView(aev);
+        
+        OrderDetailView odv = new OrderDetailView();
+        this.setView(odv);
 
 //        ArticleListView alv = new ArticleListView();
 //        this.setView(alv);
