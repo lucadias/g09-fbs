@@ -15,47 +15,47 @@ import static org.junit.Assert.assertEquals;
 
 public class OrderPersistorTest {
 
-    private OrderPersistor persistor = new OrderPersistor();
-    private Orders orders = new Orders();
-    private Orders orders2 = new Orders();
-    private List<Orders> list = new ArrayList<>();
-    private EntityManagerFactory emfactory;
-    private EntityManager entitymanager;
+    private static OrderPersistor persistor = new OrderPersistor();
+    private static Orders orders = new Orders();
+    private static Orders orders2 = new Orders();
+    private static List<Orders> list = new ArrayList<>();
 
-    @Before
-    public void init(){
+    @BeforeClass
+    public static void init(){
 
-        this.orders.setIdOrders(1);
-        this.orders.setClientIdClients(2);
-        this.orders.setEmployeeIdEmployee(1);
-        this.orders.setOrderStateIdOrderState(1);
-        this.list.add(orders);
-        this.orders2.setIdOrders(2);
-        this.orders2.setClientIdClients(2);
-        this.orders2.setEmployeeIdEmployee(2);
-        this.orders2.setOrderStateIdOrderState(1);
-        this.list.add(orders2);
+        orders.setIdOrders(9999);
+        orders.setClientIdClients(2);
+        orders.setEmployeeIdEmployee(1);
+        orders.setOrderStateIdOrderState(1);
+        list.add(orders);
+        orders2.setIdOrders(9998);
+        orders2.setClientIdClients(2);
+        orders2.setEmployeeIdEmployee(2);
+        orders2.setOrderStateIdOrderState(1);
+        list.add(orders2);
     }
 
     @Test
     public void testSave(){
-        assertEquals(FBSFeedback.SUCCESS, this.persistor.save(orders));
-        assertEquals(FBSFeedback.SUCCESS, this.persistor.save(orders2));
+        assertEquals(FBSFeedback.SUCCESS, persistor.save(orders));
+        assertEquals(FBSFeedback.SUCCESS, persistor.save(orders2));
     }
 
     @Test
     public void testGetById(){
-        assertEquals(this.orders, this.persistor.getById(1));
+        assertEquals(orders, persistor.getById(9999));
     }
 
     @Test
     public void testGetAll(){
-        // assertEquals(this.list, this.persistor.getAll());
+        assertEquals(list.size(), persistor.getAll().size());
     }
 
     @AfterClass
     public static void clean(){
-        DBEntityManager.em.createQuery("delete from Orders where idOrders = 1").executeUpdate();
-        DBEntityManager.em.createQuery("delete from Orders where idOrders = 2").executeUpdate();
+        DBEntityManager.em.getTransaction().begin();
+        DBEntityManager.em.createQuery("delete from Orders where idOrders = 9999").executeUpdate();
+        DBEntityManager.em.createQuery("delete from Orders where idOrders = 9998").executeUpdate();
+        DBEntityManager.em.getTransaction().commit();
     }
 }

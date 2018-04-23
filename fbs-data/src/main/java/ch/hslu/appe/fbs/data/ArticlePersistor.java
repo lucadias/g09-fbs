@@ -19,14 +19,9 @@ import java.util.List;
  */
 public class ArticlePersistor {
 
-    private final EntityManagerFactory emfactory;
-    private final EntityManager entitymanager;
 
-    public ArticlePersistor() {
-        this.emfactory = Persistence.createEntityManagerFactory("Glp9Pu");
+    private final EntityManager entitymanager = DBEntityManager.em;
 
-        this.entitymanager = emfactory.createEntityManager();
-        }
 
     public Article getById(int id) {
         transactionBegin();
