@@ -19,14 +19,8 @@ import java.util.List;
  */
 public class ClientPersistor {
 
-    private final EntityManagerFactory emfactory;
-    private final EntityManager entitymanager;
+    private final EntityManager entitymanager = DBEntityManager.em;
 
-    public ClientPersistor() {
-        this.emfactory = Persistence.createEntityManagerFactory("Glp9Pu");
-
-        this.entitymanager = emfactory.createEntityManager();
-    }
 
     public Client getById(int id) {
         transactionBegin();

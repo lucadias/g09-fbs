@@ -19,14 +19,7 @@ import java.util.List;
  */
 public class EmployeePersistor {
 
-    private final EntityManagerFactory emfactory;
-    private final EntityManager entitymanager;
-
-    public EmployeePersistor() {
-        this.emfactory = Persistence.createEntityManagerFactory("Glp9Pu");
-
-        this.entitymanager = emfactory.createEntityManager();
-    }
+    private final EntityManager entitymanager = DBEntityManager.em;
 
     public Employee getById(int id) {
         transactionBegin();
