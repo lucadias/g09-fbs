@@ -36,7 +36,7 @@ public class ClientPersistor {
 
     public Client getByClientNr(int clientNr) { return this.getById(clientNr);}
 
-    public FBSFeedback save(Client client) { return FBSFeedback.SUCCESS; }
+    public FBSFeedback save(Client client) { return Util.save(client); }
 
 
     public List<Client> getList() {

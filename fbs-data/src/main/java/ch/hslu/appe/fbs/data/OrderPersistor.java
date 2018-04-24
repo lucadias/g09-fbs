@@ -20,29 +20,19 @@ public class OrderPersistor {
         Orders order = entitymanager.find(Orders.class, id);
 
         transactionCommit();
-        //code
 
         return order;
     }
 
 
-
-
     public FBSFeedback save(Orders order) {
-        try {
-            transactionBegin();
-            entitymanager.merge(order);
-            entitymanager.flush();
-        } finally {
-            this.transactionCommit();
-        }
-        return FBSFeedback.SUCCESS;
+        return Util.save(order);
     }
 
     public List getAll(){
         transactionBegin();
-        List<Orders> list = new ArrayList<>();
-        list = this.entitymanager.createQuery("Select o From Orders o").getResultList();
+
+        List<Orders> list = this.entitymanager.createQuery("Select o From Orders o").getResultList();
 
         this.transactionCommit();
         return list;

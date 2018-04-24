@@ -3,9 +3,6 @@ package ch.hslu.appe.fbs.data;
 import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,10 +25,7 @@ public class ArticlePersistor {
 
         Article article = entitymanager.find(Article.class, id);
 
-
-        //code
-
-        transactionClose();
+        transactionCommit();
 
         return article;
     }
@@ -39,22 +33,16 @@ public class ArticlePersistor {
     public Article getByArticleNr(int artNr) { return this.getById(artNr);}
 
     public FBSFeedback save(Article article) {
-        try {
-            entitymanager.getTransaction().begin();
-            entitymanager.merge(article);
-            entitymanager.flush();
-        } catch (Exception ex){
-            return FBSFeedback.UNKNOWN_ERROR;
-        }finally {
-            entitymanager.getTransaction().commit();
-        }
-        return FBSFeedback.SUCCESS;
+        return Util.save(article);
     }
 
     public FBSFeedback updateStockById(int id, int amount) { return FBSFeedback.SUCCESS; }
 
     public List<Article> getList() {
-        return this.entitymanager.createQuery("Select a From Article a").getResultList();
+        this.transactionBegin();
+        List<Article> list = this.entitymanager.createQuery("Select a From Article a").getResultList();
+        this.transactionCommit();
+        return list;
     }
 
     public List<Article> search(String regEx) {
@@ -63,15 +51,10 @@ public class ArticlePersistor {
 
     private void transactionBegin(){
         entitymanager.getTransaction().begin();
-
     }
 
-    private void transactionClose(){
+    private void transactionCommit(){
         entitymanager.getTransaction().commit();
-
-        // entitymanager.close();
-        //emfactory.close();
-
     }
 
 

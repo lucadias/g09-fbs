@@ -36,7 +36,7 @@ public class EmployeePersistor {
 
     public Employee getByemployeeNr(int employeeNr) { return this.getById(employeeNr);}
 
-    public FBSFeedback save(Employee employee) { return FBSFeedback.SUCCESS; }
+    public FBSFeedback save(Employee employee) { return Util.save(employee); }
 
     public List<Employee> getList() {
         return this.entitymanager.createQuery("Select a From Employee a").getResultList();
