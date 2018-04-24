@@ -16,8 +16,10 @@ public class Util {
             entitymanager.flush();
             Util.entitymanager.getTransaction().commit();
             return FBSFeedback.SUCCESS;
-        } finally {
-            return FBSFeedback.UNKNOWN_ERROR;
+        } catch (Exception e){
+            System.out.println(e.toString());
         }
+        Util.entitymanager.getTransaction().commit();
+        return FBSFeedback.UNKNOWN_ERROR;
     }
 }
