@@ -36,9 +36,9 @@ public class DashboardViewController implements Initializable {
     public void showArticleList(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/ArticleDetailView.fxml"));
+            loader.setLocation(getClass().getResource("/fxml/ArticleListView.fxml"));
             Parent dashboard = (Parent) loader.load();
-            ArticleDetailViewController dashboardViewController = (ArticleDetailViewController) loader.getController();
+            ArticleListViewController articleListViewController = (ArticleListViewController) loader.getController();
             JavaFXViewController.getInstance().setView(dashboard);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {

@@ -31,6 +31,7 @@ import javafx.scene.control.Label;
  */
 public class ArticleDetailViewController implements Initializable {
     private ArticleDTO articleDTO;
+    private int articleId=1;
     
     @FXML
     private Label articleName;
@@ -83,7 +84,7 @@ public class ArticleDetailViewController implements Initializable {
         try {
             final String urlString = "rmi://localhost:" + String.valueOf(REGISTRY_PORT) + "/" + ARTICLE_SERVICE_NAME;
             final RemoteArticleService articleService = (RemoteArticleService) Naming.lookup(urlString);
-            ArticleDTO currentArticle = articleService.getById(1);
+            ArticleDTO currentArticle = articleService.getById(this.articleId);
             this.articleDTO = currentArticle;
             this.fillArticle();
         } catch (NotBoundException | MalformedURLException |
@@ -92,6 +93,10 @@ public class ArticleDetailViewController implements Initializable {
             this.articleDTO.setDescription("Error in RMI: "+e);
             System.out.println("Error in RMI: "+e);
         }
+    }
+    
+    public void setId(int id) {
+        this.articleId = id;
     }
     
     private void fillArticle() {
