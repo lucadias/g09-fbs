@@ -33,11 +33,6 @@ public final class JavaFXViewController {
     }
     
     public void start() {
-//        //create loginView
-//        //ToDo: Implement logged in check
-//        LoginView loginView = new LoginView();
-////        loginView.addLoginButtonListener(this);
-//        this.setView(loginView);
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/LoginView.fxml"));
@@ -49,18 +44,6 @@ public final class JavaFXViewController {
             //ToDo: handle this another way
             this.currentView = new GridPane();
         }
-        
-//        ArticleDetailView adv = new ArticleDetailView();
-//        this.setView(adv);
-        
-//        ArticleEditView aev = new ArticleEditView();
-//        this.setView(aev);
-        
-//        OrderDetailView odv = new OrderDetailView();
-//        this.setView(odv);
-
-//        ArticleListView alv = new ArticleListView();
-//        this.setView(alv);
     }
     
     public void repaint() {

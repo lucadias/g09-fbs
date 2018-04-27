@@ -27,7 +27,7 @@
             <Font size="24.0" />
          </font>
       </Button>
-      <Button fx:id="dashboardArticleListButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="250.0" text="Artikelliste" GridPane.columnIndex="1">
+      <Button fx:id="dashboardArticleListButton" mnemonicParsing="false" onAction="#showArticleList" prefHeight="150.0" prefWidth="250.0" text="Artikelliste" GridPane.columnIndex="1">
          <font>
             <Font size="24.0" />
          </font>
