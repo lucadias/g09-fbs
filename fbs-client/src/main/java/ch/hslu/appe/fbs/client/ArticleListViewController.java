@@ -27,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 /**
  * FXML Controller class
@@ -76,24 +77,29 @@ public class ArticleListViewController implements Initializable {
     }
     
     private void fillList() {
-        int i=1;
+        int i=0;
         System.out.println("till here it works");
         for(ArticleDTO article:this.articleList) {
-            Label articleName = new Label();
+            Label articleName = new Label(article.getName());
             articleName.setFont(new Font("Arial", 18));
-            articleName.setText(article.getName());
-            Label articleNumber = new Label();
+            articleName.setPrefWidth(150);
+            Label articleNumber = new Label(String.valueOf(article.getArticleNumber()));
             articleNumber.setFont(new Font("Arial", 18));
-            articleNumber.setText(String.valueOf(article.getArticleNumber()));
-            Label articlePrice = new Label();
+            articleNumber.setPrefWidth(100);
+            Label articlePrice = new Label(String.valueOf(article.getPrice()));
             articlePrice.setFont(new Font("Arial", 18));
-            articlePrice.setText(String.valueOf(article.getPrice()));
-            Label articleStock = new Label();
+            articlePrice.setPrefWidth(75);
+            Label articleStock = new Label(String.valueOf(article.getInStock()));
             articleStock.setFont(new Font("Arial", 18));
-            articleStock.setText(String.valueOf(article.getInStock()));
+            articleStock.setPrefWidth(75);
             Button details = new Button();
             details.setText("Details");
-            this.articleGrid.add(details, 5, i);
+            details.setPrefWidth(100);
+            this.articleGrid.add(articleName, 0, i);
+            this.articleGrid.add(articleNumber, 1, i);
+            this.articleGrid.add(articlePrice, 2, i);
+            this.articleGrid.add(articleStock, 3, i);
+            this.articleGrid.add(details, 4, i);
             i++;
             System.out.println("new article: "+article.getName());
         }
