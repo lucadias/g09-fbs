@@ -76,6 +76,7 @@ public class ArticleListViewController implements Initializable {
     
     private void fillList() {
         int i=1;
+        System.out.println("till here it works");
         for(ArticleDTO article:this.articleList) {
             Label articleName = new Label();
             articleName.setText(article.getName());
