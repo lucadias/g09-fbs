@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.hslu.appe.fbs.client;
+package ch.hslu.appe.fbs.client._old;
 
 import javafx.scene.Node;
 

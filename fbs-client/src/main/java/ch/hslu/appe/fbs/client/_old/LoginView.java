@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.hslu.appe.fbs.client;
+package ch.hslu.appe.fbs.client._old;
 
-import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
-import static ch.hslu.appe.fbs.client.JavaFXViewController.LOGIN_SERVICE_NAME;
+import static ch.hslu.appe.fbs.client._old.Client.REGISTRY_PORT;
+import static ch.hslu.appe.fbs.client._old.JavaFXViewController.LOGIN_SERVICE_NAME;
 import ch.hslu.appe.fbs.remote.RemoteArticleService;
 import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
 import java.net.MalformedURLException;

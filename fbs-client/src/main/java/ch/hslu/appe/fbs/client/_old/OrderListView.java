@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.hslu.appe.fbs.client;
-
-import javafx.scene.Node;
+package ch.hslu.appe.fbs.client._old;
 
 /**
  *
  * @author salzm
  */
-public interface FBSView {
-    
-    public Node getCenterPane();
-    public Node getBottomPane();
+public class OrderListView {
+    public OrderListView() {
+        
+    }
 }

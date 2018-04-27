@@ -5,6 +5,7 @@
  */
 package ch.hslu.appe.fbs.client;
 
+import ch.hslu.appe.fbs.client._old.JavaFXViewController;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
