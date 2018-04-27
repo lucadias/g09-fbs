@@ -10,37 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderPersistor {
-    private final EntityManager entitymanager;
 
-    public OrderPersistor() {
+    private final EntityManager entitymanager = DBEntityManager.em;
 
-        this.entitymanager = DBEntityManager.em;
-    }
 
     public Orders getById(int id) {
         transactionBegin();
 
         Orders order = entitymanager.find(Orders.class, id);
 
-        //code
+        transactionCommit();
 
         return order;
     }
 
 
     public FBSFeedback save(Orders order) {
-        try {
-            transactionBegin();
-            entitymanager.merge(order);
-            entitymanager.flush();
-        } finally {
-            entitymanager.getTransaction().commit();
-        }
-        return FBSFeedback.SUCCESS;
+        return Util.save(order);
     }
 
     public List getAll(){
-        return this.entitymanager.createQuery("Select o From Orders o").getResultList();
+        transactionBegin();
+
+        List<Orders> list = this.entitymanager.createQuery("Select o From Orders o").getResultList();
+
+        this.transactionCommit();
+        return list;
     }
 
 
@@ -48,4 +43,7 @@ public class OrderPersistor {
         entitymanager.getTransaction().begin();
     }
 
+    private void transactionCommit() {
+        entitymanager.getTransaction().commit();
+    }
 }

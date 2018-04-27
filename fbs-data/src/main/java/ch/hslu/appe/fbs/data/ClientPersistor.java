@@ -19,14 +19,8 @@ import java.util.List;
  */
 public class ClientPersistor {
 
-    private final EntityManagerFactory emfactory;
-    private final EntityManager entitymanager;
+    private final EntityManager entitymanager = DBEntityManager.em;
 
-    public ClientPersistor() {
-        this.emfactory = Persistence.createEntityManagerFactory("Glp9Pu");
-
-        this.entitymanager = emfactory.createEntityManager();
-    }
 
     public Client getById(int id) {
         transactionBegin();
@@ -42,7 +36,7 @@ public class ClientPersistor {
 
     public Client getByClientNr(int clientNr) { return this.getById(clientNr);}
 
-    public FBSFeedback save(Client client) { return FBSFeedback.SUCCESS; }
+    public FBSFeedback save(Client client) { return Util.save(client); }
 
 
     public List<Client> getList() {

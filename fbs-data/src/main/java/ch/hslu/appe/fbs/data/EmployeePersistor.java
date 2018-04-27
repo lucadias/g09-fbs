@@ -19,14 +19,7 @@ import java.util.List;
  */
 public class EmployeePersistor {
 
-    private final EntityManagerFactory emfactory;
-    private final EntityManager entitymanager;
-
-    public EmployeePersistor() {
-        this.emfactory = Persistence.createEntityManagerFactory("Glp9Pu");
-
-        this.entitymanager = emfactory.createEntityManager();
-    }
+    private final EntityManager entitymanager = DBEntityManager.em;
 
     public Employee getById(int id) {
         transactionBegin();
@@ -43,7 +36,7 @@ public class EmployeePersistor {
 
     public Employee getByemployeeNr(int employeeNr) { return this.getById(employeeNr);}
 
-    public FBSFeedback save(Employee employee) { return FBSFeedback.SUCCESS; }
+    public FBSFeedback save(Employee employee) { return Util.save(employee); }
 
     public List<Employee> getList() {
         return this.entitymanager.createQuery("Select a From Employee a").getResultList();

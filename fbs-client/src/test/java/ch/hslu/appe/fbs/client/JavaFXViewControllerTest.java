@@ -6,6 +6,7 @@
 package ch.hslu.appe.fbs.client;
 
 import ch.hslu.appe.fbs.client._old.JavaFXViewController;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -13,11 +14,12 @@ import static org.junit.Assert.*;
  *
  * @author salzm
  */
+@Ignore
 public class JavaFXViewControllerTest {
-    
+
     public JavaFXViewControllerTest() {
     }
-    
+
     /**
      * Test of getTopPane method, of class JavaFXViewController.
      * Test for not Null
@@ -38,7 +40,7 @@ public class JavaFXViewControllerTest {
         JavaFXViewController jvc = new JavaFXViewController();
         assertNotNull(jvc.getCenterPane());
     }
-    
+
     /**
      * Test of getRightPane method, of class JavaFXViewController.
      * Test for not Null
@@ -48,7 +50,7 @@ public class JavaFXViewControllerTest {
         JavaFXViewController jvc = new JavaFXViewController();
         assertNotNull(jvc.getRightPane());
     }
-    
+
     /**
      * Test of getLeftPane method, of class JavaFXViewController.
      * Test for not Null
@@ -68,5 +70,5 @@ public class JavaFXViewControllerTest {
         JavaFXViewController jvc = new JavaFXViewController();
         assertNotNull(jvc.getBottomPane());
     }
-    
+
 }
