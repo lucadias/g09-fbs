@@ -26,6 +26,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 /**
  * FXML Controller class
@@ -79,12 +80,16 @@ public class ArticleListViewController implements Initializable {
         System.out.println("till here it works");
         for(ArticleDTO article:this.articleList) {
             Label articleName = new Label();
+            articleName.setFont(new Font("Arial", 18));
             articleName.setText(article.getName());
             Label articleNumber = new Label();
+            articleNumber.setFont(new Font("Arial", 18));
             articleNumber.setText(String.valueOf(article.getArticleNumber()));
             Label articlePrice = new Label();
+            articlePrice.setFont(new Font("Arial", 18));
             articlePrice.setText(String.valueOf(article.getPrice()));
             Label articleStock = new Label();
+            articleStock.setFont(new Font("Arial", 18));
             articleStock.setText(String.valueOf(article.getInStock()));
             Button details = new Button();
             details.setText("Details");
