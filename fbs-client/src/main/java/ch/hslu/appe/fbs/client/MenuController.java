@@ -22,9 +22,7 @@ import javafx.scene.control.Button;
  *
  * @author salzm
  */
-public class MenuController implements Initializable, HasStateChangeListener {
-    
-    private ArrayList<StateChangeListener> stateChangeListeners = new ArrayList<>();
+public class MenuController implements Initializable {
     
     @FXML 
     private Button leftMenuDashboardButton;
@@ -56,10 +54,8 @@ public class MenuController implements Initializable, HasStateChangeListener {
             loader.setLocation(getClass().getResource("/fxml/DashboardView.fxml"));
             Parent dashboard = (Parent) loader.load();
             DashboardViewController dashboardViewController = (DashboardViewController) loader.getController();
-//            HasStateChangeListener viewController = (HasStateChangeListener) dashboardViewController;
-            for(StateChangeListener listener:stateChangeListeners) {
-                listener.stateChanged(dashboard, dashboardViewController);
-            }
+            JavaFXViewController.getInstance().setView(dashboard);
+            JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());
         }
@@ -119,13 +115,5 @@ public class MenuController implements Initializable, HasStateChangeListener {
 //        } catch (IOException e) {
 //            System.out.println("Error loading fxml: "+e.getMessage());
 //        }
-    }
-    
-    @Override
-    public void addStateChangeListener(StateChangeListener listener) {
-        if(!this.stateChangeListeners.contains(listener)) {
-            this.stateChangeListeners.add(listener);
-        }
-    }
-    
+    }    
 }

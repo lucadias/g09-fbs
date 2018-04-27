@@ -8,7 +8,9 @@ package ch.hslu.appe.fbs.client;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
 /**
  * FXML Controller class
@@ -17,19 +19,20 @@ import javafx.fxml.Initializable;
  */
 public class DashboardViewController implements Initializable {
     
-    private ArrayList<StateChangeListener> stateChangeListeners = new ArrayList<>();
-
+    @FXML
+    private Button dashboardNewOrderButton;
+    
+    @FXML
+    private Button dashboardArticleListButton;
+    
+    @FXML
+    private Button dashboardLogoutButton;
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }
-    
-    public void addStateChangeListener(StateChangeListener listener) {
-        if(!this.stateChangeListeners.contains(listener)) {
-            this.stateChangeListeners.add(listener);
-        }
-    }    
+    } 
 }

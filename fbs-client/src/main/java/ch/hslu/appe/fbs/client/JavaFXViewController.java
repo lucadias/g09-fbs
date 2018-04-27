@@ -10,16 +10,26 @@ import javafx.scene.layout.GridPane;
 /**
  * JavaDoc
  */
-public final class JavaFXViewController implements StateChangeListener {
+public final class JavaFXViewController {
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
     public static final String LOGIN_SERVICE_NAME = "LoginService";
     public static final String ORDER_SERVICE_NAME = "OrderService";
     private Node currentView;
     private ArrayList<RepaintRequestListener> repaintRequestListeners = new ArrayList<>();
+    private static JavaFXViewController viewControllerInstance = null;
     
 
-    public JavaFXViewController() {
+    private JavaFXViewController() {
         
+    }
+    
+    public static JavaFXViewController getInstance() {
+        if(viewControllerInstance != null) {
+            return viewControllerInstance;
+        } else {
+            viewControllerInstance = new JavaFXViewController();
+            return viewControllerInstance;
+        }
     }
     
     public void start() {
@@ -33,7 +43,6 @@ public final class JavaFXViewController implements StateChangeListener {
             loader.setLocation(getClass().getResource("/fxml/LoginView.fxml"));
             Parent loginView = (Parent) loader.load();
             LoginViewController loginViewController = (LoginViewController) loader.getController();
-            this.stateChanged(loginView, loginViewController);
             this.currentView = loginView;
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());
@@ -54,7 +63,7 @@ public final class JavaFXViewController implements StateChangeListener {
 //        this.setView(alv);
     }
     
-    private void repaint() {
+    public void repaint() {
         for(RepaintRequestListener listener: this.repaintRequestListeners) {
             listener.repaint();
         }
@@ -73,9 +82,7 @@ public final class JavaFXViewController implements StateChangeListener {
             FXMLLoader topMenuLoader = new FXMLLoader();
             topMenuLoader.setLocation(getClass().getResource("/fxml/TopMenu.fxml"));
             Parent topMenu = (Parent) topMenuLoader.load();
-            //don't have to add listener because of leftMenu has the same controller but won't matter, is catched
             MenuController menuController = (MenuController) topMenuLoader.getController();
-            this.stateChanged(topMenu, menuController);
             return topMenu;
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());
@@ -93,24 +100,11 @@ public final class JavaFXViewController implements StateChangeListener {
             leftMenuLoader.setLocation(getClass().getResource("/fxml/LeftMenu.fxml"));
             Parent leftMenu = (Parent) leftMenuLoader.load();
             MenuController menuController = (MenuController) leftMenuLoader.getController();
-            this.stateChanged(leftMenu, menuController);
             return leftMenu;
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());
             return null;
         }
-    }
-
-    @Override
-    public void stateChanged(Parent view, Object controller) {
-        if(controller instanceof HasStateChangeListener) {
-//            controller.addStateChangeListener(this);
-            System.out.println("fuck you");
-            ((HasStateChangeListener) controller).addStateChangeListener(this); //seems to be an endless loop
-        }
-        this.currentView = view;
-        this.repaint();
-    }
-    
+    }    
     //ToDo: Think about implementing a state-pattern with the Menu-Buttons depending on the view
 }

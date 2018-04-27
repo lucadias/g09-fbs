@@ -25,9 +25,7 @@ import javafx.scene.control.TextField;
  *
  * @author salzm
  */
-public class LoginViewController implements Initializable, HasStateChangeListener {
-    
-    private ArrayList<StateChangeListener> stateChangeListeners = new ArrayList<>();
+public class LoginViewController implements Initializable {
     
     @FXML 
     private Label title;
@@ -63,19 +61,10 @@ public class LoginViewController implements Initializable, HasStateChangeListene
             loader.setLocation(getClass().getResource("/fxml/DashboardView.fxml"));
             Parent dashboard = (Parent) loader.load();
             DashboardViewController dashboardViewController = (DashboardViewController) loader.getController();
-//            HasStateChangeListener viewController = (HasStateChangeListener) dashboardViewController;
-            for(StateChangeListener listener:stateChangeListeners) {
-                listener.stateChanged(dashboard, dashboardViewController);
-            }
+            JavaFXViewController.getInstance().setView(dashboard);
+            JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());
-        }
-    }
-    
-    @Override
-    public void addStateChangeListener(StateChangeListener listener) {
-        if(!this.stateChangeListeners.contains(listener)) {
-            this.stateChangeListeners.add(listener);
         }
     }
 }

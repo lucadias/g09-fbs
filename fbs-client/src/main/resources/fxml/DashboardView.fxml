@@ -17,17 +17,17 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="250.0" text="Neue Bestellung">
+      <Button fx:id="dashboardNewOrderButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="250.0" text="Neue Bestellung">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
-      <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="250.0" text="Ausloggen" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Button fx:id="dashboardLogoutButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="250.0" text="Ausloggen" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
-      <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="250.0" text="Artikelliste" GridPane.columnIndex="1">
+      <Button fx:id="dashboardArticleListButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="250.0" text="Artikelliste" GridPane.columnIndex="1">
          <font>
             <Font size="24.0" />
          </font>

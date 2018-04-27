@@ -30,7 +30,7 @@ public class Client extends Application implements RepaintRequestListener {
     @Override
     public void start(Stage primaryStage) {
         this.stage = primaryStage;
-        this.viewController = new JavaFXViewController();
+        this.viewController = JavaFXViewController.getInstance();
         viewController.addRepaintRequestListener(this);
         viewController.start();
         primaryStage.setTitle("Filialbestellsystem");
