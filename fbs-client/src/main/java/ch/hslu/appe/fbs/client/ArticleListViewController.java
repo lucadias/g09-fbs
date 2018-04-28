@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -95,6 +96,11 @@ public class ArticleListViewController implements Initializable {
             Button details = new Button();
             details.setText("Details");
             details.setPrefWidth(100);
+            details.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    showDetail(article.getId());
+                }
+            });
             this.articleGrid.add(articleName, 0, i);
             this.articleGrid.add(articleNumber, 1, i);
             this.articleGrid.add(articlePrice, 2, i);
