@@ -34,6 +34,8 @@ public class ArticleDetailViewController implements Initializable {
     private ArticleDTO articleDTO;
     private int articleId=1;
     
+    private RemoteArticleService articleService = null;
+    
     @FXML
     private Label articleName;
     
@@ -48,6 +50,9 @@ public class ArticleDetailViewController implements Initializable {
     
     @FXML
     private Label articleMinStock;
+    
+    @FXML
+    private Label articlePrice;
     
     @FXML
     private Button backButton;
@@ -108,10 +113,7 @@ public class ArticleDetailViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             final String urlString = "rmi://localhost:" + String.valueOf(REGISTRY_PORT) + "/" + ARTICLE_SERVICE_NAME;
-            final RemoteArticleService articleService = (RemoteArticleService) Naming.lookup(urlString);
-            ArticleDTO currentArticle = articleService.getById(this.articleId);
-            this.articleDTO = currentArticle;
-            this.fillArticle();
+            this.articleService = (RemoteArticleService) Naming.lookup(urlString);
         } catch (NotBoundException | MalformedURLException |
             RemoteException e) {
             this.articleDTO = new ArticleDTO(Integer.MAX_VALUE);
@@ -122,6 +124,15 @@ public class ArticleDetailViewController implements Initializable {
     
     public void setId(int id) {
         this.articleId = id;
+        try {
+            ArticleDTO currentArticle = articleService.getById(this.articleId);
+            this.articleDTO = currentArticle;
+            this.fillArticle();
+        } catch(RemoteException e) {
+            this.articleDTO = new ArticleDTO(Integer.MAX_VALUE);
+            this.articleDTO.setDescription("Error in RMI: "+e);
+            System.out.println("Error in RMI: "+e);
+        }
     }
     
     private void fillArticle() {
@@ -130,6 +141,7 @@ public class ArticleDetailViewController implements Initializable {
         this.articleNumber.setText(String.valueOf(this.articleDTO.getArticleNumber()));
         this.articleStock.setText(String.valueOf(this.articleDTO.getInStock()));
         this.articleMinStock.setText(String.valueOf(this.articleDTO.getMinInStock()));
+        this.articlePrice.setText(String.valueOf(this.articleDTO.getPrice()));
     }
     
 }

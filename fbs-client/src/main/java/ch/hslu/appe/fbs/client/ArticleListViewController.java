@@ -47,17 +47,17 @@ public class ArticleListViewController implements Initializable {
     
     @FXML
     public void addNewArticle(ActionEvent event) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("/fxml/ArticleDetailView.fxml"));
-//            Parent dashboard = (Parent) loader.load();
-//            ArticleDetailViewController articleDetailViewController = (ArticleDetailViewController) loader.getController();
-//            articleDetailViewController.setId(3);
-//            JavaFXViewController.getInstance().setView(dashboard);
-//            JavaFXViewController.getInstance().repaint();
-//        } catch (IOException e) {
-//            System.out.println("Error loading fxml: "+e.getMessage());
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/ArticleEditView.fxml"));
+            Parent dashboard = (Parent) loader.load();
+            ArticleEditViewController articleEditViewController = (ArticleEditViewController) loader.getController();
+            articleEditViewController.setId(0);
+            JavaFXViewController.getInstance().setView(dashboard);
+            JavaFXViewController.getInstance().repaint();
+        } catch (IOException e) {
+            System.out.println("Error loading fxml: "+e.getMessage());
+        }
     }
 
     /**
@@ -98,6 +98,7 @@ public class ArticleListViewController implements Initializable {
             details.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
                     showDetail(article.getId());
+                    System.out.println(article.getId());
                 }
             });
             this.articleGrid.add(articleName, 0, i);

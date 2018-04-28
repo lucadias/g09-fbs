@@ -59,6 +59,8 @@
                   <Label fx:id="articleStock" prefHeight="30.0" prefWidth="235.0" text="value" />
                   <Label prefHeight="30.0" prefWidth="235.0" text="Min-Bestellung" />
                   <Label fx:id="articleMinStock" prefHeight="30.0" prefWidth="235.0" text="value" />
+                  <Label prefHeight="30.0" prefWidth="235.0" text="Preis" />
+                  <Label fx:id="articlePrice" prefHeight="30.0" prefWidth="235.0" text="value" />
                </children>
             </VBox>
          </children>
