@@ -77,16 +77,16 @@ public class MenuController implements Initializable {
     
     @FXML
     public void orderButtonPressed(ActionEvent event) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("/fxml/OrderListView.fxml"));
-//            Parent orderListView = loader.load();
-//            for(StateChangeListener listener:stateChangeListeners) {
-//                listener.stateChanged(orderListView);
-//            }
-//        } catch (IOException e) {
-//            System.out.println("Error loading fxml: "+e.getMessage());
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/OrderListView.fxml"));
+            Parent orders = (Parent) loader.load();
+            OrderListViewController orderListViewController = (OrderListViewController) loader.getController();
+            JavaFXViewController.getInstance().setView(orders);
+            JavaFXViewController.getInstance().repaint();
+        } catch (IOException e) {
+            System.out.println("Error loading fxml: "+e.getMessage());
+        }
     }
     
     @FXML
