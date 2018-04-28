@@ -74,16 +74,17 @@ public class ArticleDetailViewController implements Initializable {
     
     @FXML
     public void showEditView(ActionEvent event) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("/fxml/DashboardView.fxml"));
-//            Parent dashboard = (Parent) loader.load();
-//            DashboardViewController dashboardViewController = (DashboardViewController) loader.getController();
-//            JavaFXViewController.getInstance().setView(dashboard);
-//            JavaFXViewController.getInstance().repaint();
-//        } catch (IOException e) {
-//            System.out.println("Error loading fxml: "+e.getMessage());
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/ArticleEditView.fxml"));
+            Parent dashboard = (Parent) loader.load();
+            ArticleEditViewController articleEditViewController = (ArticleEditViewController) loader.getController();
+            articleEditViewController.setId(this.articleId);
+            JavaFXViewController.getInstance().setView(dashboard);
+            JavaFXViewController.getInstance().repaint();
+        } catch (IOException e) {
+            System.out.println("Error loading fxml: "+e.getMessage());
+        }
     }
     
     @FXML
