@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 /**
@@ -47,6 +48,29 @@ public class ArticleDetailViewController implements Initializable {
     
     @FXML
     private Label articleMinStock;
+    
+    @FXML
+    private Button backButton;
+    
+    @FXML
+    private Button editButton;
+    
+    @FXML
+    private Button editStockButton;
+    
+    @FXML
+    public void back(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/ArticleListView.fxml"));
+            Parent dashboard = (Parent) loader.load();
+            ArticleListViewController articleListViewController = (ArticleListViewController) loader.getController();
+            JavaFXViewController.getInstance().setView(dashboard);
+            JavaFXViewController.getInstance().repaint();
+        } catch (IOException e) {
+            System.out.println("Error loading fxml: "+e.getMessage());
+        }
+    }
     
     @FXML
     public void showEditView(ActionEvent event) {

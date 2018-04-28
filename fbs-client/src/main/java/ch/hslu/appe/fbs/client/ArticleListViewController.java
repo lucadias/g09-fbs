@@ -79,7 +79,6 @@ public class ArticleListViewController implements Initializable {
     
     private void fillList() {
         int i=0;
-        System.out.println("till here it works");
         for(ArticleDTO article:this.articleList) {
             Label articleName = new Label(article.getName());
             articleName.setFont(new Font("Arial", 18));
