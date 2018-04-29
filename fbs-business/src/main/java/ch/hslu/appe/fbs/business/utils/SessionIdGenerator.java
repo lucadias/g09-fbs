@@ -26,4 +26,8 @@ public final class SessionIdGenerator {
 
         return new String(buffer);
     }
+
+    public static int getSessionIdLength() {
+        return sessionIdLength;
+    }
 }

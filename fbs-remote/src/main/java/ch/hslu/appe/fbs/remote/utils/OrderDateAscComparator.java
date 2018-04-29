@@ -5,7 +5,7 @@ import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 import java.util.Comparator;
 
 /**
- * OrderDateAscComparator
+ * This comparator compares orders ascending based on the date.
  *
  * @author Mischa Gruber
  */

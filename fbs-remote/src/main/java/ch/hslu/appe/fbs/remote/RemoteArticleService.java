@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 /**
- * Remote interface for the service object
+ * Remote interface for the article service.
  *
  * @author Mischa Gruber
  */
