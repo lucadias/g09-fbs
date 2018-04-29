@@ -48,7 +48,7 @@ public interface RemoteOrderService extends Remote {
      * Saves the order.
      * @param orderDTO order to save
      * @param hash lock hash of the order
-     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedbacks
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws RemoteException mandatory
      */
     FBSFeedback save(OrderDTO orderDTO, String hash) throws RemoteException;
@@ -82,7 +82,7 @@ public interface RemoteOrderService extends Remote {
     /**
      * Returns all orders as a sorted list.
      * @param type how the list has to be sorted
-     * @return ordered list of orders
+     * @return sorted list of orders
      * @throws RemoteException mandatory
      */
     List<OrderDTO> sortList(SortingType type) throws RemoteException;
@@ -91,7 +91,7 @@ public interface RemoteOrderService extends Remote {
      * Sorts a given list and returns it.
      * @param orderDTOs list to sort
      * @param type how the list has to be sorted
-     * @return ordered list of orders
+     * @return sorted list of orders
      * @throws RemoteException mandatory
      */
     List<OrderDTO> sortList(List<OrderDTO> orderDTOs, SortingType type) throws RemoteException;

@@ -11,15 +11,19 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 /**
- * JavaDoc
+ * Server implementation of the RemoteArticleService interface.
  *
  * @author Mischa Gruber
  */
 public final class ArticleService extends UnicastRemoteObject implements RemoteArticleService {
 
-
+    public static final long serialVersionUID = 1L;
     private transient ArticleManager articleManager;
 
+    /**
+     * Constructor of the ArticleService.
+     * @throws RemoteException mandatory
+     */
     public ArticleService() throws RemoteException {
         super();
 

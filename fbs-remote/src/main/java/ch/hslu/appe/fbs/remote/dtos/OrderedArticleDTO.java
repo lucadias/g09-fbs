@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 public final class OrderedArticleDTO implements Serializable {
 
+    public static final long serialVersionUID = 1L;
+
     private int id;
     private ArticleDTO articleDTO;
     private int amount;

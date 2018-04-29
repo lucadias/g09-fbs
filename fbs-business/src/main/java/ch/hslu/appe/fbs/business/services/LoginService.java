@@ -8,14 +8,19 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 /**
- * JavaDoc
+ * Server implementation of the RemoteLoginService interface.
  *
  * @author Mischa Gruber
  */
-public class LoginService extends UnicastRemoteObject implements RemoteLoginService {
+public final class LoginService extends UnicastRemoteObject implements RemoteLoginService {
 
-    private SessionManager sessionManager;
+    public static final long serialVersionUID = 1L;
+    private transient SessionManager sessionManager;
 
+    /**
+     * Constructor of the LoginService.
+     * @throws RemoteException mandatory
+     */
     public LoginService() throws RemoteException {
         super();
 
@@ -23,12 +28,12 @@ public class LoginService extends UnicastRemoteObject implements RemoteLoginServ
     }
 
     @Override
-    public String login(String username, String passwordHash) throws RemoteException {
+    public String login(final String username, final String passwordHash) throws RemoteException {
         return sessionManager.login(username, passwordHash);
     }
 
     @Override
-    public FBSFeedback logout(String sessionId, String username) throws RemoteException {
+    public FBSFeedback logout(final String sessionId, final String username) throws RemoteException {
         return sessionManager.logout(sessionId, username);
     }
 }

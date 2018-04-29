@@ -3,31 +3,44 @@ package ch.hslu.appe.fbs.business.utils;
 import java.security.SecureRandom;
 
 /**
- * JavaDoc
+ * Random Session Id Generator.
  *
  * @author Mischa Gruber
  */
 public final class SessionIdGenerator {
 
-    private final static int sessionIdLength = 128;
-    private final static String upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private final static String lowerChars = "abcdefghijklmnopqrstuvwxyz";
-    private final static String numerics = "0123456789";
-    private final static String alphanum = upperChars + lowerChars + numerics;
+    private static final int SESSION_ID_LENGTH = 128;
+    private static final String UPPER_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String LOWER_CHARS = "abcdefghijklmnopqrstuvwxyz";
+    private static final String NUMERICS = "0123456789";
+    private static final String ALPHANUM = UPPER_CHARS + LOWER_CHARS + NUMERICS;
 
+    /**
+     * Private constructor to prevent having a public one.
+     */
+    private SessionIdGenerator() {}
+
+    /**
+     * Generates a new session id string.
+     * @return new generated session id
+     */
     public static String getNewId() {
         SecureRandom random = new SecureRandom();
-        char[] buffer = new char[sessionIdLength];
-        char[] symbols = alphanum.toCharArray();
+        char[] buffer = new char[SESSION_ID_LENGTH];
+        char[] symbols = ALPHANUM.toCharArray();
 
-        for (int i=0; i<sessionIdLength; i++) {
+        for (int i = 0; i < SESSION_ID_LENGTH; i++) {
             buffer[i] = symbols[random.nextInt(symbols.length)];
         }
 
         return new String(buffer);
     }
 
+    /**
+     * Returns the length of session id strings.
+     * @return length of session id strings
+     */
     public static int getSessionIdLength() {
-        return sessionIdLength;
+        return SESSION_ID_LENGTH;
     }
 }

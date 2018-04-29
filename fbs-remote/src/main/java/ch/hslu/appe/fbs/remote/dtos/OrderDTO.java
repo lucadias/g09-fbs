@@ -11,6 +11,8 @@ import java.util.List;
  */
 public final class OrderDTO implements Serializable {
 
+    public static final long serialVersionUID = 1L;
+
     private int id;
     private Timestamp date;
     private double totalPrice;

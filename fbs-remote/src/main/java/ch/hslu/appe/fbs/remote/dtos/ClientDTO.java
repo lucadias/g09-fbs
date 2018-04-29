@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 public final class ClientDTO implements Serializable {
 
+    public static final long serialVersionUID = 1L;
+
     private int id;
     private String surname;
     private String firstname;

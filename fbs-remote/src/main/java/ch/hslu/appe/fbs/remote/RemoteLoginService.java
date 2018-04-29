@@ -24,7 +24,7 @@ public interface RemoteLoginService extends Remote {
      * Validates with additional username.
      * @param sessionId session id of the user
      * @param username username for the session id
-     * @return FBSFeedback.SUCCESS on success, FBSFeedback.SESSION_ID_USERNAME_NOT_MATCHING or FBSFeedback.SESSION_ID_NOT_EXISTING on failure
+     * @return FBSFeedback.SUCCESS on success, or a specific feedback on failure
      * @throws RemoteException mandatory
      */
     FBSFeedback logout(String sessionId, String username) throws RemoteException;

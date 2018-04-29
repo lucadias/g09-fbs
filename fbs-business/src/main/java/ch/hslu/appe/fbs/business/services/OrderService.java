@@ -11,23 +11,26 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 /**
- * Class_Name
+ * Server implementation of the RemoteOrderService interface.
  *
  * @author Mischa Gruber
  */
 public final class OrderService extends UnicastRemoteObject implements RemoteOrderService {
 
+    public static final long serialVersionUID = 1L;
     private transient OrderManager orderManager;
 
+    /**
+     * Constructor of the OrderService.
+     * @throws RemoteException
+     */
     public OrderService() throws RemoteException {
         super();
 
         orderManager = OrderManager.getInstance();
     }
 
-    /**
-     * TODO: implement getListByClientId, delete
-     */
+    //TODO: implement getListByClientId, delete
 
     @Override
     public OrderDTO getById(final int id) throws RemoteException {
