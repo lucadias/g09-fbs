@@ -1,11 +1,11 @@
 package ch.hslu.appe.fbs.business.manager;
 
-import ch.hslu.appe.fbs.business.utils.ArticleConverter;
-import ch.hslu.appe.fbs.business.utils.OrderConverter;
+import ch.hslu.appe.fbs.business.utils.*;
 import ch.hslu.appe.fbs.data.ArticlePersistor;
+import ch.hslu.appe.fbs.data.ClientPersistor;
+import ch.hslu.appe.fbs.data.EmployeePersistor;
 import ch.hslu.appe.fbs.data.OrderPersistor;
-import ch.hslu.appe.fbs.model.entities.Article;
-import ch.hslu.appe.fbs.model.entities.Orders;
+import ch.hslu.appe.fbs.model.entities.*;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
 import ch.hslu.appe.fbs.remote.dtos.*;
@@ -34,10 +34,18 @@ public final class OrderManager {
     // Persistors
     private OrderPersistor orderPersistor;
     private ArticlePersistor articlePersistor;
+    //private OrderStatePersistor orderStatePersistor;
+    //private OrderedArticlePersistor orderedArticlePersistor;
+    private EmployeePersistor employeePersistor;
+    private ClientPersistor clientPersistor;
 
     // Converter
     private OrderConverter orderConverter;
     private ArticleConverter articleConverter;
+    private OrderStateConverter orderStateConverter;
+    private OrderedArticleConverter orderedArticleConverter;
+    private EmployeeConverter employeeConverter;
+    private ClientConverter clientConverter;
 
     public static OrderManager getInstance() {
         OrderManager result = instance;
@@ -58,9 +66,15 @@ public final class OrderManager {
         // Persistors
         this.orderPersistor = new OrderPersistor();
         this.articlePersistor = new ArticlePersistor();
+        this.employeePersistor = new EmployeePersistor();
+        this.clientPersistor = new ClientPersistor();
         // Converters
         this.orderConverter = new OrderConverter();
         this.articlePersistor = new ArticlePersistor();
+        this.orderStateConverter = new OrderStateConverter();
+        this.orderedArticleConverter = new OrderedArticleConverter();
+        this.employeeConverter = new EmployeeConverter();
+        this.clientConverter = new ClientConverter();
 
         try {
             this.sha256Digest = MessageDigest.getInstance("SHA-256");
@@ -88,17 +102,12 @@ public final class OrderManager {
         Article article = articlePersistor.getById(1);
         orderedArticleDTO.setArticleDTO(articleConverter.convertToDTO(article));
         orderedArticleDTOList.add(orderedArticleDTO);
-        // Employee
-        EmployeeDTO employeeDTO = new EmployeeDTO(1);
-        employeeDTO.setSurname("Muster");
-        employeeDTO.setFirstname("Peter");
-        // Client
-        ClientDTO clientDTO = new ClientDTO(1);
-        clientDTO.setSurname("Muster");
-        clientDTO.setFirstname("Erika");
         //==============================================
 
-        return orderConverter.convertToDTO(orders, orderStateDTO, orderedArticleDTOList, employeeDTO, clientDTO);
+        Employee employee = employeePersistor.getById(orders.getEmployeeIdEmployee());
+        Client client = clientPersistor.getById(orders.getClientIdClients());
+
+        return orderConverter.convertToDTO(orders, orderStateDTO, orderedArticleDTOList, employeeConverter.convertToDTO(employee), clientConverter.convertToDTO(client));
     }
 
     public List<OrderDTO> getList() {
@@ -154,10 +163,9 @@ public final class OrderManager {
     }
 
 
-    /**
-     * TODO: lock, release, check -> as interface
-     */
 
+
+    //TODO: lock, release, check - as interface
     public String lock(final int id) {
 
         synchronized (lockpool) {
@@ -167,7 +175,7 @@ public final class OrderManager {
                 return null;
             } else {
                 String toHash = String.valueOf(id) + (new Date()).toString();
-                String hash = "";
+                String hash;
                 if (sha256Digest != null) {
                     byte[] hashBytes = sha256Digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
                     hash = String.valueOf(hashBytes);
