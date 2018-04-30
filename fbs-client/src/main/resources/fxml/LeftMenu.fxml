@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="185.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hslu.appe.fbs.client.MenuController">
+   <children>
+      <Button fx:id="leftMenuDashboardButton" mnemonicParsing="false" onAction="#dashboardButtonPressed" prefHeight="40.0" prefWidth="185.0" text="Dashboard">
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </Button>
+      <Button fx:id="leftMenuArticleButton" mnemonicParsing="false" onAction="#articleButtonPressed" prefHeight="40.0" prefWidth="185.0" text="Artikel">
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </Button>
+      <Button fx:id="leftMenuOrderButton" mnemonicParsing="false" onAction="#orderButtonPressed" prefHeight="40.0" prefWidth="185.0" text="Bestellungen">
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </Button>
+      <Button fx:id="leftMenuDeliveryButton" mnemonicParsing="false" onAction="#deliveryButtonPressed" prefHeight="40.0" prefWidth="185.0" text="Lieferungen">
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </Button>
+      <Button fx:id="leftMenuLogButton" mnemonicParsing="false" onAction="#logButtonPressed" prefHeight="40.0" prefWidth="185.0" text="Logs">
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </Button>
+   </children>
+</VBox>

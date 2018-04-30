@@ -9,8 +9,6 @@ package ch.hslu.appe.fbs.client;
  *
  * @author salzm
  */
-public class OrderListView {
-    public OrderListView() {
-        
-    }
+public interface HasStateChangeListener {
+    public void addStateChangeListener(StateChangeListener listener);
 }

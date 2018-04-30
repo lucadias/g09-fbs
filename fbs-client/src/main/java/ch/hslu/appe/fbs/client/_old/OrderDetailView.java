@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.hslu.appe.fbs.client;
+package ch.hslu.appe.fbs.client._old;
 
-import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
-import static ch.hslu.appe.fbs.client.JavaFXViewController.ORDER_SERVICE_NAME;
+import static ch.hslu.appe.fbs.client._old.Client.REGISTRY_PORT;
+import static ch.hslu.appe.fbs.client._old.JavaFXViewController.ORDER_SERVICE_NAME;
 import ch.hslu.appe.fbs.remote.RemoteOrderService;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;

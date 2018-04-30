@@ -5,10 +5,12 @@
  */
 package ch.hslu.appe.fbs.client;
 
+import javafx.scene.Parent;
+
 /**
  *
  * @author salzm
  */
-public interface LoginButtonListener {
-    public void loginButtonPressed();
+public interface StateChangeListener {
+    public void stateChanged(Parent event, Object controller);
 }

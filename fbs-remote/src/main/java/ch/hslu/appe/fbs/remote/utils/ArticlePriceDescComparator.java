@@ -5,7 +5,7 @@ import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import java.util.Comparator;
 
 /**
- * JavaDoc
+ * This comparator compares articles descending based on the price.
  *
  * @author Mischa Gruber
  */

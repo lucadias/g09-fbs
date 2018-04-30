@@ -4,12 +4,17 @@ import ch.hslu.appe.fbs.model.entities.Employee;
 import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
 
 /**
- * EmployeeConverter
+ * Converter for employee entity and DTO.
  *
  * @author Mischa Gruber
  */
 public final class EmployeeConverter {
 
+    /**
+     * Converts an employee entity into a DTO.
+     * @param employee employee to be converted
+     * @return converted employee
+     */
     public EmployeeDTO convertToDTO(final Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO(employee.getIdEmployees());
         employeeDTO.setSurname(employee.getSurname());
@@ -21,6 +26,11 @@ public final class EmployeeConverter {
         return employeeDTO;
     }
 
+    /**
+     * Converts an employee DTO into an entity.
+     * @param employeeDTO employee to be converted
+     * @return converted employee
+     */
     public Employee convertToEntity(final EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         employee.setIdEmployees(employeeDTO.getId());

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hslu.appe.fbs.client.ArticleDetailViewController">
+   <children>
+      <HBox prefHeight="50.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" text="Zurück">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="editButton" mnemonicParsing="false" onAction="#showEditView" text="Bearbeiten">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="editStockButton" mnemonicParsing="false" onAction="#showEditStock" text="Lager anpassen">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <GridPane prefHeight="325.0" prefWidth="600.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="373.0" minWidth="10.0" prefWidth="365.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="234.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="157.0" minHeight="10.0" prefHeight="40.0" valignment="TOP" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="284.0" minHeight="10.0" prefHeight="282.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <FlowPane.margin>
+            <Insets />
+         </FlowPane.margin>
+         <children>
+            <Label fx:id="articleName" prefHeight="30.0" prefWidth="350.0" text="Artikelname">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="10.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <Label fx:id="articleDescription" prefHeight="160.0" prefWidth="350.0" text="Beschreibung" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="10.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <VBox prefHeight="201.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label prefHeight="30.0" prefWidth="235.0" text="Artikelnummer" />
+                  <Label fx:id="articleNumber" prefHeight="30.0" prefWidth="235.0" text="value" />
+                  <Label prefHeight="30.0" prefWidth="235.0" text="Lagerbestand" />
+                  <Label fx:id="articleStock" prefHeight="30.0" prefWidth="235.0" text="value" />
+                  <Label prefHeight="30.0" prefWidth="235.0" text="Min-Bestellung" />
+                  <Label fx:id="articleMinStock" prefHeight="30.0" prefWidth="235.0" text="value" />
+                  <Label prefHeight="30.0" prefWidth="235.0" text="Preis" />
+                  <Label fx:id="articlePrice" prefHeight="30.0" prefWidth="235.0" text="value" />
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+   </children>
+</FlowPane>

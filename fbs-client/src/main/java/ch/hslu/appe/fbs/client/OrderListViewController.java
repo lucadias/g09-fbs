@@ -1,0 +1,109 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ch.hslu.appe.fbs.client;
+
+import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
+import static ch.hslu.appe.fbs.client.JavaFXViewController.ORDER_SERVICE_NAME;
+import ch.hslu.appe.fbs.remote.RemoteArticleService;
+import ch.hslu.appe.fbs.remote.RemoteOrderService;
+import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
+import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+
+/**
+ * FXML Controller class
+ *
+ * @author salzm
+ */
+public class OrderListViewController implements Initializable {
+    
+    private RemoteOrderService orderService = null;
+    private ArrayList<OrderDTO> orderList;
+    
+    @FXML
+    private GridPane orderGrid;
+    
+    @FXML
+    private Button newOrderButton;
+    
+    @FXML
+    public void newOrder(ActionEvent event) {
+        
+    }
+
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        try {
+            final String urlString = "rmi://localhost:" + String.valueOf(REGISTRY_PORT) + "/" + ORDER_SERVICE_NAME;
+            this.orderService = (RemoteOrderService) Naming.lookup(urlString);
+            ArrayList<OrderDTO> currentOrders = (ArrayList<OrderDTO>) this.orderService.getList();
+            this.orderList = currentOrders;
+            this.fillList();
+        } catch (NotBoundException | MalformedURLException |
+            RemoteException e) {
+            System.out.println("Error in RMI: "+e);
+        }
+    }    
+    
+    private void fillList() {
+        int i=1;
+        for(OrderDTO order:this.orderList) {
+            Label orderNumber = new Label(String.valueOf(order.getId()));
+            orderNumber.setFont(new Font("Arial", 18));
+            orderNumber.setPrefWidth(80);
+            String clientName = order.getClientDTO().getFirstname() + " " + order.getClientDTO().getSurname();
+            Label client = new Label(String.valueOf(clientName));
+            client.setFont(new Font("Arial", 18));
+            client.setPrefWidth(130);
+            String employeeName = order.getEmployeeDTO().getUsername();
+            Label employee = new Label(String.valueOf(employeeName));
+            employee.setFont(new Font("Arial", 18));
+            employee.setPrefWidth(130);
+            String orderState = order.getOrderStateDTO().getState();
+            Label state = new Label(String.valueOf(orderState));
+            state.setFont(new Font("Arial", 18));
+            state.setPrefWidth(100);
+            Button details = new Button();
+            details.setText("Details");
+            details.setPrefWidth(100);
+            details.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    showDetail(order.getId());
+                    System.out.println(order.getId());
+                }
+            });
+            this.orderGrid.add(orderNumber, 0, i);
+            this.orderGrid.add(client, 1, i);
+            this.orderGrid.add(employee, 2, i);
+            this.orderGrid.add(state, 3, i);
+            this.orderGrid.add(details, 4, i);
+            i++;
+            System.out.println("new order: "+order.getId());
+        }
+    }
+    
+    private void showDetail(int id) {
+        
+    }
+    
+}
