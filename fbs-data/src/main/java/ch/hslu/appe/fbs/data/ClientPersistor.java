@@ -1,11 +1,13 @@
 package ch.hslu.appe.fbs.data;
 
+import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.model.entities.Client;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,7 +46,14 @@ public class ClientPersistor {
     }
 
     public List<Client> search(String regEx) {
-        return getList();
+
+        List<Client> result = new ArrayList<>();
+        for (Client client:this.getList()){
+            if(client.getFirstname().matches(regEx) || client.getSurname().matches(regEx)) {
+                result.add(client);
+            }
+        }
+        return result;
     }
 
     private void transactionBegin(){

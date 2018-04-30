@@ -3,6 +3,7 @@ package ch.hslu.appe.fbs.data;
 import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -46,7 +47,13 @@ public class ArticlePersistor {
     }
 
     public List<Article> search(String regEx) {
-        return getList();
+        List<Article> result = new ArrayList<>();
+        for (Article article:this.getList()){
+            if(article.getName().matches(regEx)) {
+                result.add(article);
+            }
+        }
+        return result;
     }
 
     private void transactionBegin(){
