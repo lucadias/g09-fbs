@@ -89,9 +89,15 @@ public final class OrderManager {
 
     private OrderDTO convertToDTO(Orders orders) {
 
+        if (orders == null)
+            return null;
+
+        System.out.println(orders == null);
+
         //==============================================
         // TODO: Remove Dummies
         // OrderState
+
         OrderStateDTO orderStateDTO = new OrderStateDTO(1);
         orderStateDTO.setState("TestState");
         // List<OrderedArticle> with Article
@@ -162,8 +168,7 @@ public final class OrderManager {
         }
     }
 
-
-
+    //TODO: Orders delete mit orderstate = annul order annull funktion?
 
     //TODO: lock, release, check - as interface
     public String lock(final int id) {
