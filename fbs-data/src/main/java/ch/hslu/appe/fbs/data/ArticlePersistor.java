@@ -30,6 +30,20 @@ public class ArticlePersistor {
         return article;
     }
 
+    public List<Article> getList(String regex){
+
+        try {
+            int regexint = Integer.parseInt(regex);
+            return this.entitymanager.createQuery("SELECT c FROM Article c WHERE c.articlenumber LIKE :regexint")
+                    .setParameter("regexint", regexint)
+                    .getResultList();
+        }catch (NumberFormatException nfe) {
+            return this.entitymanager.createQuery("SELECT c FROM Article c WHERE c.name LIKE :regex OR c.description LIKE :regex")
+                    .setParameter("regex", regex)
+                    .getResultList();
+        }
+    }
+
     public Article getByArticleNr(int artNr) { return this.getById(artNr);}
 
     public FBSFeedback save(Article article) {
