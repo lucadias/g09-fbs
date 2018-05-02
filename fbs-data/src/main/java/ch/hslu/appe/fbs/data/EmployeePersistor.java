@@ -35,12 +35,13 @@ public class EmployeePersistor {
     }
 
     public Employee getByUserName(String username){
-        Employee employee = (Employee) this.entitymanager.createQuery("SELECT c FROM Employee c WHERE c.Username LIKE :custName")
+
+
+        return (Employee) this.entitymanager.createQuery("SELECT c FROM Employee c WHERE c.username LIKE :custName")
                 .setParameter("custName", username)
                 .setMaxResults(1)
-                .getResultList();
+                .getSingleResult();
 
-        return employee;
     }
 
     public Employee getByemployeeNr(int employeeNr) { return this.getById(employeeNr);}
