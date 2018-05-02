@@ -54,9 +54,9 @@ public class OrderPersistorTest {
 
     @AfterClass
     public static void clean(){
-        DBEntityManager.em.getTransaction().begin();
-        DBEntityManager.em.createQuery("delete from Orders where idOrders = 9999").executeUpdate();
-        DBEntityManager.em.createQuery("delete from Orders where idOrders = 9998").executeUpdate();
-        DBEntityManager.em.getTransaction().commit();
+        Util.entityManager.getTransaction().begin();
+        Util.entityManager.createQuery("delete from Orders where idOrders = 9999").executeUpdate();
+        Util.entityManager.createQuery("delete from Orders where idOrders = 9998").executeUpdate();
+        Util.entityManager.getTransaction().commit();
     }
 }

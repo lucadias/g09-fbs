@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class EmployeePersistor {
 
-    private final EntityManager entitymanager = DBEntityManager.em;
+    private final EntityManager entitymanager = Util.entityManager;
 
     public Employee getById(int id) {
         transactionBegin();

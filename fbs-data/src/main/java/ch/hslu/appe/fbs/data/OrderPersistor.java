@@ -11,7 +11,7 @@ import java.util.List;
 
 public class OrderPersistor {
 
-    private final EntityManager entitymanager = DBEntityManager.em;
+    private final EntityManager entitymanager = Util.entityManager;
 
 
     public Orders getById(int id) {
