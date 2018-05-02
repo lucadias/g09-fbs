@@ -68,9 +68,9 @@ public class ArticleDetailViewController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/ArticleListView.fxml"));
-            Parent dashboard = (Parent) loader.load();
+            Parent articleList = (Parent) loader.load();
             ArticleListViewController articleListViewController = (ArticleListViewController) loader.getController();
-            JavaFXViewController.getInstance().setView(dashboard);
+            JavaFXViewController.getInstance().setView(articleList);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());
@@ -82,10 +82,10 @@ public class ArticleDetailViewController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/ArticleEditView.fxml"));
-            Parent dashboard = (Parent) loader.load();
+            Parent articleEdit = (Parent) loader.load();
             ArticleEditViewController articleEditViewController = (ArticleEditViewController) loader.getController();
             articleEditViewController.setId(this.articleId);
-            JavaFXViewController.getInstance().setView(dashboard);
+            JavaFXViewController.getInstance().setView(articleEdit);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());

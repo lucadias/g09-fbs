@@ -3,23 +3,34 @@ package ch.hslu.appe.fbs.data;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 
+/**
+ * Class for shared methods of Persistors
+ */
 public class Util {
 
-    private static final EntityManager entitymanager = DBEntityManager.em;
+    public static final EntityManager entityManager = Persistence.createEntityManagerFactory("Glp9Pu").createEntityManager();
+
 
     // Todo: Create Entity superclass if possible
+
+    /**
+     * universal save/update method
+     * @param entity
+     * @return
+     */
     public static FBSFeedback save(Object entity) {
         try {
-            Util.entitymanager.getTransaction().begin();
-            entitymanager.merge(entity);
-            entitymanager.flush();
-            Util.entitymanager.getTransaction().commit();
+            Util.entityManager.getTransaction().begin();
+            Util.entityManager.merge(entity);
+            Util.entityManager.flush();
+            Util.entityManager.getTransaction().commit();
             return FBSFeedback.SUCCESS;
         } catch (Exception e){
             System.out.println(e.toString());
         }
-        Util.entitymanager.getTransaction().commit();
+        Util.entityManager.getTransaction().commit();
         return FBSFeedback.UNKNOWN_ERROR;
     }
 }

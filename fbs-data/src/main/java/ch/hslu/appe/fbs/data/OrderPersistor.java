@@ -11,15 +11,19 @@ import java.util.List;
 
 public class OrderPersistor {
 
-    private final EntityManager entitymanager = DBEntityManager.em;
+    private final EntityManager entitymanager = Util.entityManager;
 
 
     public Orders getById(int id) {
         transactionBegin();
 
+        System.out.println("Get Orders with id: " + String.valueOf(id));
         Orders order = entitymanager.find(Orders.class, id);
 
+        System.out.println(order);
+
         transactionCommit();
+
 
         return order;
     }

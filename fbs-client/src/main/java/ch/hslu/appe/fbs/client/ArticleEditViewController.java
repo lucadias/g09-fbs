@@ -33,7 +33,7 @@ import javafx.scene.control.TextField;
  */
 public class ArticleEditViewController implements Initializable {
     private ArticleDTO articleDTO;
-    private int articleId=0;
+    private int articleId=-1;
     
     private RemoteArticleService articleService = null;
     
@@ -125,15 +125,12 @@ public class ArticleEditViewController implements Initializable {
     public void setId(int id) {
         this.articleId = id;
         try {
-            if(this.articleId != 0) {
+            if(this.articleId != -1) {
                 ArticleDTO currentArticle = this.articleService.getById(this.articleId);
                 this.articleDTO = currentArticle;
                 this.fillArticle();
             } else {
-                //ToDo: use get new id method instead of random
-                Random randomGenerator = new Random();
-                int randomInt = randomGenerator.nextInt(10000);
-                this.articleDTO = new ArticleDTO(randomInt);
+                this.articleDTO = new ArticleDTO(-1);
             }
         } catch(RemoteException e) {
             this.articleDTO = new ArticleDTO(Integer.MAX_VALUE);
