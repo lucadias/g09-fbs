@@ -130,10 +130,7 @@ public class ArticleEditViewController implements Initializable {
                 this.articleDTO = currentArticle;
                 this.fillArticle();
             } else {
-                //ToDo: use get new id method instead of random
-                Random randomGenerator = new Random();
-                int randomInt = randomGenerator.nextInt(10000);
-                this.articleDTO = new ArticleDTO(randomInt);
+                this.articleDTO = new ArticleDTO(-1);
             }
         } catch(RemoteException e) {
             this.articleDTO = new ArticleDTO(Integer.MAX_VALUE);
