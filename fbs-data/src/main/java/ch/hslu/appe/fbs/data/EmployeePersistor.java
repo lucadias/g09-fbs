@@ -34,6 +34,11 @@ public class EmployeePersistor {
         return employee;
     }
 
+    public Employee getByUserName(String username){
+        Employee employee = (Employee) this.entitymanager.createQuery("Select a From Employee WHERE Username ='" + username + "';").getSingleResult();
+        return employee;
+    }
+
     public Employee getByemployeeNr(int employeeNr) { return this.getById(employeeNr);}
 
     public FBSFeedback save(Employee employee) { return Util.save(employee); }
@@ -52,11 +57,10 @@ public class EmployeePersistor {
     }
 
     private void transactionClose(){
-
         entitymanager.getTransaction().commit();
 
-
     }
+
 
 
 
