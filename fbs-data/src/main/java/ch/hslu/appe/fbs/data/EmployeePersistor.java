@@ -22,14 +22,14 @@ public class EmployeePersistor {
     private final EntityManager entitymanager = Util.entityManager;
 
     public Employee getById(int id) {
-        transactionBegin();
+        Util.transactionBegin();
 
         Employee employee = entitymanager.find(Employee.class, id);
 
 
         //code
 
-        transactionClose();
+        Util.transactionCommit();
 
         return employee;
     }
@@ -52,23 +52,6 @@ public class EmployeePersistor {
     public List<Employee> search(String regEx) {
         return getList();
     }
-
-    private void transactionBegin(){
-        entitymanager.getTransaction().begin();
-
-    }
-
-    private void transactionClose(){
-        entitymanager.getTransaction().commit();
-
-    }
-
-
-
-
-
-    //entitymanager.persist( employee );
-    //entitymanager.getTransaction( ).commit( );
 
 
 }

@@ -25,13 +25,13 @@ public class ClientPersistor {
 
 
     public Client getById(int id) {
-        transactionBegin();
+        Util.transactionBegin();
         Client client = entitymanager.find(Client.class, id);
 
 
         //code
 
-        transactionClose();
+        Util.transactionCommit();
 
         return client;
     }
@@ -55,23 +55,5 @@ public class ClientPersistor {
         }
         return result;
     }
-
-    private void transactionBegin(){
-        entitymanager.getTransaction().begin();
-
-    }
-
-    private void transactionClose(){
-        entitymanager.getTransaction().commit();
-
-
-    }
-
-
-
-
-    //entitymanager.persist( client );
-    //entitymanager.getTransaction( ).commit( );
-
 
 }

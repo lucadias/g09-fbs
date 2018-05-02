@@ -33,4 +33,12 @@ public class Util {
         Util.entityManager.getTransaction().commit();
         return FBSFeedback.UNKNOWN_ERROR;
     }
+
+    public static void transactionBegin(){
+        Util.entityManager.getTransaction().begin();
+    }
+
+    public static void transactionCommit(){
+        Util.entityManager.getTransaction().commit();
+    }
 }

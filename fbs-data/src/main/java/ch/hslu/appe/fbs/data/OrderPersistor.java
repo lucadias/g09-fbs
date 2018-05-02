@@ -15,14 +15,14 @@ public class OrderPersistor {
 
 
     public Orders getById(int id) {
-        transactionBegin();
+        Util.transactionBegin();
 
         System.out.println("Get Orders with id: " + String.valueOf(id));
         Orders order = entitymanager.find(Orders.class, id);
 
         System.out.println(order);
 
-        transactionCommit();
+        Util.transactionCommit();
 
 
         return order;
@@ -34,20 +34,12 @@ public class OrderPersistor {
     }
 
     public List getAll(){
-        transactionBegin();
+        Util.transactionBegin();
 
         List<Orders> list = this.entitymanager.createQuery("Select o From Orders o").getResultList();
 
-        this.transactionCommit();
+        Util.transactionCommit();
         return list;
     }
 
-
-    private void transactionBegin(){
-        entitymanager.getTransaction().begin();
-    }
-
-    private void transactionCommit() {
-        entitymanager.getTransaction().commit();
-    }
 }

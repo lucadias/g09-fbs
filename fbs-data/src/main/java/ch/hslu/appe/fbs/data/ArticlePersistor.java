@@ -22,11 +22,11 @@ public class ArticlePersistor {
 
 
     public Article getById(int id) {
-        transactionBegin();
+        Util.transactionBegin();
 
         Article article = entitymanager.find(Article.class, id);
 
-        transactionCommit();
+        Util.transactionCommit();
 
         return article;
     }
@@ -56,9 +56,9 @@ public class ArticlePersistor {
     public FBSFeedback updateStockById(int id, int amount) { return FBSFeedback.SUCCESS; }
 
     public List<Article> getList() {
-        this.transactionBegin();
+        Util.transactionBegin();
         List<Article> list = this.entitymanager.createQuery("Select a From Article a").getResultList();
-        this.transactionCommit();
+        Util.transactionCommit();
         return list;
     }
 
@@ -70,14 +70,6 @@ public class ArticlePersistor {
             }
         }
         return result;
-    }
-
-    private void transactionBegin(){
-        entitymanager.getTransaction().begin();
-    }
-
-    private void transactionCommit(){
-        entitymanager.getTransaction().commit();
     }
 
 

@@ -7,15 +7,15 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 public class OrderedArticlePersistor {
-    private final EntityManager entitymanager = DBEntityManager.em;
+    private final EntityManager entitymanager = Util.entityManager;
 
 
     public OrderedArticles getById(int id) {
-        transactionBegin();
+        Util.transactionBegin();
 
         OrderedArticles article = entitymanager.find(OrderedArticles.class, id);
 
-        transactionCommit();
+        Util.transactionCommit();
 
         return article;
     }
@@ -27,17 +27,9 @@ public class OrderedArticlePersistor {
     }
 
     public List<OrderedArticles> getList() {
-        this.transactionBegin();
+        Util.transactionBegin();
         List<OrderedArticles> list = this.entitymanager.createQuery("Select o From OrderedArticles o").getResultList();
-        this.transactionCommit();
+        Util.transactionCommit();
         return list;
-    }
-
-    private void transactionBegin(){
-        entitymanager.getTransaction().begin();
-    }
-
-    private void transactionCommit(){
-        entitymanager.getTransaction().commit();
     }
 }
