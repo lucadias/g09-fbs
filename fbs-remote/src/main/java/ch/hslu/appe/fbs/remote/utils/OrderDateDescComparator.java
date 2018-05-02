@@ -2,11 +2,10 @@ package ch.hslu.appe.fbs.remote.utils;
 
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 
-import java.sql.Date;
 import java.util.Comparator;
 
 /**
- * OrderDateDescComparator
+ * This comparator compares orders descending based on the date.
  *
  * @author Mischa Gruber
  */

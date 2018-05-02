@@ -17,7 +17,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button fx:id="dashboardNewOrderButton" mnemonicParsing="false" prefHeight="150.0" prefWidth="250.0" text="Neue Bestellung">
+      <Button fx:id="dashboardNewOrderButton" mnemonicParsing="false" onAction="#showNewOrder" prefHeight="150.0" prefWidth="250.0" text="Neue Bestellung">
          <font>
             <Font size="24.0" />
          </font>

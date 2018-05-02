@@ -29,7 +29,7 @@ public final class ArticleDetailView implements FBSView {
         try {
             final String url = "rmi://localhost:" + String.valueOf(REGISTRY_PORT) + "/" + ARTICLE_SERVICE_NAME;
             final RemoteArticleService articleService = (RemoteArticleService) Naming.lookup(url);
-            ArticleDTO currentArticle = articleService.getById(1);
+            ArticleDTO currentArticle = articleService.getById(2);
             this.articleDTO = currentArticle;
         } catch (NotBoundException | MalformedURLException |
             RemoteException e) {

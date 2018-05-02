@@ -10,25 +10,25 @@ import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
 import java.util.List;
 
 /**
- * OrderConverter
+ * Converter for order entity and DTO.
  *
  * @author Mischa Gruber
  */
 public final class OrderConverter {
 
-    private OrderStateConverter orderStateConverter;
-    private OrderedArticleConverter orderedArticleConverter;
-    private EmployeeConverter employeeConverter;
-    private ClientConverter clientConverter;
-
-    public OrderConverter() {
-        this.orderStateConverter = new OrderStateConverter();
-        this.orderedArticleConverter = new OrderedArticleConverter();
-        this.employeeConverter = new EmployeeConverter();
-        this.clientConverter = new ClientConverter();
-    }
-
-    public OrderDTO convertToDTO(final Orders order, final OrderStateDTO orderStateDTO, final List<OrderedArticleDTO> orderedArticleDTOs, final EmployeeDTO employeeDTO, final ClientDTO clientDTO) {
+    /**
+     * Converts an order entity into a DTO with additional given DTOs.
+     * Additional given DTOs will be set and have to be converted before this operation.
+     * @param order order to be converted
+     * @param orderStateDTO already converted OrderState
+     * @param orderedArticleDTOs already converted OrderedArticle list
+     * @param employeeDTO already converted Employee
+     * @param clientDTO already converted Client
+     * @return converted order
+     */
+    public OrderDTO convertToDTO(final Orders order, final OrderStateDTO orderStateDTO,
+                                 final List<OrderedArticleDTO> orderedArticleDTOs,
+                                 final EmployeeDTO employeeDTO, final ClientDTO clientDTO) {
         OrderDTO orderDTO = new OrderDTO(order.getIdOrders());
         orderDTO.setDate(order.getDate());
         orderDTO.setTotalPrice(order.getTotalPrice());
@@ -40,6 +40,13 @@ public final class OrderConverter {
         return orderDTO;
     }
 
+    /**
+     * Converts an order DTO into an entity.
+     * Additional DTOs have to be converted separately before or after this operation to save
+     * all data informations.
+     * @param orderDTO order to be converted
+     * @return converted order
+     */
     public Orders convertToEntity(final OrderDTO orderDTO) {
         Orders order = new Orders();
         order.setIdOrders(orderDTO.getId());

@@ -11,30 +11,30 @@
    <children>
       <HBox prefHeight="50.0" prefWidth="600.0">
          <children>
-            <Button mnemonicParsing="false" text="Zurück">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" text="Zurück">
                <HBox.margin>
                   <Insets bottom="5.0" left="10.0" top="5.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#showEditView" text="Bearbeiten">
+            <Button fx:id="editButton" mnemonicParsing="false" onAction="#showEditView" text="Bearbeiten">
                <HBox.margin>
                   <Insets bottom="5.0" left="10.0" top="5.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#showEditStock" text="Lager anpassen">
+            <Button fx:id="editStockButton" mnemonicParsing="false" onAction="#showEditStock" text="Lager anpassen">
                <HBox.margin>
                   <Insets bottom="5.0" left="10.0" top="5.0" />
                </HBox.margin>
             </Button>
          </children>
       </HBox>
-      <GridPane prefHeight="324.0" prefWidth="600.0">
+      <GridPane prefHeight="325.0" prefWidth="600.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="373.0" minWidth="10.0" prefWidth="366.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="373.0" minWidth="10.0" prefWidth="365.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="234.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="157.0" minHeight="10.0" prefHeight="42.0" valignment="TOP" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="157.0" minHeight="10.0" prefHeight="40.0" valignment="TOP" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="284.0" minHeight="10.0" prefHeight="282.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <FlowPane.margin>
@@ -59,6 +59,8 @@
                   <Label fx:id="articleStock" prefHeight="30.0" prefWidth="235.0" text="value" />
                   <Label prefHeight="30.0" prefWidth="235.0" text="Min-Bestellung" />
                   <Label fx:id="articleMinStock" prefHeight="30.0" prefWidth="235.0" text="value" />
+                  <Label prefHeight="30.0" prefWidth="235.0" text="Preis" />
+                  <Label fx:id="articlePrice" prefHeight="30.0" prefWidth="235.0" text="value" />
                </children>
             </VBox>
          </children>

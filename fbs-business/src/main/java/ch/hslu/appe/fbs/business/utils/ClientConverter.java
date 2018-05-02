@@ -4,12 +4,17 @@ import ch.hslu.appe.fbs.model.entities.Client;
 import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
 
 /**
- * ClientConverter
+ * Converter for client entity and DTO.
  *
  * @author Mischa Gruber
  */
 public final class ClientConverter {
 
+    /**
+     * Converts a client entity into a DTO.
+     * @param client client to be converted
+     * @return converted client
+     */
     public ClientDTO convertToDTO(final Client client) {
         ClientDTO clientDTO = new ClientDTO(client.getIdClients());
         clientDTO.setSurname(client.getSurname());
@@ -20,6 +25,11 @@ public final class ClientConverter {
         return clientDTO;
     }
 
+    /**
+     * Converts a client DTO into an entity.
+     * @param clientDTO client to be converted
+     * @return converted client
+     */
     public Client convertToEntity(final ClientDTO clientDTO) {
         Client client = new Client();
         client.setIdClients(clientDTO.getId());
