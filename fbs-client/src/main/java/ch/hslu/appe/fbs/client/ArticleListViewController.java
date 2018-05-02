@@ -52,7 +52,7 @@ public class ArticleListViewController implements Initializable {
             loader.setLocation(getClass().getResource("/fxml/ArticleEditView.fxml"));
             Parent dashboard = (Parent) loader.load();
             ArticleEditViewController articleEditViewController = (ArticleEditViewController) loader.getController();
-            articleEditViewController.setId(0);
+            articleEditViewController.setId(-1);
             JavaFXViewController.getInstance().setView(dashboard);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {

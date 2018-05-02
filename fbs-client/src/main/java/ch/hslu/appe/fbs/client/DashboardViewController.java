@@ -48,12 +48,23 @@ public class DashboardViewController implements Initializable {
     
     @FXML
     public void showOrderList(ActionEvent event) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(getClass().getResource("/fxml/OrderListView.fxml"));
+//            Parent orders = (Parent) loader.load();
+//            OrderListViewController orderListViewController = (OrderListViewController) loader.getController();
+//            JavaFXViewController.getInstance().setView(orders);
+//            JavaFXViewController.getInstance().repaint();
+//        } catch (IOException e) {
+//            System.out.println("Error loading fxml: "+e.getMessage());
+//        }
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/OrderListView.fxml"));
-            Parent orders = (Parent) loader.load();
-            OrderListViewController orderListViewController = (OrderListViewController) loader.getController();
-            JavaFXViewController.getInstance().setView(orders);
+            loader.setLocation(getClass().getResource("/fxml/OrderDetailView.fxml"));
+            Parent order = (Parent) loader.load();
+            OrderDetailViewController orderDetailViewController = (OrderDetailViewController) loader.getController();
+            orderDetailViewController.setId(1);
+            JavaFXViewController.getInstance().setView(order);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());
