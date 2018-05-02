@@ -20,6 +20,19 @@ public class OrderedArticlePersistor {
         return article;
     }
 
+    public List<OrderedArticles> getByOrderId(int id) {
+        Util.transactionBegin();
+
+        // TODO: right
+        List<OrderedArticles> orderedArticlesList = this.entitymanager.createQuery("SELECT o FROM OrderedArticles o WHERE o.ordersIdOrder LIKE :orderId")
+                .setParameter("orderId", id)
+                .getResultList();
+
+        Util.transactionCommit();
+
+        return orderedArticlesList;
+    }
+
     public OrderedArticles getByArticleNr(int artNr) { return this.getById(artNr);}
 
     public FBSFeedback save(OrderedArticles article) {

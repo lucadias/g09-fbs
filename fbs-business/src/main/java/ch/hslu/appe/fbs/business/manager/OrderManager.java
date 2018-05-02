@@ -1,10 +1,7 @@
 package ch.hslu.appe.fbs.business.manager;
 
 import ch.hslu.appe.fbs.business.utils.*;
-import ch.hslu.appe.fbs.data.ArticlePersistor;
-import ch.hslu.appe.fbs.data.ClientPersistor;
-import ch.hslu.appe.fbs.data.EmployeePersistor;
-import ch.hslu.appe.fbs.data.OrderPersistor;
+import ch.hslu.appe.fbs.data.*;
 import ch.hslu.appe.fbs.model.entities.*;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
@@ -34,8 +31,8 @@ public final class OrderManager {
     // Persistors
     private OrderPersistor orderPersistor;
     private ArticlePersistor articlePersistor;
-    //private OrderStatePersistor orderStatePersistor;
-    //private OrderedArticlePersistor orderedArticlePersistor;
+    private OrderStatePersistor orderStatePersistor;
+    private OrderedArticlePersistor orderedArticlePersistor;
     private EmployeePersistor employeePersistor;
     private ClientPersistor clientPersistor;
 
@@ -66,11 +63,13 @@ public final class OrderManager {
         // Persistors
         this.orderPersistor = new OrderPersistor();
         this.articlePersistor = new ArticlePersistor();
+        this.orderStatePersistor = new OrderStatePersistor();
+        this.orderedArticlePersistor = new OrderedArticlePersistor();
         this.employeePersistor = new EmployeePersistor();
         this.clientPersistor = new ClientPersistor();
         // Converters
         this.orderConverter = new OrderConverter();
-        this.articlePersistor = new ArticlePersistor();
+        this.articleConverter = new ArticleConverter();
         this.orderStateConverter = new OrderStateConverter();
         this.orderedArticleConverter = new OrderedArticleConverter();
         this.employeeConverter = new EmployeeConverter();
@@ -83,7 +82,7 @@ public final class OrderManager {
         }
     }
 
-    public OrderDTO getById(final int id) {
+    public OrderDTO getById(final String sessionId, final int id) {
         return convertToDTO(orderPersistor.getById(id));
     }
 
@@ -92,35 +91,43 @@ public final class OrderManager {
         if (orders == null)
             return null;
 
-        System.out.println(orders == null);
+        OrderState orderState = orderStatePersistor.getById(orders.getOrderStateIdOrderState());
+        OrderStateDTO orderStateDTO = null;
+        if (orderState != null)
+            orderStateDTO = orderStateConverter.convertToDTO(orderState);
 
-        //==============================================
-        // TODO: Remove Dummies
-        // OrderState
-
-        OrderStateDTO orderStateDTO = new OrderStateDTO(1);
-        orderStateDTO.setState("TestState");
-        // List<OrderedArticle> with Article
+        List<OrderedArticles> orderedArticlesList = orderedArticlePersistor.getByOrderId(orders.getIdOrders());
         List<OrderedArticleDTO> orderedArticleDTOList = new ArrayList<>();
-        OrderedArticleDTO orderedArticleDTO = new OrderedArticleDTO(1);
-        orderedArticleDTO.setAmount(10);
-        orderedArticleDTO.setTotalPrice(35.50);
-        Article article = articlePersistor.getById(1);
-        orderedArticleDTO.setArticleDTO(articleConverter.convertToDTO(article));
-        orderedArticleDTOList.add(orderedArticleDTO);
-        //==============================================
+        if (orderedArticlesList != null) {
+            for(OrderedArticles orderedArticles : orderedArticlesList) {
+                Article article = articlePersistor.getById(orderedArticles.getArticleIdArticle());
+                ArticleDTO articleDTO = null;
+                if (article != null)
+                    articleDTO = articleConverter.convertToDTO(article);
+
+                OrderedArticleDTO orderedArticleDTO = orderedArticleConverter.convertToDTO(orderedArticles, articleDTO);
+                orderedArticleDTOList.add(orderedArticleDTO);
+            }
+        }
 
         Employee employee = employeePersistor.getById(orders.getEmployeeIdEmployee());
+        EmployeeDTO employeeDTO = null;
+        if (employee != null)
+            employeeDTO = employeeConverter.convertToDTO(employee);
+
         Client client = clientPersistor.getById(orders.getClientIdClients());
+        ClientDTO clientDTO = null;
+        if (client != null)
+            clientDTO = clientConverter.convertToDTO(client);
 
-        return orderConverter.convertToDTO(orders, orderStateDTO, orderedArticleDTOList, employeeConverter.convertToDTO(employee), clientConverter.convertToDTO(client));
+        return orderConverter.convertToDTO(orders, orderStateDTO, orderedArticleDTOList, employeeDTO, clientDTO);
     }
 
-    public List<OrderDTO> getList() {
-        return getList(null);
+    public List<OrderDTO> getList(final String sessionId) {
+        return getList(sessionId, null);
     }
 
-    public List<OrderDTO> getList(final String regEx) {
+    public List<OrderDTO> getList(final String sessionId, final String regEx) {
         // TODO: Implement regEx
 
         List<Orders> ordersList = orderPersistor.getAll();
@@ -132,11 +139,11 @@ public final class OrderManager {
         return orderDTOList;
     }
 
-    public List<OrderDTO> sortList(final SortingType type) {
-        return sortList(getList(), type);
+    public List<OrderDTO> sortList(final String sessionId, final SortingType type) {
+        return sortList(sessionId, getList(sessionId), type);
     }
 
-    public List<OrderDTO> sortList(final List<OrderDTO> orderDTOList, final SortingType type) {
+    public List<OrderDTO> sortList(final String sessionId, final List<OrderDTO> orderDTOList, final SortingType type) {
 
         Comparator<OrderDTO> comparator;
 
@@ -157,7 +164,7 @@ public final class OrderManager {
         return orderDTOList;
     }
 
-    public FBSFeedback save(final OrderDTO orderDTO, final String hash) {
+    public FBSFeedback save(final String sessionId, final OrderDTO orderDTO, final String hash) {
         FBSFeedback lockCheck = checkLock(orderDTO.getId(), hash);
 
         if (lockCheck == FBSFeedback.SUCCESS) {
@@ -171,7 +178,7 @@ public final class OrderManager {
     //TODO: Orders delete mit orderstate = annul order annull funktion?
 
     //TODO: lock, release, check - as interface
-    public String lock(final int id) {
+    public String lock(final String sessionId, final int id) {
 
         synchronized (lockpool) {
 
@@ -195,7 +202,7 @@ public final class OrderManager {
         }
     }
 
-    public FBSFeedback release(final int id, final String hash) {
+    public FBSFeedback release(final String sessionId, final int id, final String hash) {
 
         synchronized (lockpool) {
 

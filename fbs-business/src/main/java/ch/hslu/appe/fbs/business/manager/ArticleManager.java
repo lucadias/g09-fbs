@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Date;
 
 /**
- * JavaDoc
+ * Manager for articles as a singleton.
  *
  * @author Mischa Gruber
  */
@@ -36,6 +36,10 @@ public final class ArticleManager {
 
     private ArticleConverter articleConverter;
 
+    /**
+     * Returns the singleton instance of the ArticleManager.
+     * @return single instance
+     */
     public static ArticleManager getInstance() {
         ArticleManager result = instance;
         if (result == null) {
@@ -49,6 +53,9 @@ public final class ArticleManager {
         return result;
     }
 
+    /**
+     * Private constructor for the single pattern.
+     */
     private ArticleManager() {
 
         this.articlePersistor = new ArticlePersistor();
@@ -62,20 +69,40 @@ public final class ArticleManager {
         }
     }
 
-    public ArticleDTO getById(final int id) {
+    /**
+     * Gets the article by the database id as an entity, converts it to a DTO and returns it.
+     * @param id database id of the article
+     * @return article as a DTO
+     */
+    public ArticleDTO getById(final String sessionId, final int id) {
         return articleConverter.convertToDTO(articlePersistor.getById(id));
     }
 
-    public ArticleDTO getByArticleNr(final int artNr) {
+    /**
+     * Gets the article by the article number as an entity, converts it to a DTO and returns it.
+     * @param artNr article number of the article
+     * @return article as a DTO
+     */
+    public ArticleDTO getByArticleNr(final String sessionId, final int artNr) {
         return articleConverter.convertToDTO(articlePersistor.getByArticleNr(artNr));
     }
 
-    public List<ArticleDTO> getList() {
+    /**
+     * Gets all the articles as entities, converts and returns them as a list.
+     * @return articles as a DTO list
+     */
+    public List<ArticleDTO> getList(final String sessionId) {
         List<Article> articleList = articlePersistor.getList();
         return articleConverter.convertToDTO(articleList);
     }
 
-    public FBSFeedback save(final ArticleDTO articleDTO, final String hash) {
+    /**
+     * Converts the given DTO article to an entity and passes it to the persistor.
+     * @param articleDTO article to save as a DTO
+     * @param hash lock hash string for the article
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     */
+    public FBSFeedback save(final String sessionId, final ArticleDTO articleDTO, final String hash) {
         FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
         if (lockCheck == FBSFeedback.SUCCESS) {
@@ -86,7 +113,13 @@ public final class ArticleManager {
         }
     }
 
-    public FBSFeedback delete(final ArticleDTO articleDTO, final String hash) {
+    /**
+     * Converts the given DTO article to an entity, sets the availability to false and passes it to the persistor.
+     * @param articleDTO article to delete as a DTO
+     * @param hash lock hash string for the article
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     */
+    public FBSFeedback delete(final String sessionId, final ArticleDTO articleDTO, final String hash) {
         FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
         if (lockCheck == FBSFeedback.SUCCESS) {
@@ -99,7 +132,15 @@ public final class ArticleManager {
         }
     }
 
-    public FBSFeedback updateStockById(final int id, final int amount, final String hash) {
+    /**
+     * Updates the amount of stock of an article by adding the given amount.
+     * Amount is added and not set, so no absolute setter.
+     * @param id database id of the article
+     * @param amount amount that has to be added
+     * @param hash lock hash string for the article
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     */
+    public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash) {
         FBSFeedback lockCheck = checkLock(id, hash);
 
         if (lockCheck == FBSFeedback.SUCCESS) {
@@ -109,11 +150,11 @@ public final class ArticleManager {
         }
     }
 
-    public List<ArticleDTO> sortList(final SortingType type) {
-        return sortList(articleConverter.convertToDTO(articlePersistor.getList()), type);
+    public List<ArticleDTO> sortList(final String sessionId, final SortingType type) {
+        return sortList(sessionId, articleConverter.convertToDTO(articlePersistor.getList()), type);
     }
 
-    public List<ArticleDTO> sortList(final List<ArticleDTO> articleDTOs, final SortingType type) {
+    public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type) {
 
         Comparator<ArticleDTO> comparator;
 
@@ -140,11 +181,11 @@ public final class ArticleManager {
         return articleDTOs;
     }
 
-    public List<ArticleDTO> search(final String regEx) {
+    public List<ArticleDTO> search(final String sessionId, final String regEx) {
         return articleConverter.convertToDTO(articlePersistor.search(regEx));
     }
 
-    public String lock(final int id) {
+    public String lock(final String sessionId, final int id) {
 
         synchronized (lockpool) {
 
@@ -168,7 +209,7 @@ public final class ArticleManager {
         }
     }
 
-    public FBSFeedback release(final int id, final String hash) {
+    public FBSFeedback release(final String sessionId, final int id, final String hash) {
 
         synchronized (lockpool) {
 

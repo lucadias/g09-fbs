@@ -33,52 +33,52 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
     //TODO: implement getListByClientId, delete
 
     @Override
-    public OrderDTO getById(final int id) throws RemoteException {
-        return orderManager.getById(id);
+    public OrderDTO getById(final String sessionId, final int id) throws RemoteException {
+        return orderManager.getById(sessionId, id);
     }
 
     @Override
-    public List<OrderDTO> getList() throws RemoteException {
-        return orderManager.getList();
+    public List<OrderDTO> getList(final String sessionId) throws RemoteException {
+        return orderManager.getList(sessionId);
     }
 
     @Override
-    public List<OrderDTO> getListByClientId(final int id) throws RemoteException {
+    public List<OrderDTO> getListByClientId(final String sessionId, final int id) throws RemoteException {
         return null;
     }
 
     @Override
-    public List<OrderDTO> search(final String regEx) throws RemoteException {
-        return orderManager.getList(regEx);
+    public List<OrderDTO> search(final String sessionId, final String regEx) throws RemoteException {
+        return orderManager.getList(sessionId, regEx);
     }
 
     @Override
-    public FBSFeedback save(final OrderDTO orderDTO, final String hash) throws RemoteException {
-        return orderManager.save(orderDTO, hash);
+    public FBSFeedback save(final String sessionId, final OrderDTO orderDTO, final String hash) throws RemoteException {
+        return orderManager.save(sessionId, orderDTO, hash);
     }
 
     @Override
-    public FBSFeedback delete(final OrderDTO orderDTO, final String hash) throws RemoteException {
+    public FBSFeedback delete(final String sessionId, final OrderDTO orderDTO, final String hash) throws RemoteException {
         return null;
     }
 
     @Override
-    public String lock(final OrderDTO orderDTO) throws RemoteException {
-        return orderManager.lock(orderDTO.getId());
+    public String lock(final String sessionId, final OrderDTO orderDTO) throws RemoteException {
+        return orderManager.lock(sessionId, orderDTO.getId());
     }
 
     @Override
-    public FBSFeedback release(final OrderDTO orderDTO, final String hash) throws RemoteException {
-        return orderManager.release(orderDTO.getId(), hash);
+    public FBSFeedback release(final String sessionId, final OrderDTO orderDTO, final String hash) throws RemoteException {
+        return orderManager.release(sessionId, orderDTO.getId(), hash);
     }
 
     @Override
-    public List<OrderDTO> sortList(final SortingType type) throws RemoteException {
-        return orderManager.sortList(type);
+    public List<OrderDTO> sortList(final String sessionId, final SortingType type) throws RemoteException {
+        return orderManager.sortList(sessionId, type);
     }
 
     @Override
-    public List<OrderDTO> sortList(final List<OrderDTO> orderDTOs, final SortingType type) throws RemoteException {
-        return orderManager.sortList(orderDTOs, type);
+    public List<OrderDTO> sortList(final String sessionId, final List<OrderDTO> orderDTOs, final SortingType type) throws RemoteException {
+        return orderManager.sortList(sessionId, orderDTOs, type);
     }
 }

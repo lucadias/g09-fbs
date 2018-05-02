@@ -4,6 +4,9 @@ import ch.hslu.appe.fbs.model.entities.OrderedArticles;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Converter for OrderArticle entity and DTO.
  *
