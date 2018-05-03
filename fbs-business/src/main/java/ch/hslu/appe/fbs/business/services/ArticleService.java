@@ -3,7 +3,7 @@ package ch.hslu.appe.fbs.business.services;
 import ch.hslu.appe.fbs.business.manager.ArticleManager;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
-import ch.hslu.appe.fbs.remote.RemoteArticleService;
+import ch.hslu.appe.fbs.remote.remoteServices.RemoteArticleService;
 import ch.hslu.appe.fbs.remote.SortingType;
 
 import java.rmi.RemoteException;

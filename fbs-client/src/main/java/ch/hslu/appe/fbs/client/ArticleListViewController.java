@@ -8,7 +8,7 @@ package ch.hslu.appe.fbs.client;
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
 import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ARTICLE_SERVICE_NAME;
-import ch.hslu.appe.fbs.remote.RemoteArticleService;
+import ch.hslu.appe.fbs.remote.remoteServices.RemoteArticleService;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -17,7 +17,6 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,7 +28,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 /**
  * FXML Controller class

@@ -1,4 +1,6 @@
-package ch.hslu.appe.fbs.remote;
+package ch.hslu.appe.fbs.remote.remoteServices;
+
+import ch.hslu.appe.fbs.remote.FBSFeedback;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
