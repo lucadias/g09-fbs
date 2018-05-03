@@ -2,7 +2,7 @@ package ch.hslu.appe.fbs.business.services;
 
 import ch.hslu.appe.fbs.business.manager.OrderManager;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
-import ch.hslu.appe.fbs.remote.RemoteOrderService;
+import ch.hslu.appe.fbs.remote.remoteServices.RemoteOrderService;
 import ch.hslu.appe.fbs.remote.SortingType;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 

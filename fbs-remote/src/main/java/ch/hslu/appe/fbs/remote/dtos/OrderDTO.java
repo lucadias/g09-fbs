@@ -134,4 +134,22 @@ public final class OrderDTO implements Serializable {
     public void setClientDTO(final ClientDTO clientDTO) {
         this.clientDTO = clientDTO;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+
+        if(obj == null || obj.getClass()!= this.getClass())
+            return false;
+
+        OrderDTO orderDTO = (OrderDTO) obj;
+
+        return (orderDTO.getId() == this.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
 }

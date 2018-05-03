@@ -1,8 +1,6 @@
 package ch.hslu.appe.fbs.business;
 
-import ch.hslu.appe.fbs.business.services.ArticleService;
-import ch.hslu.appe.fbs.business.services.LoginService;
-import ch.hslu.appe.fbs.business.services.OrderService;
+import ch.hslu.appe.fbs.business.services.*;
 
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
@@ -22,6 +20,9 @@ public final class FBSServer {
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
     public static final String ORDER_SERVICE_NAME = "OrderService";
     public static final String LOGIN_SERVICE_NAME = "LoginService";
+    public static final String CLIENT_SERVICE_NAME = "ClientService";
+    public static final String EMPLOYEE_SERVICE_NAME = "EmployeeService";
+    public static final String ORDER_STATE_SERVICE_NAME = "OrderStateService";
 
     /**
      * Constructor of the FBSServer.
@@ -62,6 +63,21 @@ public final class FBSServer {
             final String urlLoginService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + LOGIN_SERVICE_NAME;
             Naming.bind(urlLoginService, loginService);
+
+            final ClientService clientService = new ClientService();
+            final String urlClientService = "rmi://localhost:"
+                    + String.valueOf(REGISTRY_PORT) + "/" + CLIENT_SERVICE_NAME;
+            Naming.bind(urlClientService, clientService);
+
+            final EmployeeService employeeService = new EmployeeService();
+            final String urlEmployeeService = "rmi://localhost:"
+                    + String.valueOf(REGISTRY_PORT) + "/" + EMPLOYEE_SERVICE_NAME;
+            Naming.bind(urlEmployeeService, employeeService);
+
+            final OrderStateService orderStateService= new OrderStateService();
+            final String urlOrderStateService = "rmi://localhost:"
+                    + String.valueOf(REGISTRY_PORT) + "/" + ORDER_STATE_SERVICE_NAME;
+            Naming.bind(urlOrderStateService, orderStateService);
 
         } catch (RemoteException e) {
             e.printStackTrace();

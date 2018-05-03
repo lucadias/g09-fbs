@@ -1,5 +1,7 @@
-package ch.hslu.appe.fbs.remote;
+package ch.hslu.appe.fbs.remote.remoteServices;
 
+import ch.hslu.appe.fbs.remote.FBSFeedback;
+import ch.hslu.appe.fbs.remote.SortingType;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 
 import java.rmi.Remote;
