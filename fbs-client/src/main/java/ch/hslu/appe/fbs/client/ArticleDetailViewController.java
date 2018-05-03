@@ -7,6 +7,7 @@ package ch.hslu.appe.fbs.client;
  */
 
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
+import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ARTICLE_SERVICE_NAME;
 import ch.hslu.appe.fbs.remote.RemoteArticleService;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
@@ -125,7 +126,7 @@ public class ArticleDetailViewController implements Initializable {
     public void setId(int id) {
         this.articleId = id;
         try {
-            ArticleDTO currentArticle = articleService.getById(this.articleId);
+            ArticleDTO currentArticle = articleService.getById(SESSION, this.articleId);
             this.articleDTO = currentArticle;
             this.fillArticle();
         } catch(RemoteException e) {

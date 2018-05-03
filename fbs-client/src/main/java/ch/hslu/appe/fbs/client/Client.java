@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 public class Client extends Application implements RepaintRequestListener {
     
     public static final int REGISTRY_PORT = 1099;
+    public static String SESSION = null;
     private BorderPane border = new BorderPane();
     private Stage stage;
     private JavaFXViewController viewController;

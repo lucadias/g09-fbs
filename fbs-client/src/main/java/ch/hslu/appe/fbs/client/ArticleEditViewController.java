@@ -6,6 +6,7 @@
 package ch.hslu.appe.fbs.client;
 
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
+import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ARTICLE_SERVICE_NAME;
 import ch.hslu.appe.fbs.remote.RemoteArticleService;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
@@ -80,15 +81,15 @@ public class ArticleEditViewController implements Initializable {
     public void save(ActionEvent event) {
         //ToDo: check values bevor saving
         try {
-            String hash = this.articleService.lock(this.articleDTO);
+            String hash = this.articleService.lock(SESSION, this.articleDTO);
             this.articleDTO.setName(this.articleNameValue.getText());
             this.articleDTO.setDescription(this.articleDescriptionValue.getText());
             this.articleDTO.setArticleNumber(Integer.valueOf(this.articleNumberValue.getText()));
             this.articleDTO.setInStock(Integer.valueOf(this.articleStockValue.getText()));
             this.articleDTO.setMinInStock(Integer.valueOf(this.articleMinStockValue.getText()));
             this.articleDTO.setPrice(Double.valueOf(this.articlePriceValue.getText()));
-            this.articleService.save(this.articleDTO, hash);
-            this.articleService.release(this.articleDTO, hash);
+            this.articleService.save(SESSION, this.articleDTO, hash);
+            this.articleService.release(SESSION, this.articleDTO, hash);
         } catch (RemoteException e) {
             this.articleDTO.setDescription("Error in RMI: "+e);
             System.out.println("Error in RMI: "+e);
@@ -126,7 +127,7 @@ public class ArticleEditViewController implements Initializable {
         this.articleId = id;
         try {
             if(this.articleId != -1) {
-                ArticleDTO currentArticle = this.articleService.getById(this.articleId);
+                ArticleDTO currentArticle = this.articleService.getById(SESSION, this.articleId);
                 this.articleDTO = currentArticle;
                 this.fillArticle();
             } else {

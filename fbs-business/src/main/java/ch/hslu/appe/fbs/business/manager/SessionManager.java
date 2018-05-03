@@ -72,9 +72,13 @@ public class SessionManager {
      * @return session id string on success, null on failure
      */
     public String login(String username, String passwordHash) {
+        System.out.println("employee: " + username);
         Employee employee = employeePersistor.getByUserName(username);
         if (employee != null) {
             if (employee.getUsername().equals(username)) {
+                System.out.println("database: " + employee.getPassword());
+                System.out.println("client: " + passwordHash);
+                
                 if(employee.getPassword().equals(passwordHash)) {
                     return createNewSessionId(employee.getIdEmployees());
                 }

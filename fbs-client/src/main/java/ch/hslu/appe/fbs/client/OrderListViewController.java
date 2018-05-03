@@ -6,6 +6,7 @@
 package ch.hslu.appe.fbs.client;
 
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
+import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ORDER_SERVICE_NAME;
 import ch.hslu.appe.fbs.remote.RemoteArticleService;
 import ch.hslu.appe.fbs.remote.RemoteOrderService;
@@ -69,7 +70,7 @@ public class OrderListViewController implements Initializable {
         try {
             final String urlString = "rmi://localhost:" + String.valueOf(REGISTRY_PORT) + "/" + ORDER_SERVICE_NAME;
             this.orderService = (RemoteOrderService) Naming.lookup(urlString);
-            ArrayList<OrderDTO> currentOrders = (ArrayList<OrderDTO>) this.orderService.getList();
+            ArrayList<OrderDTO> currentOrders = (ArrayList<OrderDTO>) this.orderService.getList(SESSION);
             this.orderList = currentOrders;
             this.fillList();
         } catch (NotBoundException | MalformedURLException |

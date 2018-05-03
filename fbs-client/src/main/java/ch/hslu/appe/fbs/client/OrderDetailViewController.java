@@ -6,6 +6,7 @@
 package ch.hslu.appe.fbs.client;
 
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
+import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ORDER_SERVICE_NAME;
 import ch.hslu.appe.fbs.remote.RemoteOrderService;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
@@ -96,7 +97,7 @@ public class OrderDetailViewController implements Initializable {
     public void setId(int id) {
         this.orderId = id;
         try {
-            OrderDTO currentOrder = orderService.getById(this.orderId);
+            OrderDTO currentOrder = orderService.getById(SESSION, this.orderId);
             this.orderDTO = currentOrder;
             //ToDo: Check Nullpointers, maybe work with optionals
             this.articleList = this.orderDTO.getOrderedArticleDTOList();

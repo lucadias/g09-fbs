@@ -59,7 +59,7 @@ public class DashboardViewController implements Initializable {
 //        } catch (IOException e) {
 //            System.out.println("Error loading fxml: "+e.getMessage());
 //        }
-try {
+        try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/OrderDetailView.fxml"));
             Parent order = (Parent) loader.load();

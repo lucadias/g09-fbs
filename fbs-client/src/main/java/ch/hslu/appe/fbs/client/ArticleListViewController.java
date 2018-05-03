@@ -6,6 +6,7 @@
 package ch.hslu.appe.fbs.client;
 
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
+import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ARTICLE_SERVICE_NAME;
 import ch.hslu.appe.fbs.remote.RemoteArticleService;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
@@ -68,7 +69,7 @@ public class ArticleListViewController implements Initializable {
         try {
             final String urlString = "rmi://localhost:" + String.valueOf(REGISTRY_PORT) + "/" + ARTICLE_SERVICE_NAME;
             final RemoteArticleService articleService = (RemoteArticleService) Naming.lookup(urlString);
-            ArrayList<ArticleDTO> currentArticles = (ArrayList<ArticleDTO>) articleService.getList();
+            ArrayList<ArticleDTO> currentArticles = (ArrayList<ArticleDTO>) articleService.getList(SESSION);
             this.articleList = currentArticles;
             this.fillList();
         } catch (NotBoundException | MalformedURLException |
