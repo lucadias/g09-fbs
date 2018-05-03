@@ -3,6 +3,9 @@ package ch.hslu.appe.fbs.business.utils;
 import ch.hslu.appe.fbs.model.entities.Employee;
 import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Converter for employee entity and DTO.
  *
@@ -24,6 +27,20 @@ public final class EmployeeConverter {
         employeeDTO.setActive(employee.getActive());
 
         return employeeDTO;
+    }
+
+    /**
+     * Converts a list of employee entities into DTOs.
+     * @param employeeList list to be converted
+     * @return converted list
+     */
+    public List<EmployeeDTO> convertToDTO(final List<Employee> employeeList) {
+        List<EmployeeDTO> employeeDTOList = new ArrayList<>();
+        for (Employee employee : employeeList) {
+            employeeDTOList.add(convertToDTO(employee));
+        }
+
+        return employeeDTOList;
     }
 
     /**

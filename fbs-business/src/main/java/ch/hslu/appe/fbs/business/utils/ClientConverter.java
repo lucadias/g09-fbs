@@ -3,6 +3,9 @@ package ch.hslu.appe.fbs.business.utils;
 import ch.hslu.appe.fbs.model.entities.Client;
 import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Converter for client entity and DTO.
  *
@@ -23,6 +26,20 @@ public final class ClientConverter {
         clientDTO.setActive(client.getActive());
 
         return clientDTO;
+    }
+
+    /**
+     * Converts a list of clients entities into DTOs.
+     * @param clientList list to be converted
+     * @return converted list
+     */
+    public List<ClientDTO> convertToDTO(final List<Client> clientList) {
+        List<ClientDTO> clientDTOList = new ArrayList<>();
+        for (Client client : clientList) {
+            clientDTOList.add(convertToDTO(client));
+        }
+
+        return clientDTOList;
     }
 
     /**
