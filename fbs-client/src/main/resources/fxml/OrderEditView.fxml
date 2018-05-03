@@ -40,11 +40,11 @@
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
             </Label>
-            <DatePicker fx:id="orderDatePicker" prefHeight="40.0" prefWidth="100.0">
+            <Label fx:id="orderDate" prefHeight="30.0" prefWidth="100.0" text="Datum">
                <HBox.margin>
-                  <Insets top="5.0" />
+                  <Insets top="10.0" />
                </HBox.margin>
-            </DatePicker>
+            </Label>
             <ChoiceBox fx:id="stateChoise" prefHeight="40.0" prefWidth="100.0">
                <HBox.margin>
                   <Insets left="10.0" top="5.0" />
@@ -63,7 +63,7 @@
                <content>
                   <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="600.0" vbarPolicy="ALWAYS">
                      <content>
-                        <GridPane fx:id="articleGrid" prefWidth="600.0">
+                        <GridPane fx:id="orderedArticleGrid" prefWidth="600.0">
                            <children>
                               <Label text="Artikel">
                                  <GridPane.margin>
@@ -99,7 +99,7 @@
                <content>
                   <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
                      <content>
-                        <GridPane fx:id="articleGrid1" prefWidth="600.0">
+                        <GridPane fx:id="allArticleGrid" prefWidth="600.0">
                            <children>
                               <Label text="Artikel">
                                  <GridPane.margin>
