@@ -97,6 +97,7 @@ public class OrderEditViewController implements Initializable {
                 //ToDo: Check Nullpointers, maybe work with optionals
                 this.orderedArticleList = this.orderDTO.getOrderedArticleDTOList();
                 this.fillOrderedArticles();
+                this.fillAllArticles();
             } else {
                 this.orderDTO = new OrderDTO(-1);
             }
