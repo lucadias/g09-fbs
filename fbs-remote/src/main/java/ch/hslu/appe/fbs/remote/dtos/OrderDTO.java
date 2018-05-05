@@ -152,4 +152,9 @@ public final class OrderDTO implements Serializable {
     public int hashCode() {
         return this.id;
     }
+    
+    @Override
+    public String toString() {
+        return String.valueOf(this.getId());
+    }
 }

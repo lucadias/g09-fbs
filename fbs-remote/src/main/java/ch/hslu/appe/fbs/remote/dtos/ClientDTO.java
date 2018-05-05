@@ -118,4 +118,9 @@ public final class ClientDTO implements Serializable {
     public int hashCode() {
         return this.id;
     }
+    
+    @Override
+    public String toString() {
+        return this.getFirstname() + " " + this.getSurname();
+    }
 }

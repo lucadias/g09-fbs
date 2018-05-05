@@ -65,4 +65,9 @@ public final class OrderStateDTO implements Serializable {
     public int hashCode() {
         return this.id;
     }
+    
+    @Override
+    public String toString() {
+        return this.getState();
+    }
 }

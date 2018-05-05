@@ -99,4 +99,9 @@ public final class OrderedArticleDTO implements Serializable {
     public int hashCode() {
         return this.id;
     }
+    
+    @Override
+    public String toString() {
+        return String.valueOf(this.getId());
+    }
 }
