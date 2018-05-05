@@ -11,17 +11,17 @@
    <children>
       <HBox prefHeight="50.0" prefWidth="600.0">
          <children>
-            <Button mnemonicParsing="false" prefWidth="100.0" text="Zurück">
+            <Button mnemonicParsing="false" onAction="#back" prefWidth="100.0" text="Zurück">
                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Speichern">
+            <Button mnemonicParsing="false" onAction="#save" text="Speichern">
                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <ChoiceBox fx:id="clientChoise" prefHeight="40.0" prefWidth="100.0">
+            <ChoiceBox fx:id="clientChoice" prefHeight="40.0" prefWidth="100.0">
                <HBox.margin>
                   <Insets left="200.0" top="5.0" />
                </HBox.margin>
@@ -45,7 +45,7 @@
                   <Insets top="10.0" />
                </HBox.margin>
             </Label>
-            <ChoiceBox fx:id="stateChoise" prefHeight="40.0" prefWidth="100.0">
+            <ChoiceBox fx:id="stateChoice" prefHeight="40.0" prefWidth="100.0">
                <HBox.margin>
                   <Insets left="10.0" top="5.0" />
                </HBox.margin>
@@ -133,20 +133,56 @@
           </Tab>
             <Tab text="Artikel suchen">
                <content>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <FlowPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <TextField>
-                           <HBox.margin>
-                              <Insets left="10.0" top="10.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Button mnemonicParsing="false" text="Suchen">
-                           <HBox.margin>
-                              <Insets left="10.0" top="10.0" />
-                           </HBox.margin>
-                        </Button>
+                        <HBox prefHeight="50.0" prefWidth="600.0">
+                           <children>
+                              <TextField fx:id="searchInput">
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Button mnemonicParsing="false" onAction="#searchArticle" text="Suchen">
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="600.0" vbarPolicy="ALWAYS">
+                           <content>
+                              <GridPane fx:id="searchArticleGrid" prefWidth="600.0">
+                                 <children>
+                                    <Label text="Artikel">
+                                       <GridPane.margin>
+                                          <Insets left="10.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label text="Anzahl" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="10.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label text="Preis" GridPane.columnIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="10.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="236.0" minWidth="10.0" prefWidth="236.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="130.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="128.0" minWidth="10.0" prefWidth="130.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="130.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </content>
+                        </ScrollPane>
                      </children>
-                  </HBox>
+                  </FlowPane>
                </content>
             </Tab>
         </tabs>
