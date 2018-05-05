@@ -75,9 +75,8 @@ public class LoginViewController implements Initializable {
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
             String passwordHash = this.sha256(password);
-            System.out.println("hash:"+String.valueOf(passwordHash));
-            System.out.println("pw"+password);
             if(this.checkLogin(username, String.valueOf(passwordHash))) {
+                Client.username = username;
                 this.showDashboard();
             } else {
                 System.out.println("Login failed");
@@ -88,20 +87,20 @@ public class LoginViewController implements Initializable {
     }
     
     private String sha256(String base) {
-    try{
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(base.getBytes("UTF-8"));
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
+        try{
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch(Exception ex){
+           throw new RuntimeException(ex);
         }
-        return hexString.toString();
-    } catch(Exception ex){
-       throw new RuntimeException(ex);
     }
-}
     
     private void showDashboard() {
         try {

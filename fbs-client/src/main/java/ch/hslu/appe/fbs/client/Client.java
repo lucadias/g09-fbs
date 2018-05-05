@@ -24,6 +24,7 @@ public class Client extends Application implements RepaintRequestListener {
     
     public static final int REGISTRY_PORT = 1099;
     public static String SESSION = null;
+    public static String username = "";
     private BorderPane border = new BorderPane();
     private Stage stage;
     private JavaFXViewController viewController;
@@ -42,8 +43,6 @@ public class Client extends Application implements RepaintRequestListener {
         this.currentScene = new Scene(border, 800, 500);
         this.stage.setScene(this.currentScene);
         this.stage.show();
-        //ToDo: Check if is logged in
-        //ToDo: outsource scene and panefilling
         repaint();
     }
     
@@ -52,7 +51,6 @@ public class Client extends Application implements RepaintRequestListener {
         this.border.setLeft(viewController.getLeftPane());
         this.border.setTop(viewController.getTopPane());
         this.border.setCenter(viewController.getCenterPane());
-//        this.border.getCenter().getScene().setRoot(this.currentScene);
     }
 
     /**

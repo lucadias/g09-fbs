@@ -9,11 +9,13 @@ import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
 import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ARTICLE_SERVICE_NAME;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ORDER_SERVICE_NAME;
-import ch.hslu.appe.fbs.remote.RemoteArticleService;
-import ch.hslu.appe.fbs.remote.RemoteOrderService;
+import ch.hslu.appe.fbs.remote.FBSFeedback;
+import ch.hslu.appe.fbs.remote.remoteServices.RemoteArticleService;
+import ch.hslu.appe.fbs.remote.remoteServices.RemoteOrderService;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.Naming;
@@ -24,7 +26,9 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -151,10 +155,10 @@ public class OrderEditViewController implements Initializable {
                         addToOrder(article, amount);
                     }
                 });
-                this.orderedArticleGrid.add(articleName, 0, i);
-                this.orderedArticleGrid.add(articleAmount, 1, i);
-                this.orderedArticleGrid.add(articlePrice, 2, i);
-                this.orderedArticleGrid.add(addToOrderButton, 3, i);
+                this.allArticleGrid.add(articleName, 0, i);
+                this.allArticleGrid.add(articleAmount, 1, i);
+                this.allArticleGrid.add(articlePrice, 2, i);
+                this.allArticleGrid.add(addToOrderButton, 3, i);
                 i++;
             }
         } catch(RemoteException e) {
@@ -168,10 +172,46 @@ public class OrderEditViewController implements Initializable {
             orderedArticle.setAmount(amount);
             orderedArticle.setArticleDTO(article);
             this.orderedArticleList.add(orderedArticle);
+            this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
+        }
+        try {
+            String hash = this.orderService.lock(SESSION, this.orderDTO);
+            System.out.println(hash);
+            FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
+            System.out.println(feedback+" "+hash);
+            feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+            this.refresh();
+        } catch(RemoteException e) {
+            System.out.println("Error in RMI:"+e.getMessage());
         }
     }
     
     private void removeFromOrder(OrderedArticleDTO article) {
         this.orderedArticleList.remove(article);
+        this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
+        try {
+            String hash = this.orderService.lock(SESSION, this.orderDTO);
+            FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
+            System.out.println(feedback+" "+hash);
+            feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+            System.out.println(feedback+" "+hash);
+            this.refresh();
+        } catch(RemoteException e) {
+            System.out.println("Error in RMI:"+e.getMessage());
+        }
+    }
+    
+    private void refresh() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/OrderEditView.fxml"));
+            Parent orderEdit = (Parent) loader.load();
+            OrderEditViewController orderEditViewController = (OrderEditViewController) loader.getController();
+            orderEditViewController.setId(this.orderId);
+            JavaFXViewController.getInstance().setView(orderEdit);
+            JavaFXViewController.getInstance().repaint();
+        } catch (IOException e) {
+            System.out.println("Error loading fxml: "+e.getMessage());
+        }
     }
 }
