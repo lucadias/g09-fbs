@@ -8,6 +8,8 @@ import org.junit.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,14 +26,19 @@ public class OrderPersistorTest {
     @BeforeClass
     public static void init(){
 
-        orders.setIdOrders(9999);
+        orders.setIdOrders(1);
         orders.setClientIdClients(2);
-        orders.setEmployeeIdEmployee(1);
+        orders.setDate(Timestamp.from(Instant.now()));
+        orders.setTotalPrice(130.00);
+        orders.setEmployeeIdEmployee(7);
         orders.setOrderStateIdOrderState(1);
         list.add(orders);
-        orders2.setIdOrders(9998);
-        orders2.setClientIdClients(2);
-        orders2.setEmployeeIdEmployee(2);
+
+        orders2.setIdOrders(2);
+        orders2.setClientIdClients(1);
+        orders2.setDate(Timestamp.from(Instant.now()));
+        orders2.setTotalPrice(180.00);
+        orders2.setEmployeeIdEmployee(8);
         orders2.setOrderStateIdOrderState(1);
         list.add(orders2);
     }

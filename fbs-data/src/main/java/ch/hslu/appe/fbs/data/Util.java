@@ -21,6 +21,7 @@ public class Util {
      * @return
      */
     public static FBSFeedback save(Object entity) {
+
         try {
             Util.entityManager.getTransaction().begin();
             Util.entityManager.merge(entity);
@@ -29,9 +30,9 @@ public class Util {
             return FBSFeedback.SUCCESS;
         } catch (Exception e){
             System.out.println(e.toString());
+            Util.entityManager.getTransaction().commit();
+            return FBSFeedback.UNKNOWN_ERROR;
         }
-        Util.entityManager.getTransaction().commit();
-        return FBSFeedback.UNKNOWN_ERROR;
     }
 
     public static void transactionBegin(){

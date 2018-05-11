@@ -11,7 +11,7 @@ import java.util.List;
 
 
 /**
- * JavaDoc
+ * Persitor for saving and retrieving Article entities.
  *
  * @author Pascal Stalder
  */
@@ -21,6 +21,11 @@ public class ArticlePersistor {
     private final EntityManager entitymanager = Util.entityManager;
 
 
+    /**
+     * Returns Article entity with id.
+     * @param id
+     * @return Article
+     */
     public Article getById(int id) {
         Util.transactionBegin();
 
@@ -49,27 +54,33 @@ public class ArticlePersistor {
 
     public Article getByArticleNr(int artNr) { return this.getById(artNr);}
 
+    /**
+     * Saves Article object to database.
+     * @param article
+     * @return FBSFeeback
+     */
     public FBSFeedback save(Article article) {
         return Util.save(article);
     }
 
+    /**
+     * Updates the inStock value of an Article.
+     * @param id
+     * @param amount
+     * @return FSBFeedback
+     */
     public FBSFeedback updateStockById(int id, int amount) { return FBSFeedback.SUCCESS; }
 
+
+    /**
+     *
+     * @return
+     */
     public List<Article> getList() {
         Util.transactionBegin();
         List<Article> list = this.entitymanager.createQuery("Select a From Article a").getResultList();
         Util.transactionCommit();
         return list;
-    }
-
-    public List<Article> search(String regEx) {
-        List<Article> result = new ArrayList<>();
-        for (Article article:this.getList()){
-            if(article.getName().matches(regEx)) {
-                result.add(article);
-            }
-        }
-        return result;
     }
 
 
