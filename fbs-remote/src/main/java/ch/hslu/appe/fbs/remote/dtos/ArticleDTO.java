@@ -1,6 +1,7 @@
 package ch.hslu.appe.fbs.remote.dtos;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * DTO of Article Entity.
@@ -148,5 +149,28 @@ public final class ArticleDTO implements Serializable {
      */
     public void setAvailable(final boolean available) {
         this.available = available;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+
+        if(obj == null || obj.getClass()!= this.getClass())
+            return false;
+
+        ArticleDTO articleDTO = (ArticleDTO) obj;
+
+        return (articleDTO.getId() == this.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+    
+    @Override
+    public String toString() {
+        return String.valueOf(this.getId());
     }
 }

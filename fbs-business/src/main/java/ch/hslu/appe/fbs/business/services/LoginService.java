@@ -2,7 +2,7 @@ package ch.hslu.appe.fbs.business.services;
 
 import ch.hslu.appe.fbs.business.manager.SessionManager;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
-import ch.hslu.appe.fbs.remote.RemoteLoginService;
+import ch.hslu.appe.fbs.remote.remoteServices.RemoteLoginService;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

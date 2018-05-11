@@ -8,7 +8,7 @@ package ch.hslu.appe.fbs.client;
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
 import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ORDER_SERVICE_NAME;
-import ch.hslu.appe.fbs.remote.RemoteOrderService;
+import ch.hslu.appe.fbs.remote.remoteServices.RemoteOrderService;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
@@ -26,6 +26,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
@@ -51,6 +52,21 @@ public class OrderDetailViewController implements Initializable {
     private GridPane articleGrid;
     
     @FXML
+    private Label orderNumber;
+    
+    @FXML
+    private Label orderDate;
+    
+    @FXML
+    private Label orderState;
+    
+    @FXML
+    private Label orderEmployee;
+    
+    @FXML
+    private Label orderClient;
+    
+    @FXML
     public void back(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -66,17 +82,17 @@ public class OrderDetailViewController implements Initializable {
     
     @FXML
     public void showEditView(ActionEvent event) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("/fxml/OrderEditView.fxml"));
-//            Parent orderEdit = (Parent) loader.load();
-//            OrderEditViewController orderEditViewController = (OrderEditViewController) loader.getController();
-//            orderEditViewController.setId(this.orderId);
-//            JavaFXViewController.getInstance().setView(orderEdit);
-//            JavaFXViewController.getInstance().repaint();
-//        } catch (IOException e) {
-//            System.out.println("Error loading fxml: "+e.getMessage());
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/OrderEditView.fxml"));
+            Parent orderEdit = (Parent) loader.load();
+            OrderEditViewController orderEditViewController = (OrderEditViewController) loader.getController();
+            orderEditViewController.setId(this.orderId);
+            JavaFXViewController.getInstance().setView(orderEdit);
+            JavaFXViewController.getInstance().repaint();
+        } catch (IOException e) {
+            System.out.println("Error loading fxml: "+e.getMessage());
+        }
     }
 
     /**
@@ -99,6 +115,16 @@ public class OrderDetailViewController implements Initializable {
         try {
             OrderDTO currentOrder = orderService.getById(SESSION, this.orderId);
             this.orderDTO = currentOrder;
+            String date = String.valueOf(this.orderDTO.getDate());
+            this.orderDate.setText(date);
+            String employee = this.orderDTO.getEmployeeDTO().getUsername();
+            this.orderEmployee.setText(employee);
+            String number = String.valueOf(this.orderDTO.getId());
+            this.orderNumber.setText(number);
+            String state = this.orderDTO.getOrderStateDTO().getState();
+            this.orderState.setText(state);
+            String client = this.orderDTO.getClientDTO().getFirstname() + " " + this.orderDTO.getClientDTO().getSurname();
+            this.orderClient.setText(client);
             //ToDo: Check Nullpointers, maybe work with optionals
             this.articleList = this.orderDTO.getOrderedArticleDTOList();
             this.fillOrder();

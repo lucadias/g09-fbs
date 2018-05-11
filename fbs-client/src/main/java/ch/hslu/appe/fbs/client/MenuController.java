@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 /**
  * FXML Controller class
@@ -38,13 +39,16 @@ public class MenuController implements Initializable {
     
     @FXML 
     private Button leftMenuLogButton;
+    
+    @FXML
+    private Label topMenuUsername;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+//        this.topMenuUsername.setText(Client.username); not working
     }
     
     @FXML

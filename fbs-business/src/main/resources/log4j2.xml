@@ -2,14 +2,17 @@
 <Configuration status="INFO" monitorInterval="30">
 
    <Appenders>
-      <Console name="Console" target="SYSTEM_OUT">
-         <PatternLayout pattern="%style{%d{DEFAULT}}{White} %highlight{%-5level} - %msg%n" />
+      <File name="file" fileName="FBSLogs.log" bufferedIO="false" advertiseURI="FBSLogs.log" advertise="true">
+      <PatternLayout pattern="%d | %msg%n" />
+      </File>
+      <Console name="STDOUT" target="SYSTEM_OUT">
+         <PatternLayout pattern="%d%msg%n" />
       </Console>
    </Appenders>
 
    <Loggers>
       <Root level="info">
-         <AppenderRef ref="Console" />
+         <AppenderRef ref="file" />
       </Root>
    </Loggers>
 

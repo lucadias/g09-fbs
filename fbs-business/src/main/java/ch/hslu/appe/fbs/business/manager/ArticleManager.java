@@ -10,6 +10,8 @@ import ch.hslu.appe.fbs.remote.utils.ArticleNameAscComparator;
 import ch.hslu.appe.fbs.remote.utils.ArticleNameDescComparator;
 import ch.hslu.appe.fbs.remote.utils.ArticlePriceAscComparator;
 import ch.hslu.appe.fbs.remote.utils.ArticlePriceDescComparator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -35,6 +37,9 @@ public final class ArticleManager {
     private MessageDigest sha256Digest;
 
     private ArticleConverter articleConverter;
+
+    static final Logger logger = LogManager.getLogger(ArticleManager.class.getName());
+
 
     /**
      * Returns the singleton instance of the ArticleManager.
@@ -92,6 +97,7 @@ public final class ArticleManager {
      * @return articles as a DTO list
      */
     public List<ArticleDTO> getList(final String sessionId) {
+        logger.info("Got all Articles from Database, Session id: " + sessionId);
         List<Article> articleList = articlePersistor.getList();
         return articleConverter.convertToDTO(articleList);
     }
@@ -151,6 +157,7 @@ public final class ArticleManager {
     }
 
     public List<ArticleDTO> sortList(final String sessionId, final SortingType type) {
+
         return sortList(sessionId, articleConverter.convertToDTO(articlePersistor.getList()), type);
     }
 

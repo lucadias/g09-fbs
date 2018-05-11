@@ -115,4 +115,27 @@ public final class EmployeeDTO implements Serializable {
     public void setActive(final boolean active) {
         this.active = active;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+
+        if(obj == null || obj.getClass()!= this.getClass())
+            return false;
+
+        EmployeeDTO employeeDTO= (EmployeeDTO) obj;
+
+        return (employeeDTO.getId() == this.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+    
+    @Override
+    public String toString() {
+        return this.getUsername();
+    }
 }

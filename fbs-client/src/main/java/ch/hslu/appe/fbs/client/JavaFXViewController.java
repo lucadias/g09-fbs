@@ -1,5 +1,6 @@
 package ch.hslu.appe.fbs.client;
 
+import static ch.hslu.appe.fbs.client.Client.SESSION;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,9 @@ public final class JavaFXViewController {
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
     public static final String LOGIN_SERVICE_NAME = "LoginService";
     public static final String ORDER_SERVICE_NAME = "OrderService";
+    public static final String ORDERSTATE_SERVICE_NAME = "OrderStateService";
+    public static final String EMPLOYEE_SERVICE_NAME = "EmployeeService";
+    public static final String CLIENT_SERVICE_NAME = "ClientService";
     private Node currentView;
     private ArrayList<RepaintRequestListener> repaintRequestListeners = new ArrayList<>();
     private static JavaFXViewController viewControllerInstance = null;
@@ -61,16 +65,19 @@ public final class JavaFXViewController {
     }
     
     public Node getTopPane() {
-        try {
-            FXMLLoader topMenuLoader = new FXMLLoader();
-            topMenuLoader.setLocation(getClass().getResource("/fxml/TopMenu.fxml"));
-            Parent topMenu = (Parent) topMenuLoader.load();
-            MenuController menuController = (MenuController) topMenuLoader.getController();
-            return topMenu;
-        } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
-            return null;
+        Node returnNode = new GridPane();
+        if(SESSION != null) {
+            try {
+                FXMLLoader topMenuLoader = new FXMLLoader();
+                topMenuLoader.setLocation(getClass().getResource("/fxml/TopMenu.fxml"));
+                Parent topMenu = (Parent) topMenuLoader.load();
+                MenuController menuController = (MenuController) topMenuLoader.getController();
+                returnNode = topMenu;
+            } catch (IOException e) {
+                System.out.println("Error loading fxml: "+e.getMessage());
+            }
         }
+        return returnNode;
     }
     
     public Node getCenterPane() {
@@ -78,16 +85,19 @@ public final class JavaFXViewController {
     }
     
     public Node getLeftPane() {
-        try {
-            FXMLLoader leftMenuLoader = new FXMLLoader();
-            leftMenuLoader.setLocation(getClass().getResource("/fxml/LeftMenu.fxml"));
-            Parent leftMenu = (Parent) leftMenuLoader.load();
-            MenuController menuController = (MenuController) leftMenuLoader.getController();
-            return leftMenu;
-        } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
-            return null;
+        Node returnNode = new GridPane();
+        if(SESSION != null) {
+            try {
+                FXMLLoader leftMenuLoader = new FXMLLoader();
+                leftMenuLoader.setLocation(getClass().getResource("/fxml/LeftMenu.fxml"));
+                Parent leftMenu = (Parent) leftMenuLoader.load();
+                MenuController menuController = (MenuController) leftMenuLoader.getController();
+                returnNode = leftMenu;
+            } catch (IOException e) {
+                System.out.println("Error loading fxml: "+e.getMessage());
+            }
         }
+        return returnNode;
     }    
     //ToDo: Think about implementing a state-pattern with the Menu-Buttons depending on the view
 }

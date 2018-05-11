@@ -47,4 +47,27 @@ public final class OrderStateDTO implements Serializable {
     public void setState(final String state) {
         this.state = state;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+
+        if(obj == null || obj.getClass()!= this.getClass())
+            return false;
+
+        OrderStateDTO orderStateDTO = (OrderStateDTO) obj;
+
+        return (orderStateDTO.getId() == this.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+    
+    @Override
+    public String toString() {
+        return this.getState();
+    }
 }

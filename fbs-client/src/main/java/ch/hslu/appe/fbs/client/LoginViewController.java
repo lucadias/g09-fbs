@@ -9,11 +9,10 @@ package ch.hslu.appe.fbs.client;
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
 import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.LOGIN_SERVICE_NAME;
-import ch.hslu.appe.fbs.remote.RemoteLoginService;
+import ch.hslu.appe.fbs.remote.remoteServices.RemoteLoginService;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -76,9 +75,8 @@ public class LoginViewController implements Initializable {
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
             String passwordHash = this.sha256(password);
-            System.out.println("hash:"+String.valueOf(passwordHash));
-            System.out.println("pw"+password);
             if(this.checkLogin(username, String.valueOf(passwordHash))) {
+                Client.username = username;
                 this.showDashboard();
             } else {
                 System.out.println("Login failed");
@@ -89,20 +87,20 @@ public class LoginViewController implements Initializable {
     }
     
     private String sha256(String base) {
-    try{
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(base.getBytes("UTF-8"));
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
+        try{
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch(Exception ex){
+           throw new RuntimeException(ex);
         }
-        return hexString.toString();
-    } catch(Exception ex){
-       throw new RuntimeException(ex);
     }
-}
     
     private void showDashboard() {
         try {
