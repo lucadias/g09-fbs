@@ -1,5 +1,6 @@
 package ch.hslu.appe.fbs.data;
 
+import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.model.entities.Client;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 
@@ -58,6 +59,10 @@ public class ClientPersistor {
             return this.entitymanager.createQuery(query)
                     .setParameter("regex", searchText)
                     .getResultList();
+    }
+
+    public List<Client> search(String searchText){
+        return this.getList(searchText);
     }
 
 }

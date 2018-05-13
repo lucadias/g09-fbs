@@ -49,6 +49,10 @@ public class ArticlePersistor {
                 .getResultList();
     }
 
+    public List<Article> search(String searchText){
+        return this.getList(searchText);
+    }
+
     /**
      * Returns an Article by an article number
      * @param artNr article number of wanted Article
