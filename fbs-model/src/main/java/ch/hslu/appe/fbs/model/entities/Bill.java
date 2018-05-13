@@ -17,6 +17,7 @@ public class Bill {
 
     @Id
     @Column(name = "idBill", nullable = false)
+    @GeneratedValue()
     public int getIdBill() {
         return idBill;
     }

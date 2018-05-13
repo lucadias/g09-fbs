@@ -56,4 +56,13 @@ public class ClientPersistor {
         return result;
     }
 
+    public List<Client> getList(String regEx){
+        String regex = "%"+regEx+"%";
+        String query = "SELECT c FROM Client c WHERE c.firstname LIKE :regex OR c.surname LIKE :regex OR c.idClients LIKE :regex";
+            return this.entitymanager.createQuery(query)
+                    .setParameter("regex", regEx)
+                    .getResultList();
+
+    }
+
 }

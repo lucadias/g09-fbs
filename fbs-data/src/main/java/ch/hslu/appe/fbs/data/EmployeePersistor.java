@@ -49,8 +49,18 @@ public class EmployeePersistor {
         return this.entitymanager.createQuery("Select a From Employee a").getResultList();
     }
 
-    public List<Employee> search(String regEx) {
-        return getList();
+    public List<Employee> getList(String regEx) {
+        String query = "";
+        try {
+            int regexint = Integer.parseInt(regEx);
+            query = "SELECT c FROM Employee c WHERE c.idEmployees  LIKE :regexint";
+        }catch (NumberFormatException nfe) {
+            query = "SELECT c FROM Employee c WHERE c.firstname LIKE :regex OR c.surname LIKE :regex OR c.username LIKE :regex";
+        } finally {
+            return this.entitymanager.createQuery(query)
+                    .setParameter("regex", regEx)
+                    .getResultList();
+        }
     }
 
 

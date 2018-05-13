@@ -2,10 +2,12 @@ package ch.hslu.appe.fbs.data;
 
 import ch.hslu.appe.fbs.model.entities.OrderedArticles;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class OrderedArticlePersistorTest {
     public static OrderedArticles article;
     public static OrderedArticlePersistor persistor = new OrderedArticlePersistor();

@@ -55,7 +55,6 @@ public class OrderPersistorTest {
     }
 
     @Test
-    @Ignore
     public void testGetAll(){
         assertEquals(list.size(), persistor.getAll().size());
     }

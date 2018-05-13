@@ -14,6 +14,7 @@ public class Client {
 
     @Id
     @Column(name = "idClients", nullable = false)
+    @GeneratedValue()
     public int getIdClients() {
         return idClients;
     }

@@ -3,6 +3,8 @@ package ch.hslu.appe.fbs.data;
 import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import javax.persistence.EntityManager;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,23 +38,26 @@ public class ArticlePersistor {
         return article;
     }
 
-    public List<Article> getList(String regex){
+    public List<Article> getList(String searchtext){
 
-
-        String query = "";
-        try {
-            int regexint = Integer.parseInt(regex);
-            query = "SELECT c FROM Article c WHERE c.articlenumber LIKE :regexint";
-        }catch (NumberFormatException nfe) {
-            query = "SELECT c FROM Article c WHERE c.name LIKE :regex OR c.description LIKE :regex";
-        } finally {
+        String regex = "%"+searchtext+"%";
+        String query = "SELECT a FROM Article a WHERE a.name LIKE :regex OR a.description LIKE :regex OR a.articlenumber LIKE :regex";
             return this.entitymanager.createQuery(query)
                     .setParameter("regex", regex)
                     .getResultList();
         }
-}
 
-    public Article getByArticleNr(int artNr) { return this.getById(artNr);}
+    public Article getByArticleNr(int artNr) {
+        try {
+            return (Article) this.entitymanager.createQuery("SELECT a FROM Article a WHERE a.articlenumber = :artNr")
+                    .setParameter("artNr", artNr)
+                    .getSingleResult();
+
+        }catch(Exception e){
+            System.out.println(e.toString());
+            return null;
+        }
+    }
 
     /**
      * Saves Article object to database.
@@ -69,7 +74,18 @@ public class ArticlePersistor {
      * @param amount
      * @return FSBFeedback
      */
-    public FBSFeedback updateStockById(int id, int amount) { return FBSFeedback.SUCCESS; }
+    public FBSFeedback updateStockById(int id, int amount) {
+        try {
+            Article article = this.getById(id);
+            Util.transactionBegin();
+            article.setInStock(amount);
+            Util.transactionCommit();
+            return FBSFeedback.SUCCESS;
+        }catch (Exception e){
+            System.out.println(e.toString());
+            return FBSFeedback.UNKNOWN_ERROR;
+        }
+        }
 
 
     /**
@@ -81,6 +97,21 @@ public class ArticlePersistor {
         List<Article> list = this.entitymanager.createQuery("Select a From Article a").getResultList();
         Util.transactionCommit();
         return list;
+    }
+
+    /**
+     * Returns a List of Article's matching regEx.
+     * @param regEx
+     * @return List&gtArticle&lt
+     */
+    public List<Article> search(String regEx) {
+        List<Article> result = new ArrayList<>();
+        for (Article article:this.getList()){
+            if(article.getName().matches(regEx)) {
+                result.add(article);
+            }
+        }
+        return result;
     }
 
 
