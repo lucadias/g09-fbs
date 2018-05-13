@@ -1,6 +1,8 @@
 package ch.hslu.appe.fbs.model.entities;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,6 +13,7 @@ public class EmployeeGroupsPK implements Serializable {
 
     @Column(name = "Employee_idEmployees", nullable = false)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getEmployeeIdEmployees() {
         return employeeIdEmployees;
     }

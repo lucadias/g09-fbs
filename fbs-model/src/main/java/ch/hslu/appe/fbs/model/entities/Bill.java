@@ -17,7 +17,7 @@ public class Bill {
 
     @Id
     @Column(name = "idBill", nullable = false)
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdBill() {
         return idBill;
     }

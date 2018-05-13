@@ -12,6 +12,7 @@ public class EmployeeGroups {
 
     @Id
     @Column(name = "Employee_idEmployees", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getEmployeeIdEmployees() {
         return employeeIdEmployees;
     }

@@ -11,6 +11,7 @@ public class OrderState {
 
     @Id
     @Column(name = "idOrderState", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdOrderState() {
         return idOrderState;
     }

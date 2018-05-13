@@ -1,12 +1,16 @@
 package ch.hslu.appe.fbs.data;
 
 import ch.hslu.appe.fbs.model.entities.OrderState;
-import ch.hslu.appe.fbs.model.entities.OrderedArticles;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+/**
+ * Class for persisting OrderStates
+ *
+ * @author Pascal Stalder
+ */
 public class OrderStatePersistor {
     private final EntityManager entitymanager = Util.entityManager;
 

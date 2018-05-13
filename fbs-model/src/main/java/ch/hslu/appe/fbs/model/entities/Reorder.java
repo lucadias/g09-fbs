@@ -15,6 +15,7 @@ public class Reorder {
 
     @Id
     @Column(name = "idReorder", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdReorder() {
         return idReorder;
     }

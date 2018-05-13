@@ -11,6 +11,7 @@ public class Groups {
 
     @Id
     @Column(name = "idGroups", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdGroups() {
         return idGroups;
     }

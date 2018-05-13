@@ -15,6 +15,7 @@ public class Employee {
 
     @Id
     @Column(name = "idEmployees", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdEmployees() {
         return idEmployees;
     }

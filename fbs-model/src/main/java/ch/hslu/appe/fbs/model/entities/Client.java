@@ -14,7 +14,7 @@ public class Client {
 
     @Id
     @Column(name = "idClients", nullable = false)
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdClients() {
         return idClients;
     }

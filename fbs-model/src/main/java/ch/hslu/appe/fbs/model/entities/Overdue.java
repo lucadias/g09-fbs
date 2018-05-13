@@ -14,6 +14,7 @@ public class Overdue {
 
     @Id
     @Column(name = "idOverdue", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdOverdue() {
         return idOverdue;
     }

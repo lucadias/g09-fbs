@@ -14,6 +14,7 @@ public class OrderedArticles {
 
     @Id
     @Column(name = "idOrderedArticles", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdOrderedArticles() {
         return idOrderedArticles;
     }

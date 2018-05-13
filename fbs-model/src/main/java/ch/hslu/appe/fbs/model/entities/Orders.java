@@ -16,6 +16,7 @@ public class Orders {
 
     @Id
     @Column(name = "idOrders", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdOrders() {
         return idOrders;
     }
