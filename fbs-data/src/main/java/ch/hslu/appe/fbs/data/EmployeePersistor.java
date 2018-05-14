@@ -2,6 +2,7 @@ package ch.hslu.appe.fbs.data;
 
 import ch.hslu.appe.fbs.model.entities.Employee;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class EmployeePersistor {
 
     /**
      * Returns an Employee by its id.
+     *
      * @param id int
      * @return Employee
      */
@@ -35,10 +37,11 @@ public class EmployeePersistor {
 
     /**
      * Returns an Employee by its username.
+     *
      * @param username String
      * @return Employee
      */
-    public Employee getByUserName(String username){
+    public Employee getByUserName(String username) {
         return (Employee) this.entitymanager.createQuery("SELECT c FROM Employee c WHERE c.username LIKE :custName")
                 .setParameter("custName", username)
                 .setMaxResults(1)
@@ -46,17 +49,23 @@ public class EmployeePersistor {
     }
 
 
-    public Employee getByemployeeNr(int employeeNr) { return this.getById(employeeNr);}
+    public Employee getByemployeeNr(int employeeNr) {
+        return this.getById(employeeNr);
+    }
 
     /**
      * saves or updates an Employee.
+     *
      * @param employee Employee
      * @return FBSFeedback
      */
-    public FBSFeedback save(Employee employee) { return Util.save(employee); }
+    public FBSFeedback save(Employee employee) {
+        return Util.save(employee);
+    }
 
     /**
      * Returns all Employees.
+     *
      * @return List&gt;Employee&lt;
      */
     public List<Employee> getList() {
@@ -65,20 +74,17 @@ public class EmployeePersistor {
 
     /**
      * Returns a List of Employees resembling the searchText
+     *
      * @param searchText String
      * @return List&gt;Employee&lt;
      */
     public List<Employee> getList(String searchText) {
-        String query = "";
-        try {
-            int regexint = Integer.parseInt(searchText);
-            query = "SELECT c FROM Employee c WHERE c.idEmployees  LIKE :regexint";
-        }catch (NumberFormatException nfe) {
-            query = "SELECT c FROM Employee c WHERE c.firstname LIKE :regex OR c.surname LIKE :regex OR c.username LIKE :regex";
-        } finally {
-            return this.entitymanager.createQuery(query)
-                    .setParameter("regex", searchText)
-                    .getResultList();
-        }
+        String regex = "%"+searchText+"%";
+        //noinspection JpaQlInspection
+        String query = "SELECT e FROM Employee e WHERE e.firstname LIKE :regex OR e.surname LIKE :regex OR e.idEmployees LIKE :regex";
+
+        return this.entitymanager.createQuery(query)
+                .setParameter("regex", regex)
+                .getResultList();
     }
 }
