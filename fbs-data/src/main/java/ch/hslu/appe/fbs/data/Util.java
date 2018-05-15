@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
 /**
- * Class for shared methods of Persistors
+ * Class for shared methods of Persistors.
  */
 public class Util {
 
@@ -14,6 +14,13 @@ public class Util {
      * single entityManager for all BD transactions.
      */
     static final EntityManager entityManager = Persistence.createEntityManagerFactory("Glp9Pu").createEntityManager();
+
+    /**
+     * Private Constructor to prevent instances.
+     */
+    private Util() {
+        // Do not fill.
+    }
 
     /**
      * universal save/update method
@@ -37,14 +44,14 @@ public class Util {
     /**
      * Begin DB transaction.
      */
-    static void transactionBegin(){
+    static void transactionBegin() {
         Util.entityManager.getTransaction().begin();
     }
 
     /**
      * Commit DB transaction.
      */
-    static void transactionCommit(){
+    static void transactionCommit() {
         Util.entityManager.getTransaction().commit();
     }
 }
