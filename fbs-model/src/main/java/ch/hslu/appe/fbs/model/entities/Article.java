@@ -17,7 +17,7 @@ public class Article {
 
     @Id
     @Column(name = "idArticle", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getIdArticle() {
         return idArticle;
     }
@@ -101,14 +101,14 @@ public class Article {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Article article = (Article) o;
-        return idArticle == article.idArticle &&
-                Objects.equals(name, article.name) &&
-                Objects.equals(articlenumber, article.articlenumber) &&
-                Objects.equals(description, article.description) &&
-                Objects.equals(inStock, article.inStock) &&
-                Objects.equals(price, article.price) &&
-                Objects.equals(minInStock, article.minInStock) &&
-                Objects.equals(available, article.available);
+        return idArticle == article.getIdArticle() &&
+                this.name.equals(article.getName()) &&
+                this.articlenumber.equals(article.getArticlenumber()) &&
+                this.description.equals(article.getDescription()) &&
+                this.inStock.equals(article.getInStock()) &&
+                this.price.equals(article.getPrice()) &&
+                this.minInStock.equals(article.getMinInStock()) &&
+                this.available.equals(article.getAvailable());
     }
 
     @Override

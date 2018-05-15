@@ -3,6 +3,9 @@ package ch.hslu.appe.fbs.model.entities;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * OrderState entity
+ */
 @Entity
 @Table(name = "OrderState")
 public class OrderState {
@@ -11,7 +14,7 @@ public class OrderState {
 
     @Id
     @Column(name = "idOrderState", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getIdOrderState() {
         return idOrderState;
     }

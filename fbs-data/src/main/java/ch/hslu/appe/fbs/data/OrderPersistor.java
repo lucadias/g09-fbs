@@ -34,6 +34,18 @@ public class OrderPersistor {
         return order;
     }
 
+    /**
+     * Returns List of Orders matching a Client id.
+     * @param id int Client Id
+     * @return List&gt;Orders&lt;
+     */
+    public List<Orders> getListByClientId(int id){
+        String query = "SELECT o FROM Orders o WHERE o.clientIdClients = :id";
+        return this.entitymanager.createQuery(query)
+                .setParameter("id", id)
+                .getResultList();
+    }
+
 
     /**
      * saves or updates an Order.

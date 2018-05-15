@@ -11,7 +11,7 @@ public class Groups {
 
     @Id
     @Column(name = "idGroups", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getIdGroups() {
         return idGroups;
     }

@@ -13,7 +13,7 @@ public class EmployeeGroupsPK implements Serializable {
 
     @Column(name = "Employee_idEmployees", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getEmployeeIdEmployees() {
         return employeeIdEmployees;
     }

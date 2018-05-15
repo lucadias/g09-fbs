@@ -15,6 +15,11 @@ public class OrderStatePersistor {
     private final EntityManager entitymanager = Util.entityManager;
 
 
+    /**
+     * Returns an {@link OrderState} by its id
+     * @param id int
+     * @return {@link OrderState}
+     */
     public OrderState getById(int id) {
         Util.transactionBegin();
 
@@ -25,10 +30,19 @@ public class OrderStatePersistor {
         return state;
     }
 
+    /**
+     * Saves or updates an OrderState.
+     * @param state {@link OrderState}
+     * @return {@link FBSFeedback}
+     */
     public FBSFeedback save(OrderState state) {
         return Util.save(state);
     }
 
+    /**
+     * Returns all possible OrderStates
+     * @return List&gt;{@link OrderState}&lt;
+     */
     public List<OrderState> getList() {
         Util.transactionBegin();
         List<OrderState> list = this.entitymanager.createQuery("Select s From OrderState s").getResultList();

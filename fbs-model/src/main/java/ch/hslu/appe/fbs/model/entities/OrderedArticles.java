@@ -14,7 +14,7 @@ public class OrderedArticles {
 
     @Id
     @Column(name = "idOrderedArticles", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getIdOrderedArticles() {
         return idOrderedArticles;
     }

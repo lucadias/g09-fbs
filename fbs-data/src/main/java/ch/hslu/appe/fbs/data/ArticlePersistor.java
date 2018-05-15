@@ -55,15 +55,15 @@ public class ArticlePersistor {
     }
 
     /**
-     * Returns an Article by an article number
+     * Returns Articles by an article number
      * @param artNr article number of wanted Article
-     * @return Article
+     * @return List&gt;Article&lt;
      */
-    public Article getByArticleNr(int artNr) {
+    public List<Article> getByArticleNr(int artNr) {
         try {
-            return (Article) this.entitymanager.createQuery("SELECT a FROM Article a WHERE a.articlenumber = :artNr")
+            return this.entitymanager.createQuery("SELECT a FROM Article a WHERE a.articlenumber = :artNr")
                     .setParameter("artNr", artNr)
-                    .getSingleResult();
+                    .getResultList();
 
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -110,6 +110,7 @@ public class ArticlePersistor {
             return FBSFeedback.SUCCESS;
         } catch (Exception e) {
             System.out.println(e.toString());
+            Util.transactionCommit();
             return FBSFeedback.UNKNOWN_ERROR;
         }
     }

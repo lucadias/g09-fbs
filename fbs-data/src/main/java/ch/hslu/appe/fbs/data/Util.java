@@ -10,36 +10,41 @@ import javax.persistence.Persistence;
  */
 public class Util {
 
-    public static final EntityManager entityManager = Persistence.createEntityManagerFactory("Glp9Pu").createEntityManager();
-
-
-    // Todo: Create Entity superclass if possible
+    /**
+     * single entityManager for all BD transactions.
+     */
+    static final EntityManager entityManager = Persistence.createEntityManagerFactory("Glp9Pu").createEntityManager();
 
     /**
      * universal save/update method
-     * @param entity
-     * @return
+     * @param entity generic Entity
+     * @return FBSFeedback
      */
-    public static FBSFeedback save(Object entity) {
-
+    static FBSFeedback save(final Object entity) {
         try {
-            Util.entityManager.getTransaction().begin();
+            Util.transactionBegin();
             Util.entityManager.merge(entity);
             Util.entityManager.flush();
-            Util.entityManager.getTransaction().commit();
+            Util.transactionCommit();
             return FBSFeedback.SUCCESS;
         } catch (Exception e){
             System.out.println(e.toString());
-            Util.entityManager.getTransaction().commit();
+            Util.transactionCommit();
             return FBSFeedback.UNKNOWN_ERROR;
         }
     }
 
-    public static void transactionBegin(){
+    /**
+     * Begin DB transaction.
+     */
+    static void transactionBegin(){
         Util.entityManager.getTransaction().begin();
     }
 
-    public static void transactionCommit(){
+    /**
+     * Commit DB transaction.
+     */
+    static void transactionCommit(){
         Util.entityManager.getTransaction().commit();
     }
 }
