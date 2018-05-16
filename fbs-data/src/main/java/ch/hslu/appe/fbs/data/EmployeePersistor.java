@@ -49,7 +49,7 @@ public class EmployeePersistor {
     }
 
 
-    public Employee getByemployeeNr(int employeeNr) {
+    public Employee getByEmployeeNr(int employeeNr) {
         return this.getById(employeeNr);
     }
 

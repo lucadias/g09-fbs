@@ -20,7 +20,9 @@
             <property name="javax.persistence.jdbc.user" value="grp09"/>
             <property name="javax.persistence.jdbc.password" value="wcva3FGW#1ATQ2@VCqe5FT$X2cA4qRX"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+
             <property name="eclipselink.logging.level" value="FINE"/>
+
             <property name="eclipselink.ddl-generation" value="create-tables"/>
             <property name="eclipselink.jdbc.url" value="jdbc:mysql://db-appe.el.eee.intern:3306/grp09"/>
             <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
