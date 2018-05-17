@@ -65,6 +65,9 @@ public class OrderEditViewController implements Initializable {
     private List<OrderedArticleDTO> orderedArticleList;
     private List<ArticleDTO> allArticleList;
     private List<ArticleDTO> searchArticleList;
+    private ObservableList<OrderStateDTO> stateObservableList;
+    private ObservableList<ClientDTO> clientObservableList;
+    private ObservableList<EmployeeDTO> employeeObservableList;
     private OrderDTO orderDTO;
     private int orderId;
     
@@ -192,15 +195,15 @@ public class OrderEditViewController implements Initializable {
                 this.orderDate.setText(date);
                 String number = String.valueOf(this.orderDTO.getId());
                 this.orderNumber.setText(number);
-                this.fillStateChoice();
-                this.fillClientChoice();
-                this.fillEmployeeChoice();
                 //ToDo: Check Nullpointers, maybe work with optionals
                 this.orderedArticleList = this.orderDTO.getOrderedArticleDTOList();
             } else {
                 this.orderDTO = new OrderDTO(-1);
                 this.orderedArticleList = new ArrayList<>();
             }
+            this.fillStateChoice();
+            this.fillClientChoice();
+            this.fillEmployeeChoice();
             this.fillOrderedArticles();
             this.fillAllArticles();
         } catch(RemoteException e) {
@@ -212,43 +215,53 @@ public class OrderEditViewController implements Initializable {
     private void fillStateChoice() {
         try {
             this.orderStateList = this.orderStateService.getList(SESSION);
-            ObservableList<OrderStateDTO> stateObservList = FXCollections.observableArrayList(this.orderStateList);
-            this.stateChoice.setItems(stateObservList);
-            if(stateObservList.contains(this.orderDTO.getOrderStateDTO())) {
-                this.stateChoice.setValue(this.orderDTO.getOrderStateDTO());
-            }
+            this.stateObservableList = FXCollections.observableArrayList(this.orderStateList);
+            this.stateChoice.setItems(this.stateObservableList);
+            this.selectStateChoice();
         } catch(RemoteException e) {
             System.out.println("Error in getting orderStates:"+e.getMessage());
+        }
+    }
+    
+    private void selectStateChoice() {
+        if(this.stateObservableList.contains(this.orderDTO.getOrderStateDTO())) {
+            this.stateChoice.setValue(this.orderDTO.getOrderStateDTO());
         }
     }
     
     private void fillClientChoice() {
         try {
             this.clientList = this.clientService.getList(SESSION);
-            ObservableList<ClientDTO> clientObservList = FXCollections.observableArrayList(this.clientList);
-            this.clientChoice.setItems(clientObservList);
-            if(clientList.contains(this.orderDTO.getClientDTO())) {
-                this.clientChoice.setValue(this.orderDTO.getClientDTO());
-            }
+            this.clientObservableList = FXCollections.observableArrayList(this.clientList);
+            this.clientChoice.setItems(this.clientObservableList);
+            this.selectClientChoice();
         } catch(RemoteException e) {
             System.out.println("Error in getting orderStates:"+e.getMessage());
+        }
+    }
+    
+    private void selectClientChoice() {
+        if(clientList.contains(this.orderDTO.getClientDTO())) {
+            this.clientChoice.setValue(this.orderDTO.getClientDTO());
         }
     }
     
     private void fillEmployeeChoice() {
         try {
             this.employeeList = this.employeeService.getList(SESSION);
-            ObservableList<EmployeeDTO> employeeObservList = FXCollections.observableArrayList(this.employeeList);
-            this.employeeChoice.setItems(employeeObservList);
-            if(employeeObservList.contains(this.orderDTO.getEmployeeDTO())) {
-                this.employeeChoice.setValue(this.orderDTO.getEmployeeDTO());
-            }
+            this.employeeObservableList = FXCollections.observableArrayList(this.employeeList);
+            this.employeeChoice.setItems(this.employeeObservableList);
+            this.selectEmployeeChoice();
         } catch(RemoteException e) {
             System.out.println("Error in getting orderStates:"+e.getMessage());
         }
     }
     
-    
+    private void selectEmployeeChoice() {
+        if(this.employeeObservableList.contains(this.orderDTO.getEmployeeDTO())) {
+            this.employeeChoice.setValue(this.orderDTO.getEmployeeDTO());
+        }
+    }
     
     private void fillOrderedArticles() {
         int i = 1;
