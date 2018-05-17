@@ -48,17 +48,17 @@ public class OrderListViewController implements Initializable {
     
     @FXML
     public void newOrder(ActionEvent event) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("/fxml/OrderEditView.fxml"));
-//            Parent orderEdit = (Parent) loader.load();
-//            OrderEditViewController orderEditViewController = (OrderEditViewController) loader.getController();
-//            orderEditViewController.setId(-1);
-//            JavaFXViewController.getInstance().setView(orderEdit);
-//            JavaFXViewController.getInstance().repaint();
-//        } catch (IOException e) {
-//            System.out.println("Error loading fxml: "+e.getMessage());
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/OrderEditView.fxml"));
+            Parent orderEdit = (Parent) loader.load();
+            OrderEditViewController orderEditViewController = (OrderEditViewController) loader.getController();
+            orderEditViewController.setId(-1);
+            JavaFXViewController.getInstance().setView(orderEdit);
+            JavaFXViewController.getInstance().repaint();
+        } catch (IOException e) {
+            System.out.println("Error loading fxml: "+e.getMessage());
+        }
     }
 
     /**

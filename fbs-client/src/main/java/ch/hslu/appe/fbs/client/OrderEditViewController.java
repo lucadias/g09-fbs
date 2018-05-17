@@ -30,6 +30,7 @@ import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -96,21 +97,37 @@ public class OrderEditViewController implements Initializable {
     
     @FXML
     public void back(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/OrderDetailView.fxml"));
-            Parent orderDetail = (Parent) loader.load();
-            OrderDetailViewController orderDetailViewController = (OrderDetailViewController) loader.getController();
-            orderDetailViewController.setId(this.orderId);
-            JavaFXViewController.getInstance().setView(orderDetail);
-            JavaFXViewController.getInstance().repaint();
-        } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+        if(this.orderId != -1) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/fxml/OrderDetailView.fxml"));
+                Parent orderDetail = (Parent) loader.load();
+                OrderDetailViewController orderDetailViewController = (OrderDetailViewController) loader.getController();
+                orderDetailViewController.setId(this.orderId);
+                JavaFXViewController.getInstance().setView(orderDetail);
+                JavaFXViewController.getInstance().repaint();
+            } catch (IOException e) {
+                System.out.println("Error loading fxml: "+e.getMessage());
+            }
+        } else {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/fxml/OrderListView.fxml"));
+                Parent orders = (Parent) loader.load();
+                OrderListViewController orderListViewController = (OrderListViewController) loader.getController();
+                JavaFXViewController.getInstance().setView(orders);
+                JavaFXViewController.getInstance().repaint();
+            } catch (IOException e) {
+                System.out.println("Error loading fxml: "+e.getMessage());
+            }
         }
     }
     
     @FXML
     public void save(ActionEvent event) {
+        //ToDo: set state, employee and client for orderDTO before saving
+        OrderStateDTO state = (OrderStateDTO)this.stateChoice.getValue();
+        this.orderDTO.setOrderStateDTO(state);
         try {
             String hash = this.orderService.lock(SESSION, this.orderDTO);
             FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
@@ -180,11 +197,12 @@ public class OrderEditViewController implements Initializable {
                 this.fillEmployeeChoice();
                 //ToDo: Check Nullpointers, maybe work with optionals
                 this.orderedArticleList = this.orderDTO.getOrderedArticleDTOList();
-                this.fillOrderedArticles();
-                this.fillAllArticles();
             } else {
                 this.orderDTO = new OrderDTO(-1);
+                this.orderedArticleList = new ArrayList<>();
             }
+            this.fillOrderedArticles();
+            this.fillAllArticles();
         } catch(RemoteException e) {
             this.orderDTO = new OrderDTO(Integer.MAX_VALUE);
             System.out.println("Error in RMI: "+e);
@@ -229,6 +247,8 @@ public class OrderEditViewController implements Initializable {
             System.out.println("Error in getting orderStates:"+e.getMessage());
         }
     }
+    
+    
     
     private void fillOrderedArticles() {
         int i = 1;
