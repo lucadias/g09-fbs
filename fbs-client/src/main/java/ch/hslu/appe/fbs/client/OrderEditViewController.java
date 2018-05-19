@@ -98,6 +98,12 @@ public class OrderEditViewController implements Initializable {
     @FXML
     private TextField searchInput;
     
+    /**
+     * This method is called when the GUI-Button "zurück" is pressed.
+     * This method navigates to the Detail or the ListView depending if its
+     * a new or an existing order.
+     * @param event An ActionEvent given by JavaFx
+     */
     @FXML
     public void back(ActionEvent event) {
         if(this.orderId != -1) {
@@ -126,15 +132,28 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method is not Clean Code compatibel xD
+     * This method is called when the GUI-Button "speichern" is pressed.
+     * It takes the choices(state, employee, client) from the GUI, sets them in the orderDTO
+     * and saves the DTO. Then it navigates to the DetailView
+     * @param event An ActionEvent given by JavaFx
+     */
     @FXML
     public void save(ActionEvent event) {
-        //ToDo: set state, employee and client for orderDTO before saving
         OrderStateDTO state = (OrderStateDTO)this.stateChoice.getValue();
         this.orderDTO.setOrderStateDTO(state);
+        EmployeeDTO employee = (EmployeeDTO)this.employeeChoice.getValue();
+        this.orderDTO.setEmployeeDTO(employee);
+        ClientDTO client = (ClientDTO)this.clientChoice.getValue();
+        this.orderDTO.setClientDTO(client);
         try {
             String hash = this.orderService.lock(SESSION, this.orderDTO);
+            System.out.println("Hash in save is: "+hash);
             FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
+            System.out.println("Feedback is: "+feedback.toString());
             feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+            System.out.println("Second feedback is: "+ feedback.toString());
             //ToDo: need to get orderId here and set orderDTO. Otherwise there are to many Nullpointers
         } catch(RemoteException e) {
             System.out.println("Error while saving: "+e.getMessage());
@@ -152,6 +171,11 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method is called when the GUI-Button "suchen" in the "Artikel suchen" tab is pressed
+     * It calls the search method of the articleService and then print a list of them
+     * @param event An ActionEvent given by JavaFx
+     */
     @FXML
     public void searchArticle(ActionEvent event) {
         try {
@@ -165,6 +189,13 @@ public class OrderEditViewController implements Initializable {
     
     /**
      * Initializes the controller class.
+     * This method is called, when the OrderEditView Fxml file is loaded.
+     * This method initializes the needed services
+     * - orderService
+     * - articleService
+     * - employeeService
+     * - orderStateService
+     * - clientService
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
