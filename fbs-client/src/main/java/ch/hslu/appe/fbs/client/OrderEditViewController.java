@@ -135,6 +135,7 @@ public class OrderEditViewController implements Initializable {
             String hash = this.orderService.lock(SESSION, this.orderDTO);
             FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
             feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+            //ToDo: need to get orderId here and set orderDTO. Otherwise there are to many Nullpointers
         } catch(RemoteException e) {
             System.out.println("Error while saving: "+e.getMessage());
         }
