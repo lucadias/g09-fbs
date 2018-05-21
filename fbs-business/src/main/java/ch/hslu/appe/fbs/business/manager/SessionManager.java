@@ -65,6 +65,26 @@ public class SessionManager {
         return sessionId;
     }
 
+    public int getEmployeeIdFromSessionId(String sessionId) {
+
+        synchronized (sessionPool) {
+            if(sessionPool.containsKey(sessionId)) {
+                return sessionPool.get(sessionId);
+            }
+        }
+
+        return -1;
+    }
+
+    public boolean getIsLoggedIn(String sessionId) {
+        synchronized (sessionPool) {
+            if(sessionPool.containsKey(sessionId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Validates username and passwordHash for an employee and creates a session id if login is valid.
      * @param username username of the employee
@@ -84,15 +104,6 @@ public class SessionManager {
                 }
             }
         }
-
-        /*List<Employee> employees = employeePersistor.getList();
-        for(Employee employee : employees) {
-            if (employee.getUsername().equals(username)) {
-                if(employee.getPassword().equals(passwordHash)) {
-                    return createNewSessionId(employee.getIdEmployees());
-                }
-            }
-        }*/
         return null;
     }
 
@@ -103,8 +114,7 @@ public class SessionManager {
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      */
     public FBSFeedback logout(String sessionId, String username) {
-        //Employee employee = employeePersistor.getByUserName(username);
-        Employee employee = employeePersistor.getById(1);
+        Employee employee = employeePersistor.getByUserName(username);
         Integer userId = new Integer(employee.getIdEmployees());
 
         synchronized (sessionPool) {

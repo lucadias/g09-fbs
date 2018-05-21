@@ -23,6 +23,7 @@ public final class FBSServer {
     public static final String CLIENT_SERVICE_NAME = "ClientService";
     public static final String EMPLOYEE_SERVICE_NAME = "EmployeeService";
     public static final String ORDER_STATE_SERVICE_NAME = "OrderStateService";
+    public static final String LOG_SERVICE_NAME = "LogService";
 
     /**
      * Constructor of the FBSServer.
@@ -74,10 +75,17 @@ public final class FBSServer {
                     + String.valueOf(REGISTRY_PORT) + "/" + EMPLOYEE_SERVICE_NAME;
             Naming.bind(urlEmployeeService, employeeService);
 
-            final OrderStateService orderStateService= new OrderStateService();
+            final OrderStateService orderStateService = new OrderStateService();
             final String urlOrderStateService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + ORDER_STATE_SERVICE_NAME;
             Naming.bind(urlOrderStateService, orderStateService);
+
+            final LogService logService = new LogService();
+            final String urlLogService = "rmi://localhost:"
+                    + String.valueOf(REGISTRY_PORT) + "/" + LOG_SERVICE_NAME;
+            Naming.bind(urlLogService, logService);
+
+
 
         } catch (RemoteException e) {
             e.printStackTrace();

@@ -1,6 +1,7 @@
 package ch.hslu.appe.fbs.business.manager;
 
 import ch.hslu.appe.fbs.business.utils.OrderStateConverter;
+import ch.hslu.appe.fbs.business.utils.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.OrderStatePersistor;
 import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
 
@@ -18,6 +19,8 @@ public final class OrderStateManager {
 
     private OrderStatePersistor orderStatePersistor;
     private OrderStateConverter orderStateConverter;
+
+    private SessionManager sessionManager;
 
     /**
      * Returns the singleton instance of the OrderStateManager.
@@ -42,13 +45,20 @@ public final class OrderStateManager {
     private OrderStateManager() {
         this.orderStatePersistor = new OrderStatePersistor();
         this.orderStateConverter = new OrderStateConverter();
+        this.sessionManager = SessionManager.getInstance();
     }
 
     public OrderStateDTO getById(final String sessionId, final int id) {
-        return orderStateConverter.convertToDTO(orderStatePersistor.getById(id));
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            return orderStateConverter.convertToDTO(orderStatePersistor.getById(id));
+        }
+        throw new UserNotLoggedInException();
     }
 
     public List<OrderStateDTO> getList(final String sessionId) {
-        return orderStateConverter.convertToDTO(orderStatePersistor.getList());
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            return orderStateConverter.convertToDTO(orderStatePersistor.getList());
+        }
+        throw new UserNotLoggedInException();
     }
 }

@@ -1,6 +1,7 @@
 package ch.hslu.appe.fbs.business.manager;
 
 import ch.hslu.appe.fbs.business.utils.ArticleConverter;
+import ch.hslu.appe.fbs.business.utils.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.ArticlePersistor;
 import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
@@ -40,6 +41,8 @@ public final class ArticleManager {
 
     static final Logger logger = LogManager.getLogger(ArticleManager.class.getName());
 
+    private SessionManager sessionManager;
+
 
     /**
      * Returns the singleton instance of the ArticleManager.
@@ -66,6 +69,7 @@ public final class ArticleManager {
         this.articlePersistor = new ArticlePersistor();
         this.lockpool = new HashMap<>();
         this.articleConverter = new ArticleConverter();
+        this.sessionManager = SessionManager.getInstance();
 
         try {
             this.sha256Digest = MessageDigest.getInstance("SHA-256");
@@ -80,16 +84,22 @@ public final class ArticleManager {
      * @return article as a DTO
      */
     public ArticleDTO getById(final String sessionId, final int id) {
-        return articleConverter.convertToDTO(articlePersistor.getById(id));
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            return articleConverter.convertToDTO(articlePersistor.getById(id));
+        }
+        throw new UserNotLoggedInException();
     }
 
     /**
-     * Gets the article by the article number as an entity, converts it to a DTO and returns it.
+     * Gets the articles by the article number as entites, converts them to a DTOs and returns them as a list.
      * @param artNr article number of the article
-     * @return article as a DTO
+     * @return articles as a list
      */
-    public ArticleDTO getByArticleNr(final String sessionId, final int artNr) {
-        return articleConverter.convertToDTO(articlePersistor.getByArticleNr(artNr));
+    public List<ArticleDTO> getByArticleNr(final String sessionId, final int artNr) {
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            return articleConverter.convertToDTO(articlePersistor.getByArticleNr(artNr));
+        }
+        throw new UserNotLoggedInException();
     }
 
     /**
@@ -97,45 +107,54 @@ public final class ArticleManager {
      * @return articles as a DTO list
      */
     public List<ArticleDTO> getList(final String sessionId) {
-        logger.info("Got all Articles from Database, Session id: " + sessionId);
-        List<Article> articleList = articlePersistor.getList();
-        return articleConverter.convertToDTO(articleList);
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            logger.info("Got all Articles from Database, Session id: " + sessionId);
+            List<Article> articleList = articlePersistor.getList();
+            return articleConverter.convertToDTO(articleList);
+        }
+        throw new UserNotLoggedInException();
     }
 
     /**
      * Converts the given DTO article to an entity and passes it to the persistor.
      * @param articleDTO article to save as a DTO
      * @param hash lock hash string for the article
-     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @return the saved article as a DTO on success, otherwise null
      */
-    public FBSFeedback save(final String sessionId, final ArticleDTO articleDTO, final String hash) {
-        FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
+    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash) {
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
-        if (lockCheck == FBSFeedback.SUCCESS) {
-            Article article = articleConverter.convertToEntity(articleDTO);
-            return articlePersistor.save(article);
-        } else {
-            return lockCheck;
+            if (lockCheck == FBSFeedback.SUCCESS) {
+                Article article = articleConverter.convertToEntity(articleDTO);
+                return articleConverter.convertToDTO(articlePersistor.save(article));
+            } else {
+                return null;
+            }
         }
+        throw new UserNotLoggedInException();
     }
 
     /**
      * Converts the given DTO article to an entity, sets the availability to false and passes it to the persistor.
      * @param articleDTO article to delete as a DTO
      * @param hash lock hash string for the article
-     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @return the saved article as a DTO on success, otherwise null
      */
-    public FBSFeedback delete(final String sessionId, final ArticleDTO articleDTO, final String hash) {
-        FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
+    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash) {
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
-        if (lockCheck == FBSFeedback.SUCCESS) {
-            Article article = articleConverter.convertToEntity(articleDTO);
-            article.setAvailable(false);
+            if (lockCheck == FBSFeedback.SUCCESS) {
+                Article article = articleConverter.convertToEntity(articleDTO);
+                article.setAvailable(false);
 
-            return articlePersistor.save(article);
-        } else {
-            return lockCheck;
+                return articleConverter.convertToDTO(articlePersistor.save(article));
+            } else {
+                return null;
+            }
         }
+        throw new UserNotLoggedInException();
     }
 
     /**
@@ -147,93 +166,115 @@ public final class ArticleManager {
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      */
     public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash) {
-        FBSFeedback lockCheck = checkLock(id, hash);
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            FBSFeedback lockCheck = checkLock(id, hash);
 
-        if (lockCheck == FBSFeedback.SUCCESS) {
-            return articlePersistor.updateStockById(id, amount);
-        } else {
-            return lockCheck;
+            if (lockCheck == FBSFeedback.SUCCESS) {
+                return articlePersistor.updateStockById(id, amount);
+            } else {
+                return lockCheck;
+            }
         }
+        throw new UserNotLoggedInException();
     }
 
     public List<ArticleDTO> sortList(final String sessionId, final SortingType type) {
-
-        return sortList(sessionId, articleConverter.convertToDTO(articlePersistor.getList()), type);
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            return sortList(sessionId, articleConverter.convertToDTO(articlePersistor.getList()), type);
+        }
+        throw new UserNotLoggedInException();
     }
 
     public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type) {
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            Comparator<ArticleDTO> comparator;
 
-        Comparator<ArticleDTO> comparator;
+            switch (type) {
+                case ARTICLE_NAME_ASC:
+                    comparator = new ArticleNameAscComparator();
+                    break;
+                case ARTICLE_NAME_DESC:
+                    comparator = new ArticleNameDescComparator();
+                    break;
+                case ARTICLE_PRICE_ASC:
+                    comparator = new ArticlePriceAscComparator();
+                    break;
+                case ARTICLE_PRICE_DESC:
+                    comparator = new ArticlePriceDescComparator();
+                    break;
+                default:
+                    comparator = new ArticleNameAscComparator();
+                    break;
+            }
 
-        switch (type) {
-            case ARTICLE_NAME_ASC:
-                comparator = new ArticleNameAscComparator();
-                break;
-            case ARTICLE_NAME_DESC:
-                comparator = new ArticleNameDescComparator();
-                break;
-            case ARTICLE_PRICE_ASC:
-                comparator = new ArticlePriceAscComparator();
-                break;
-            case ARTICLE_PRICE_DESC:
-                comparator = new ArticlePriceDescComparator();
-                break;
-            default:
-                comparator = new ArticleNameAscComparator();
-                break;
+            Collections.sort(articleDTOs, comparator);
+
+            return articleDTOs;
         }
-
-        Collections.sort(articleDTOs, comparator);
-
-        return articleDTOs;
+        throw new UserNotLoggedInException();
     }
 
     public List<ArticleDTO> search(final String sessionId, final String regEx) {
-        return articleConverter.convertToDTO(articlePersistor.search(regEx));
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            return articleConverter.convertToDTO(articlePersistor.search(regEx));
+        }
+        throw new UserNotLoggedInException();
     }
 
     public String lock(final String sessionId, final int id) {
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            synchronized (lockpool) {
 
-        synchronized (lockpool) {
-
-            // check if article is already locked
-            if (lockpool.containsKey(String.valueOf(id))) {
-                return null;
-            } else {
-                String toHash = String.valueOf(id) + (new Date()).toString();
-                String hash = "";
-                if (sha256Digest != null) {
-                    byte[] hashBytes = sha256Digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
-                    hash = String.valueOf(hashBytes);
+                // check if article is already locked
+                if (lockpool.containsKey(String.valueOf(id))) {
+                    return null;
                 } else {
-                    hash = toHash;
+                    String toHash = String.valueOf(id) + (new Date()).toString();
+                    String hash = "";
+                    if (sha256Digest != null) {
+                        byte[] hashBytes = sha256Digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
+                        StringBuffer hexString = new StringBuffer();
+                        for (int i = 0; i < hashBytes.length; i++) {
+                            String hex = Integer.toHexString(0xff & hashBytes[i]);
+                            if(hex.length() == 1) hexString.append('0');
+                            hexString.append(hex);
+                        }
+                        hash = hexString.toString();
+                    } else {
+                        hash = toHash;
+                    }
+
+                    lockpool.put(String.valueOf(id), hash);
+                    return hash;
                 }
 
-                lockpool.put(String.valueOf(id), hash);
-                return hash;
             }
-
         }
+        throw new UserNotLoggedInException();
     }
 
     public FBSFeedback release(final String sessionId, final int id, final String hash) {
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            synchronized (lockpool) {
 
-        synchronized (lockpool) {
+                if (lockpool.containsKey(String.valueOf(id))) {
 
-            if (lockpool.containsKey(String.valueOf(id))) {
+                    System.out.println("lockpool hash: " + lockpool.get(String.valueOf(id)));
+                    System.out.println("passed hash: " + hash);
+                    if (lockpool.get(String.valueOf(id)).equals(hash)) {
+                        lockpool.remove(String.valueOf(id), hash);
+                        return FBSFeedback.SUCCESS;
+                    } else {
+                        return FBSFeedback.MISMATCHING_HASH;
+                    }
 
-                if (lockpool.get(String.valueOf(id)).equals(hash)) {
-                    lockpool.remove(String.valueOf(id), hash);
-                    return FBSFeedback.SUCCESS;
                 } else {
-                    return FBSFeedback.MISMATCHING_HASH;
+                    return FBSFeedback.LOCK_LOST;
                 }
 
-            } else {
-                return FBSFeedback.LOCK_LOST;
             }
-
         }
+        throw new UserNotLoggedInException();
     }
 
     private FBSFeedback checkLock(final int id, final String hash) {

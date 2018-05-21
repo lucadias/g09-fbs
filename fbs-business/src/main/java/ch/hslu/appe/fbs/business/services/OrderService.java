@@ -30,7 +30,7 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
         orderManager = OrderManager.getInstance();
     }
 
-    //TODO: implement getListByClientId, delete
+    //TODO: implement getListByClientId
 
     @Override
     public OrderDTO getById(final String sessionId, final int id) throws RemoteException {
@@ -59,7 +59,7 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
 
     @Override
     public FBSFeedback delete(final String sessionId, final OrderDTO orderDTO, final String hash) throws RemoteException {
-        return null;
+        return orderManager.delete(sessionId, orderDTO, hash);
     }
 
     @Override

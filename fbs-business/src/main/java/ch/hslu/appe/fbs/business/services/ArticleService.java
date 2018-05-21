@@ -36,7 +36,7 @@ public final class ArticleService extends UnicastRemoteObject implements RemoteA
     }
 
     @Override
-    public ArticleDTO getByArticleNr(final String sessionId, final int artNr) throws RemoteException {
+    public List<ArticleDTO> getByArticleNr(final String sessionId, final int artNr) throws RemoteException {
         return articleManager.getByArticleNr(sessionId, artNr);
     }
 
@@ -66,12 +66,12 @@ public final class ArticleService extends UnicastRemoteObject implements RemoteA
     }
 
     @Override
-    public FBSFeedback save(final String sessionId, final ArticleDTO articleDTO, final String hash) throws RemoteException {
+    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash) throws RemoteException {
         return articleManager.save(sessionId, articleDTO, hash);
     }
 
     @Override
-    public FBSFeedback delete(final String sessionId, final ArticleDTO articleDTO, final String hash) throws RemoteException {
+    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash) throws RemoteException {
         return articleManager.delete(sessionId, articleDTO, hash);
     }
 

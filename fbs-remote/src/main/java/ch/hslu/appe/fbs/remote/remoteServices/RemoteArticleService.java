@@ -25,13 +25,13 @@ public interface RemoteArticleService extends Remote {
     ArticleDTO getById(String sessionId, int id) throws RemoteException;
 
     /**
-     * Returns an ArticleDTO object with the given article number.
+     * Returns an ArticleDTO listwith the given article number.
      * @param sessionId session id to gain access
-     * @param artNr article number of the article
-     * @return ArticleDTO with the given article number
+     * @param artNr article number of the articles
+     * @return ArticleDTO list with the given article number
      * @throws RemoteException mandatory
      */
-    ArticleDTO getByArticleNr(String sessionId, int artNr) throws RemoteException;
+    List<ArticleDTO> getByArticleNr(String sessionId, int artNr) throws RemoteException;
 
     /**
      * Returns all articles.
@@ -85,20 +85,20 @@ public interface RemoteArticleService extends Remote {
      * @param sessionId session id to gain access
      * @param articleDTO article to save
      * @param hash lock hash of the article
-     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @return saved article DTO on success, otherwise null
      * @throws RemoteException mandatory
      */
-    FBSFeedback save(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException;
+    ArticleDTO save(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException;
 
     /**
      * Deletes the article.
      * @param sessionId session id to gain access
      * @param articleDTO article to delete
      * @param hash lock hash of the article
-     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @return saved article DTO on success, otherwise null
      * @throws RemoteException mandatory
      */
-    FBSFeedback delete(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException;
+    ArticleDTO delete(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException;
 
     /**
      * Tries to gain the lock of an article.
