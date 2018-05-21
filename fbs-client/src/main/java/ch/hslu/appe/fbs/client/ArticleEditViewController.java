@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.hslu.appe.fbs.client;
 
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
@@ -28,8 +23,8 @@ import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
- *
- * @author salzm
+ * This class is responsible for the articleEditView and defines the methods for that view
+ * @author joel salzmann
  */
 public class ArticleEditViewController implements Initializable {
     private ArticleDTO articleDTO;

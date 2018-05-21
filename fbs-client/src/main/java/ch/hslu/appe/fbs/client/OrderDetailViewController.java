@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.hslu.appe.fbs.client;
 
 import static ch.hslu.appe.fbs.client.Client.REGISTRY_PORT;
@@ -32,7 +27,7 @@ import javafx.scene.text.Text;
 
 /**
  * FXML Controller class
- *
+ * This class is responsible for the orderDetailView and defines the methods for that view
  * @author salzm
  */
 public class OrderDetailViewController implements Initializable {
@@ -66,6 +61,11 @@ public class OrderDetailViewController implements Initializable {
     @FXML
     private Label orderClient;
     
+    /**
+     * This method is called when the GUI-Button "zurück" is pressed.
+     * This method navigates to the orderListView
+     * @param event An ActionEvent given by JavaFx
+     */
     @FXML
     public void back(ActionEvent event) {
         try {
@@ -80,6 +80,11 @@ public class OrderDetailViewController implements Initializable {
         }
     }
     
+    /**
+     * This method is called when the GUI-Button "Bearbeiten" is pressed
+     * This method navigates to the orderEditView and sets the orderDTO to be edited
+     * @param event An ActionEvent given by JavaFx
+     */
     @FXML
     public void showEditView(ActionEvent event) {
         try {
@@ -97,6 +102,8 @@ public class OrderDetailViewController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * This method is called when the orderDetailView Fxml file is loaded
+     * This method initializes the orderService
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -110,6 +117,11 @@ public class OrderDetailViewController implements Initializable {
         }
     }
     
+    /**
+     * This method is used to set the orderDTO given by id.
+     * Then it fills the ui components with the orderDTO's values
+     * @param id the id of the orderDTO
+     */
     public void setId(int id) {
         this.orderId = id;
         try {
@@ -134,6 +146,9 @@ public class OrderDetailViewController implements Initializable {
         }
     }
     
+    /**
+     * This method fills the grid with the orderedArticles
+     */
     private void fillOrder() {
         int i = 1;
         for(OrderedArticleDTO orderedArticle:this.articleList) {

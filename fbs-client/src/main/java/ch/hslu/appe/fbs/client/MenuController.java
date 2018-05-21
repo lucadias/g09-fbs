@@ -1,14 +1,7 @@
 package ch.hslu.appe.fbs.client;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,8 +13,8 @@ import javafx.scene.control.Label;
 
 /**
  * FXML Controller class
- *
- * @author salzm
+ * This class is responsible for the menuViews leftMenu and topMenu and defines the methods for those views
+ * @author joel salzmann
  */
 public class MenuController implements Initializable {
     

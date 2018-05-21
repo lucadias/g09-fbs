@@ -9,7 +9,10 @@ import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
 
 /**
- * JavaDoc
+ * This class is responsible for the viewManagement
+ * It hols the current view and provides methods to receive their contents
+ * for the different areas of the gui
+ * @author joel salzmann
  */
 public final class JavaFXViewController {
     public static final String ARTICLE_SERVICE_NAME = "ArticleService";
@@ -24,7 +27,7 @@ public final class JavaFXViewController {
     
 
     private JavaFXViewController() {
-        
+        //empty
     }
     
     public static JavaFXViewController getInstance() {
