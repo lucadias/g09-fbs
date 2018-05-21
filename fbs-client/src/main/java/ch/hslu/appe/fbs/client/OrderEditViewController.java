@@ -50,8 +50,8 @@ import javafx.scene.text.Text;
 
 /**
  * FXML Controller class
- *
- * @author salzm
+ * This class is responsible for the orderEditView and defines the methods for that view
+ * @author joel salzmann
  */
 public class OrderEditViewController implements Initializable {
     private RemoteOrderService orderService = null;
@@ -216,7 +216,11 @@ public class OrderEditViewController implements Initializable {
             System.out.println("Error in RMI: "+e);
         }
     }
-    
+    /**
+     * This method is used to set the orderDTO given by id.
+     * Then it fills the ui components with the orderDTO's values
+     * @param id the id of the orderDTO
+     */
     public void setId(int id) {
         this.orderId = id;
         try {
@@ -244,6 +248,9 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method fills the ui component StateChoice with the possible values
+     */
     private void fillStateChoice() {
         try {
             this.orderStateList = this.orderStateService.getList(SESSION);
@@ -255,12 +262,18 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method sets the stateChoice depending on the orderDTO
+     */
     private void selectStateChoice() {
         if(this.stateObservableList.contains(this.orderDTO.getOrderStateDTO())) {
             this.stateChoice.setValue(this.orderDTO.getOrderStateDTO());
         }
     }
     
+    /**
+     * This method fills the ui component ClientChoice with the possible values
+     */
     private void fillClientChoice() {
         try {
             this.clientList = this.clientService.getList(SESSION);
@@ -272,12 +285,18 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method sets the clientChoice depending on the orderDTO
+     */
     private void selectClientChoice() {
         if(clientList.contains(this.orderDTO.getClientDTO())) {
             this.clientChoice.setValue(this.orderDTO.getClientDTO());
         }
     }
     
+    /**
+     * This method fills the ui component EmployeeChoice with the possible values
+     */
     private void fillEmployeeChoice() {
         try {
             this.employeeList = this.employeeService.getList(SESSION);
@@ -289,12 +308,18 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method sets the employeeChoice depending on the orderDTO
+     */
     private void selectEmployeeChoice() {
         if(this.employeeObservableList.contains(this.orderDTO.getEmployeeDTO())) {
             this.employeeChoice.setValue(this.orderDTO.getEmployeeDTO());
         }
     }
     
+    /**
+     * This method fills the grid of orderedArticles depending on the orderedArticleList of the orderDTO
+     */
     private void fillOrderedArticles() {
         int i = 1;
         for(OrderedArticleDTO orderedArticle:this.orderedArticleList) {
@@ -321,6 +346,9 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method fills the grid, where all available articles are listet
+     */
     private void fillAllArticles() {
         int i = 1;
         try {
@@ -350,6 +378,9 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method fills the grid of searched articles depending on the searchArticleList
+     */
     private void fillSearchedArticles() {
         int i = 1;
         for(ArticleDTO article:this.searchArticleList) {
@@ -375,6 +406,11 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method adds an articleDTO to the order
+     * @param article An articleDTO which should be added to the order
+     * @param amount The amount of the articleDTO which should be added to the order
+     */
     private void addToOrder(ArticleDTO article, int amount) {
         for(int i=0; i<amount; i++) {
             OrderedArticleDTO orderedArticle = new OrderedArticleDTO(-1);
@@ -395,6 +431,10 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method removes an articleDTO from an order
+     * @param article An articleDTO which should be removed from the order
+     */
     private void removeFromOrder(OrderedArticleDTO article) {
         this.orderedArticleList.remove(article);
         this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
@@ -410,6 +450,9 @@ public class OrderEditViewController implements Initializable {
         }
     }
     
+    /**
+     * This method reloads the orderEditView depending on the orderId
+     */
     private void refresh() {
         try {
             FXMLLoader loader = new FXMLLoader();
