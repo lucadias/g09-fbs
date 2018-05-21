@@ -51,6 +51,8 @@ public class LoginViewController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * This method is called, when the loginView Fxml file is loaded.
+     * This method initializes the login service
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -63,25 +65,30 @@ public class LoginViewController implements Initializable {
         }
     }
     
+    /**
+     * This method is called when the GUI-Button "login" is pressed
+     * It takes the inputs and checks if the login is successfull
+     * @param event An ActionEvent given by JavaFx
+     */
     @FXML
     public void loginButtonPressed(ActionEvent event) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            String username = this.usernameInput.getText();
-            String password = this.passwordInput.getText();
-            String passwordHash = this.sha256(password);
-            if(this.checkLogin(username, String.valueOf(passwordHash))) {
-                Client.username = username;
-                this.showDashboard();
-            } else {
-                System.out.println("Login failed");
-            }
-        } catch(NoSuchAlgorithmException e) {
-            System.out.println("Problems with password:"+e.getMessage());
-        }        
+        String username = this.usernameInput.getText();
+        String password = this.passwordInput.getText();
+        String passwordHash = this.sha256(password);
+        if(this.checkLogin(username, String.valueOf(passwordHash))) {
+            Client.username = username;
+            this.showDashboard();
+        } else {
+            System.out.println("Login failed");
+        }    
     }
     
-    private String sha256(String base) {
+    /**
+     * This method generates a sha256 hash for a given string
+     * @param base the string which should be hashed
+     * @return String the hashed string
+     */
+    String sha256(String base) {
         try{
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(base.getBytes("UTF-8"));
@@ -97,6 +104,9 @@ public class LoginViewController implements Initializable {
         }
     }
     
+    /**
+     * This method navigates to the dashboardView
+     */
     private void showDashboard() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -110,7 +120,14 @@ public class LoginViewController implements Initializable {
         }
     }
     
-    private Boolean checkLogin(String username, String password) {
+    /**
+     * This method checks if there is a user with the given username
+     * who has the given password.
+     * @param username the username of the user who wants to log in
+     * @param password the password of the user who wants to log in
+     * @return Boolean success of the login true/false
+     */
+    Boolean checkLogin(String username, String password) {
         Boolean loginSuccess = false;
         if(this.loginService != null) {
             try {
