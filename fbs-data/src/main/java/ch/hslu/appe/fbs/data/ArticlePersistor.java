@@ -31,6 +31,7 @@ public final class ArticlePersistor {
 
         Util.transactionCommit();
 
+
         return article;
     }
 
@@ -78,10 +79,24 @@ public final class ArticlePersistor {
      * @param article Article entity to save.
      * @return FBSFeedback
      */
-    public FBSFeedback save(final Article article) {
-        return Util.save(article);
-    }
+    public Article save(Article article) {
 
+        try {
+            Util.transactionBegin();
+            if(article.getIdArticle() == -1){
+                article.setIdArticle(null);
+                Util.entityManager.persist(article);
+            } else {
+                Util.entityManager.merge(article);
+            }
+            Util.entityManager.flush();
+            Util.transactionCommit();
+        } catch (Exception e){
+            System.out.println(e.toString());
+            Util.transactionCommit();
+        }
+        return article;
+    }
 
     /**
      * Returns all Articles from database.

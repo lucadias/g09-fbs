@@ -6,7 +6,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "Article")
 public class Article {
-    private int idArticle;
+    private Integer idArticle;
     private String name;
     private Integer articlenumber;
     private String description;
@@ -18,11 +18,11 @@ public class Article {
     @Id
     @Column(name = "idArticle", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getIdArticle() {
+    public Integer getIdArticle() {
         return idArticle;
     }
 
-    public void setIdArticle(int idArticle) {
+    public void setIdArticle(Integer idArticle) {
         this.idArticle = idArticle;
     }
 

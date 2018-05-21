@@ -18,8 +18,7 @@ public class ArticlePersistorTest {
     @Before
     public void setup(){
         article = new Article();
-        article.setIdArticle(-1);
-        article.setName("Main Board");
+        article.setName("Main Board123");
         article.setAvailable(true);
         article.setArticlenumber(9999);
         article.setDescription("Main boarding mostly");
@@ -32,7 +31,7 @@ public class ArticlePersistorTest {
 
     @Test
     public void save() {
-        assertEquals(FBSFeedback.SUCCESS, persistor.save(article));
+        assertEquals(article, persistor.save(article));
     }
 
     @Test
