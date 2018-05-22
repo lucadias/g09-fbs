@@ -47,4 +47,13 @@ public final class OrderedArticleConverter {
 
         return orderedArticles;
     }
+
+    public List<OrderedArticles> convertToEntityList(final List<OrderedArticleDTO> orderedArticlesDTOList) {
+        List<OrderedArticles> orderedArticlesEntityList = new ArrayList<>();
+        for (OrderedArticleDTO orderedArticlesDTO : orderedArticlesDTOList) {
+            orderedArticlesEntityList.add(convertToEntity(orderedArticlesDTO));
+        }
+
+        return orderedArticlesEntityList;
+    }
 }
