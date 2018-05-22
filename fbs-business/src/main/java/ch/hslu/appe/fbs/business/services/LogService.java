@@ -3,6 +3,7 @@ package ch.hslu.appe.fbs.business.services;
 import ch.hslu.appe.fbs.business.manager.LogManager;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteLogService;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -24,7 +25,7 @@ public final class LogService extends UnicastRemoteObject implements RemoteLogSe
     }
 
     @Override
-    public List<String> getLogList(String sessionId) throws RemoteException {
+    public List<String> getLogList(String sessionId) throws IOException {
         return logManager.getLogList(sessionId);
     }
 }

@@ -2,6 +2,7 @@ package ch.hslu.appe.fbs.remote.remoteServices;
 
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 
+import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -19,5 +20,5 @@ public interface RemoteLogService extends Remote {
      * @return log list
      * @throws RemoteException mandatory
      */
-    List<String> getLogList(String sessionId) throws RemoteException;
+    List<String> getLogList(String sessionId) throws IOException;
 }
