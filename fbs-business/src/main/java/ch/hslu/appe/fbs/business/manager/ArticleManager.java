@@ -108,7 +108,7 @@ public final class ArticleManager {
      */
     public List<ArticleDTO> getList(final String sessionId) {
         if (sessionManager.getIsLoggedIn(sessionId)) {
-            logger.info("Got all Articles from Database, Session id: " + sessionId);
+            logger.info("List all Articles from Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
             List<Article> articleList = articlePersistor.getList();
             return articleConverter.convertToDTO(articleList);
         }
@@ -127,6 +127,7 @@ public final class ArticleManager {
 
             if (lockCheck == FBSFeedback.SUCCESS) {
                 Article article = articleConverter.convertToEntity(articleDTO);
+                logger.info("Save Article with id: " +article.getIdArticle()+ " to Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 return articleConverter.convertToDTO(articlePersistor.save(article));
             } else {
                 return null;
@@ -147,6 +148,7 @@ public final class ArticleManager {
 
             if (lockCheck == FBSFeedback.SUCCESS) {
                 Article article = articleConverter.convertToEntity(articleDTO);
+                logger.info("Deleted Article with id: " +article.getIdArticle()+ " to Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 article.setAvailable(false);
 
                 return articleConverter.convertToDTO(articlePersistor.save(article));
@@ -170,6 +172,7 @@ public final class ArticleManager {
             FBSFeedback lockCheck = checkLock(id, hash);
 
             if (lockCheck == FBSFeedback.SUCCESS) {
+                logger.info("Update Article Stock with id: " +id+ " | New Amount:" +amount+" | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 return articlePersistor.updateStockById(id, amount);
             } else {
                 return lockCheck;

@@ -18,6 +18,7 @@ public class ArticlePersistorTest {
     @Before
     public void setup(){
         article = new Article();
+        article.setIdArticle(-1);
         article.setName("Main Board123");
         article.setAvailable(true);
         article.setArticlenumber(9999);
@@ -36,14 +37,14 @@ public class ArticlePersistorTest {
 
     @Test
     public void getById() {
-        Article testarticle = persistor.getById(-1);
+        Article testarticle = persistor.getById(article.getIdArticle());
         System.out.println(article.getClass()+" "+testarticle.getClass());
         assertEquals(article, testarticle);
     }
 
     @Test
     public void getByArticleNr() {
-        List<Article> list = persistor.getByArticleNr(9999);
+        List<Article> list = persistor.getByArticleNr(article.getArticlenumber());
         for (Article testarticle : list){
             System.out.println(testarticle.getIdArticle()+" "+article.getIdArticle());
             assertEquals(this.article, testarticle);

@@ -45,7 +45,7 @@ public final class ArticlePersistor {
 
         String regex = "%" + searchtext + "%";
         //noinspection JpaQlInspection
-        String query = "SELECT a FROM Article a WHERE a.name LIKE :regex OR a.description LIKE :regex OR a.articlenumber LIKE :regex";
+        String query = "SELECT a FROM Article a WHERE a.name LIKE :regex OR a.description LIKE :regex OR CONCAT(a.articlenumber, '') LIKE :regex";
         return this.entitymanager.createQuery(query)
                 .setParameter("regex", regex)
                 .getResultList();

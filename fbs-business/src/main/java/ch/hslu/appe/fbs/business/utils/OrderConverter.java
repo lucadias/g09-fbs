@@ -54,6 +54,7 @@ public final class OrderConverter {
         order.setTotalPrice(orderDTO.getTotalPrice());
         order.setOrderStateIdOrderState(orderDTO.getOrderStateDTO().getId());
         order.setEmployeeIdEmployee(orderDTO.getEmployeeDTO().getId());
+        order.setClientIdClients(orderDTO.getClientDTO().getId());
 
         return order;
     }

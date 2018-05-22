@@ -4,6 +4,7 @@ import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 
+import javax.persistence.RollbackException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -58,7 +59,7 @@ public interface RemoteOrderService extends Remote {
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws RemoteException mandatory
      */
-    FBSFeedback save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException;
+    FBSFeedback save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, RollbackException;
 
     /**
      * Deletes the order.
