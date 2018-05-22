@@ -53,7 +53,7 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
     }
 
     @Override
-    public FBSFeedback save(final String sessionId, final OrderDTO orderDTO, final String hash) throws RemoteException {
+    public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash) throws RemoteException {
         return orderManager.save(sessionId, orderDTO, hash);
     }
 

@@ -52,14 +52,14 @@ public interface RemoteOrderService extends Remote {
     List<OrderDTO> search(String sessionId, String regEx) throws RemoteException;
 
     /**
-     * Saves the order.
+     * Saves the order and returns the saved order
      * @param sessionId session id to gain access
      * @param orderDTO order to save
      * @param hash lock hash of the order
-     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @return saved order dto
      * @throws RemoteException mandatory
      */
-    FBSFeedback save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, RollbackException;
+    OrderDTO save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, RollbackException;
 
     /**
      * Deletes the order.

@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public final class LogManager {
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public List<String> getLogList(final String sessionId) throws IOException {
+    public List<String> getLogList(final String sessionId) throws IOException{
 
         List<String> logs = new ArrayList<>();
         if (sessionManager.getIsLoggedIn(sessionId)) {

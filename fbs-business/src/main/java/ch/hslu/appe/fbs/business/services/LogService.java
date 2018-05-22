@@ -25,7 +25,7 @@ public final class LogService extends UnicastRemoteObject implements RemoteLogSe
     }
 
     @Override
-    public List<String> getLogList(String sessionId) throws IOException {
+    public List<String> getLogList(final String sessionId) throws IOException {
         return logManager.getLogList(sessionId);
     }
 }

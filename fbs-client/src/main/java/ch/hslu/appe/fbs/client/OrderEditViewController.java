@@ -152,6 +152,7 @@ public class OrderEditViewController implements Initializable {
             //ToDo: need to get orderId here and set orderDTO. Otherwise there are to many Nullpointers
         } catch(RemoteException e) {
             System.out.println("Error while saving: "+e.getMessage());
+            e.printStackTrace();
         }
         try {
             FXMLLoader loader = new FXMLLoader();

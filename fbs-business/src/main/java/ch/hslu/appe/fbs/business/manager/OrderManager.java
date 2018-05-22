@@ -10,6 +10,7 @@ import ch.hslu.appe.fbs.remote.utils.OrderDateAscComparator;
 import ch.hslu.appe.fbs.remote.utils.OrderDateDescComparator;
 
 import java.nio.charset.StandardCharsets;
+import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -86,7 +87,7 @@ public final class OrderManager {
         }
     }
 
-    public OrderDTO getById(final String sessionId, final int id) {
+    public OrderDTO getById(final String sessionId, final int id) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return convertToDTO(orderPersistor.getById(id));
         }
@@ -130,14 +131,14 @@ public final class OrderManager {
         return orderConverter.convertToDTO(orders, orderStateDTO, orderedArticleDTOList, employeeDTO, clientDTO);
     }
 
-    public List<OrderDTO> getList(final String sessionId) {
+    public List<OrderDTO> getList(final String sessionId) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return getList(sessionId, null);
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<OrderDTO> getList(final String sessionId, final String regEx) {
+    public List<OrderDTO> getList(final String sessionId, final String regEx) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             // TODO: Implement regEx
 
@@ -152,14 +153,14 @@ public final class OrderManager {
         throw new UserNotLoggedInException();
     }
 
-    public List<OrderDTO> sortList(final String sessionId, final SortingType type) {
+    public List<OrderDTO> sortList(final String sessionId, final SortingType type) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return sortList(sessionId, getList(sessionId), type);
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<OrderDTO> sortList(final String sessionId, final List<OrderDTO> orderDTOList, final SortingType type) {
+    public List<OrderDTO> sortList(final String sessionId, final List<OrderDTO> orderDTOList, final SortingType type) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             Comparator<OrderDTO> comparator;
 
@@ -182,7 +183,7 @@ public final class OrderManager {
         throw new UserNotLoggedInException();
     }
 
-    public FBSFeedback save(final String sessionId, final OrderDTO orderDTO, final String hash) {
+    public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(orderDTO.getId(), hash);
 
@@ -194,15 +195,15 @@ public final class OrderManager {
 
 
                 Orders order = orderConverter.convertToEntity(orderDTO);
-                return orderPersistor.save(order);
+                return convertToDTO(orderPersistor.save(order));
             } else {
-                return lockCheck;
+                throw new LockCheckFailedException();
             }
         }
         throw new UserNotLoggedInException();
     }
 
-    public FBSFeedback delete(final String sessionId, final OrderDTO orderDTO, final String hash) {
+    public FBSFeedback delete(final String sessionId, final OrderDTO orderDTO, final String hash) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(orderDTO.getId(), hash);
 
@@ -210,7 +211,7 @@ public final class OrderManager {
                 Orders order = orderConverter.convertToEntity(orderDTO);
                 // Canceled
                 order.setOrderStateIdOrderState(5);
-                return orderPersistor.save(order);
+                return FBSFeedback.SUCCESS;
             } else {
                 return lockCheck;
             }
@@ -221,7 +222,7 @@ public final class OrderManager {
     //TODO: Orders delete mit orderstate = annul order annull funktion?
 
     //TODO: lock, release, check - as interface
-    public String lock(final String sessionId, final int id) {
+    public String lock(final String sessionId, final int id) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
 
@@ -253,7 +254,7 @@ public final class OrderManager {
         throw new UserNotLoggedInException();
     }
 
-    public FBSFeedback release(final String sessionId, final int id, final String hash) {
+    public FBSFeedback release(final String sessionId, final int id, final String hash) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
 

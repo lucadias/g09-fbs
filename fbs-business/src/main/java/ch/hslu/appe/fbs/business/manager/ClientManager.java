@@ -5,6 +5,7 @@ import ch.hslu.appe.fbs.business.utils.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.ClientPersistor;
 import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -48,14 +49,14 @@ public final class ClientManager {
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public ClientDTO getById(final String sessionId, final int id) {
+    public ClientDTO getById(final String sessionId, final int id) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return clientConverter.convertToDTO(clientPersistor.getById(id));
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<ClientDTO> getList(final String sessionId) {
+    public List<ClientDTO> getList(final String sessionId) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return clientConverter.convertToDTO(clientPersistor.getList());
         }

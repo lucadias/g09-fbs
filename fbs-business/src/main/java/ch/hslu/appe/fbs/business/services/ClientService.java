@@ -24,12 +24,12 @@ public final class ClientService extends UnicastRemoteObject implements RemoteCl
     }
 
     @Override
-    public ClientDTO getById(String sessionId, int id) throws RemoteException {
+    public ClientDTO getById(final String sessionId, final int id) throws RemoteException {
         return clientManager.getById(sessionId, id);
     }
 
     @Override
-    public List<ClientDTO> getList(String sessionId) throws RemoteException {
+    public List<ClientDTO> getList(final String sessionId) throws RemoteException {
         return clientManager.getList(sessionId);
     }
 }

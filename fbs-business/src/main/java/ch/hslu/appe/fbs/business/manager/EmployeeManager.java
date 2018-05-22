@@ -5,6 +5,7 @@ import ch.hslu.appe.fbs.business.utils.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.EmployeePersistor;
 import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -48,14 +49,14 @@ public final class EmployeeManager {
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public EmployeeDTO getById(final String sessionId, final int id) {
+    public EmployeeDTO getById(final String sessionId, final int id) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return employeeConverter.convertToDTO(employeePersistor.getById(id));
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<EmployeeDTO> getList(final String sessionId) {
+    public List<EmployeeDTO> getList(final String sessionId) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return employeeConverter.convertToDTO(employeePersistor.getList());
         }

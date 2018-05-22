@@ -24,12 +24,12 @@ public final class OrderStateService extends UnicastRemoteObject implements Remo
     }
 
     @Override
-    public OrderStateDTO getById(String sessionId, int id) throws RemoteException {
+    public OrderStateDTO getById(final String sessionId, final int id) throws RemoteException {
         return orderStateManager.getById(sessionId, id);
     }
 
     @Override
-    public List<OrderStateDTO> getList(String sessionId) throws RemoteException {
+    public List<OrderStateDTO> getList(final String sessionId) throws RemoteException {
         return orderStateManager.getList(sessionId);
     }
 }

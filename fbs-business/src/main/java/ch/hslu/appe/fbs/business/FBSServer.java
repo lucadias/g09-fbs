@@ -24,6 +24,7 @@ public final class FBSServer {
     public static final String EMPLOYEE_SERVICE_NAME = "EmployeeService";
     public static final String ORDER_STATE_SERVICE_NAME = "OrderStateService";
     public static final String LOG_SERVICE_NAME = "LogService";
+    public static final String PERMISSION_SERVICE_NAME = "PermissionService";
 
     /**
      * Constructor of the FBSServer.
@@ -85,7 +86,10 @@ public final class FBSServer {
                     + String.valueOf(REGISTRY_PORT) + "/" + LOG_SERVICE_NAME;
             Naming.bind(urlLogService, logService);
 
-
+            final PermissionService permissionService = new PermissionService();
+            final String urlPermissionService = "rmi://localhost:"
+                    + String.valueOf(REGISTRY_PORT) + "/" + PERMISSION_SERVICE_NAME;
+            Naming.bind(urlPermissionService, permissionService);
 
         } catch (RemoteException e) {
             e.printStackTrace();

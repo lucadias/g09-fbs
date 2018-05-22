@@ -2,8 +2,6 @@ package ch.hslu.appe.fbs.business.manager;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sun.plugin2.message.Message;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

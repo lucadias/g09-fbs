@@ -5,6 +5,7 @@ import ch.hslu.appe.fbs.business.utils.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.OrderStatePersistor;
 import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -48,14 +49,14 @@ public final class OrderStateManager {
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public OrderStateDTO getById(final String sessionId, final int id) {
+    public OrderStateDTO getById(final String sessionId, final int id) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return orderStateConverter.convertToDTO(orderStatePersistor.getById(id));
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<OrderStateDTO> getList(final String sessionId) {
+    public List<OrderStateDTO> getList(final String sessionId) throws RemoteException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return orderStateConverter.convertToDTO(orderStatePersistor.getList());
         }
