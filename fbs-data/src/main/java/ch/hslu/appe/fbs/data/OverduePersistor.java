@@ -35,10 +35,6 @@ public class OverduePersistor {
 
 
 
-    public Overdue getByOverdueNr(int overdueNr) {
-        return this.getById(overdueNr);
-    }
-
     /**
      * saves or updates an Overdue.
      *

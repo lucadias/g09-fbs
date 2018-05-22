@@ -34,11 +34,6 @@ public class ReorderPersistor {
 
 
 
-
-    public Reorder getByReorderNr(int reorderNr) {
-        return this.getById(reorderNr);
-    }
-
     /**
      * saves or updates an Reorder.
      *
