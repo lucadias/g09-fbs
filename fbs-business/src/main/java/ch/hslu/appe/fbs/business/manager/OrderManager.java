@@ -187,7 +187,12 @@ public final class OrderManager {
             FBSFeedback lockCheck = checkLock(orderDTO.getId(), hash);
 
             if (lockCheck == FBSFeedback.SUCCESS) {
-                List<OrderedArticles> orderedArticlesList = orderedArticleConverter.convertToEntityList(orderDTO.getOrderedArticleDTOList());
+                List<OrderedArticles> orderedArticlesList = orderedArticleConverter.convertToEntityList(orderDTO.getOrderedArticleDTOList(), orderDTO.getId());
+                for(OrderedArticles orderedArticle : orderedArticlesList) {
+                    orderedArticlePersistor.save(orderedArticle);
+                }
+
+
                 Orders order = orderConverter.convertToEntity(orderDTO);
                 return orderPersistor.save(order);
             } else {

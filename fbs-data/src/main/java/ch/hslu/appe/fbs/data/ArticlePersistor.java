@@ -83,8 +83,7 @@ public final class ArticlePersistor {
 
         try {
             Util.transactionBegin();
-            if(article.getIdArticle() == -1){
-                article.setIdArticle(null);
+            if(article.getIdArticle() == null){
                 Util.entityManager.persist(article);
             } else {
                 Util.entityManager.merge(article);

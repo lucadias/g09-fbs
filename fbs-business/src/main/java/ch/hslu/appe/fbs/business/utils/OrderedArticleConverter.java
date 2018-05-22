@@ -37,21 +37,21 @@ public final class OrderedArticleConverter {
      * @param orderedArticleDTO OrderedArticle to be converted
      * @return converted OrderedArticle
      */
-    public OrderedArticles convertToEntity(final OrderedArticleDTO orderedArticleDTO) {
+    public OrderedArticles convertToEntity(final OrderedArticleDTO orderedArticleDTO, final int orderId) {
         OrderedArticles orderedArticles = new OrderedArticles();
         orderedArticles.setIdOrderedArticles(orderedArticleDTO.getId());
         orderedArticles.setArticleIdArticle(orderedArticleDTO.getArticleDTO().getId());
-        orderedArticles.setOrdersIdOrder(orderedArticleDTO.getArticleDTO().getId());
+        orderedArticles.setOrdersIdOrder(orderId);
         orderedArticles.setAmount(orderedArticleDTO.getAmount());
         orderedArticles.setTotalPrice(orderedArticleDTO.getTotalPrice());
 
         return orderedArticles;
     }
 
-    public List<OrderedArticles> convertToEntityList(final List<OrderedArticleDTO> orderedArticlesDTOList) {
+    public List<OrderedArticles> convertToEntityList(final List<OrderedArticleDTO> orderedArticlesDTOList, final int orderId) {
         List<OrderedArticles> orderedArticlesEntityList = new ArrayList<>();
         for (OrderedArticleDTO orderedArticlesDTO : orderedArticlesDTOList) {
-            orderedArticlesEntityList.add(convertToEntity(orderedArticlesDTO));
+            orderedArticlesEntityList.add(convertToEntity(orderedArticlesDTO, orderId));
         }
 
         return orderedArticlesEntityList;

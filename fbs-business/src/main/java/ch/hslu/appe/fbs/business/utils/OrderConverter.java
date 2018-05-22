@@ -49,6 +49,8 @@ public final class OrderConverter {
      */
     public Orders convertToEntity(final OrderDTO orderDTO) {
         Orders order = new Orders();
+
+        //TODO : if id = -1, dont set new idOrders
         order.setIdOrders(orderDTO.getId());
         order.setDate(orderDTO.getDate());
         order.setTotalPrice(orderDTO.getTotalPrice());
