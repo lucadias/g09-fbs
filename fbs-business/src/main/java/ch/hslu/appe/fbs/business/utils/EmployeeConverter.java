@@ -50,7 +50,8 @@ public final class EmployeeConverter {
      */
     public Employee convertToEntity(final EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
-        employee.setIdEmployees(employeeDTO.getId());
+        if (employeeDTO.getId() != -1)
+            employee.setIdEmployees(employeeDTO.getId());
         employee.setSurname(employeeDTO.getSurname());
         employee.setFirstname(employeeDTO.getFirstname());
         employee.setUsername(employeeDTO.getUsername());

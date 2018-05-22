@@ -52,7 +52,8 @@ public final class ArticleConverter {
      */
     public Article convertToEntity(final ArticleDTO articleDTO) {
         Article article = new Article();
-        article.setIdArticle(articleDTO.getId());
+        if (articleDTO.getId() != -1)
+            article.setIdArticle(articleDTO.getId());
         article.setName(articleDTO.getName());
         article.setArticlenumber(articleDTO.getArticleNumber());
         article.setDescription(articleDTO.getDescription());

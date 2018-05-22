@@ -39,7 +39,8 @@ public final class OrderedArticleConverter {
      */
     public OrderedArticles convertToEntity(final OrderedArticleDTO orderedArticleDTO, final int orderId) {
         OrderedArticles orderedArticles = new OrderedArticles();
-        orderedArticles.setIdOrderedArticles(orderedArticleDTO.getId());
+        if (orderedArticleDTO.getId() != -1)
+            orderedArticles.setIdOrderedArticles(orderedArticleDTO.getId());
         orderedArticles.setArticleIdArticle(orderedArticleDTO.getArticleDTO().getId());
         orderedArticles.setOrdersIdOrder(orderId);
         orderedArticles.setAmount(orderedArticleDTO.getAmount());
