@@ -30,30 +30,30 @@ public class ArticlePersistorTest {
     }
 
     @Test
-    public void save() {
+    public void testSave() {
         assertEquals(article, persistor.save(article));
     }
 
     @Test
-    public void getById() {
+    public void testGetById() {
         Article testarticle = persistor.getById(article.getIdArticle());
         System.out.println(article.getClass()+" "+testarticle.getClass());
         assertEquals(article, testarticle);
     }
 
     @Test
-    public void getByArticleNr() {
+    public void testGetByArticleNr() {
         List<Article> list = persistor.getByArticleNr(article.getArticlenumber());
         assertTrue(list.contains(this.article));
     }
 
     @Test
-    public void updateStockById() {
+    public void testUpdateStockById() {
         persistor.updateStockById(article.getIdArticle(), 200);
     }
 
     @Test
-    public void getListWithParam() {
+    public void testGetListWithParam() {
         List<Article> list = persistor.getList("main");
         for (Article article : list){
             System.out.println(article.getArticlenumber());
@@ -61,25 +61,15 @@ public class ArticlePersistorTest {
     }
 
     @Test
-    public void getList() {
+    public void testGetList() {
         List<Article> list = persistor.getList();
 
         assertTrue(list.contains(article));
     }
 
-    @Test
-    public void delete() {
-
-        persistor.deleteByArticleNr(persistor.getByArticleNr(55555).get(0));
-
-        persistor.deleteTestArticles();
-    }
-
-
 
     @After
     public void cleanUp(){
-
-
+        persistor.deleteTestArticles();
     }
 }

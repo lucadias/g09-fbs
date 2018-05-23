@@ -68,6 +68,8 @@ public class CentralStock {
         return -1;
     }
 
+//TODO: finish reserving items
+
     public Instant getItemDeliveryDate(String key){
 
         try {

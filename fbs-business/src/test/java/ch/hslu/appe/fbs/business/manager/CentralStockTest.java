@@ -11,7 +11,7 @@ public class CentralStockTest {
 
 
     @Test
-    public void getCentralStockTest(){
+    public void testGetCentralStockTest(){
 
         int amountOnCentralStock = cs.getCentralStock(123999999);
 
@@ -23,18 +23,13 @@ public class CentralStockTest {
 
 
     @Test
-    public void orderItemTest(){
+    public void testOrderItemTest(){
         System.out.println(cs.orderItem(123999999,5));
     }
 
-    @Test
-    public void reserveItemTest(){
-        System.out.println(cs.reserveItem("123123",5));
-    }
-
 
     @Test
-    public void getItemDeliveryDateTest(){
+    public void testGetItemDeliveryDateTest(){
         System.out.println(cs.getItemDeliveryDate("123123"));
     }
 }

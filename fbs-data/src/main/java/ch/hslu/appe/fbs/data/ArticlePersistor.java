@@ -97,7 +97,7 @@ public final class ArticlePersistor {
         return article;
     }
 
-    public FBSFeedback deleteByArticleNr(Article article) {
+    public FBSFeedback delete(Article article) {
 
         try {
             Util.transactionBegin();
