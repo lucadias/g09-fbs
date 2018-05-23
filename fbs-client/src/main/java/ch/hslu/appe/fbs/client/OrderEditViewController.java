@@ -142,18 +142,7 @@ public class OrderEditViewController implements Initializable {
         this.orderDTO.setEmployeeDTO(employee);
         ClientDTO client = (ClientDTO)this.clientChoice.getValue();
         this.orderDTO.setClientDTO(client);
-        try {
-            String hash = this.orderService.lock(SESSION, this.orderDTO);
-            System.out.println("Hash in save is: "+hash);
-            FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
-            System.out.println("Feedback is: "+feedback.toString());
-            feedback = this.orderService.release(SESSION, this.orderDTO, hash);
-            System.out.println("Second feedback is: "+ feedback.toString());
-            //ToDo: need to get orderId here and set orderDTO. Otherwise there are to many Nullpointers
-        } catch(RemoteException e) {
-            System.out.println("Error while saving: "+e.getMessage());
-            e.printStackTrace();
-        }
+        this.saveDTO();
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/OrderDetailView.fxml"));
@@ -240,7 +229,8 @@ public class OrderEditViewController implements Initializable {
             this.fillAllArticles();
         } catch(RemoteException e) {
             this.orderDTO = new OrderDTO(Integer.MAX_VALUE);
-            System.out.println("Error in RMI: "+e);
+            System.out.println("Error in RMI: ");
+            e.printStackTrace();
         }
     }
     
@@ -415,16 +405,8 @@ public class OrderEditViewController implements Initializable {
             this.orderedArticleList.add(orderedArticle);
             this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
         }
-        try {
-            String hash = this.orderService.lock(SESSION, this.orderDTO);
-            System.out.println(hash);
-            FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
-            System.out.println(feedback+" "+hash);
-            feedback = this.orderService.release(SESSION, this.orderDTO, hash);
-            this.refresh();
-        } catch(RemoteException e) {
-            System.out.println("Error in RMI:"+e.getMessage());
-        }
+        this.saveDTO();
+        this.refresh();
     }
     
     /**
@@ -434,15 +416,34 @@ public class OrderEditViewController implements Initializable {
     private void removeFromOrder(OrderedArticleDTO article) {
         this.orderedArticleList.remove(article);
         this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
-        try {
-            String hash = this.orderService.lock(SESSION, this.orderDTO);
-            FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
-            System.out.println(feedback+" "+hash);
-            feedback = this.orderService.release(SESSION, this.orderDTO, hash);
-            System.out.println(feedback+" "+hash);
-            this.refresh();
-        } catch(RemoteException e) {
-            System.out.println("Error in RMI:"+e.getMessage());
+        this.saveDTO();
+        this.refresh();
+    }
+    
+    /**
+     * This method saves the orderDTO
+     */
+    private void saveDTO() {
+        System.out.println("save");
+        if(this.orderId != -1) {
+            System.out.println("blue");
+            try {
+                String hash = this.orderService.lock(SESSION, this.orderDTO);
+                this.orderDTO = this.orderService.save(SESSION, this.orderDTO, hash);
+                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+            } catch(RemoteException e) {
+                System.out.println("Error in RMI:");
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                this.orderDTO = this.orderService.save(SESSION, this.orderDTO, "");
+                this.orderId = this.orderDTO.getId();
+                System.out.println(String.valueOf(this.orderDTO.getId()));
+            } catch(RemoteException e){
+                System.out.println("Error in RMI:");
+                e.printStackTrace();
+            }  
         }
     }
     
