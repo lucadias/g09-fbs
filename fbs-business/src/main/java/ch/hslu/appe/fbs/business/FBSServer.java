@@ -26,6 +26,30 @@ public final class FBSServer {
     public static final String LOG_SERVICE_NAME = "LogService";
     public static final String PERMISSION_SERVICE_NAME = "PermissionService";
 
+    private static ArticleService articleService;
+    private static OrderService orderService;
+    private static LoginService loginService;
+    private static ClientService clientService;
+    private static EmployeeService employeeService;
+    private static OrderStateService orderStateService;
+    private static LogService logService;
+    private static PermissionService permissionService;
+
+    static {
+        try {
+            FBSServer.articleService = new ArticleService();
+            FBSServer.orderService = new OrderService();
+            FBSServer.loginService = new LoginService();
+            FBSServer.clientService = new ClientService();
+            FBSServer.employeeService = new EmployeeService();
+            FBSServer.orderStateService = new OrderStateService();
+            FBSServer.logService = new LogService();
+            FBSServer.permissionService = new PermissionService();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Constructor of the FBSServer.
      */
@@ -51,45 +75,37 @@ public final class FBSServer {
 
         // Bind Services
         try {
-            final ArticleService articleService = new ArticleService();
             final String urlArticleService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + ARTICLE_SERVICE_NAME;
-            Naming.bind(urlArticleService, articleService);
+            Naming.bind(urlArticleService, FBSServer.articleService);
 
-            final OrderService orderService = new OrderService();
             final String urlOrderService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + ORDER_SERVICE_NAME;
-            Naming.bind(urlOrderService, orderService);
+            Naming.bind(urlOrderService, FBSServer.orderService);
 
-            final LoginService loginService = new LoginService();
             final String urlLoginService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + LOGIN_SERVICE_NAME;
-            Naming.bind(urlLoginService, loginService);
+            Naming.bind(urlLoginService, FBSServer.loginService);
 
-            final ClientService clientService = new ClientService();
             final String urlClientService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + CLIENT_SERVICE_NAME;
-            Naming.bind(urlClientService, clientService);
+            Naming.bind(urlClientService, FBSServer.clientService);
 
-            final EmployeeService employeeService = new EmployeeService();
             final String urlEmployeeService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + EMPLOYEE_SERVICE_NAME;
-            Naming.bind(urlEmployeeService, employeeService);
+            Naming.bind(urlEmployeeService, FBSServer.employeeService);
 
-            final OrderStateService orderStateService = new OrderStateService();
             final String urlOrderStateService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + ORDER_STATE_SERVICE_NAME;
-            Naming.bind(urlOrderStateService, orderStateService);
+            Naming.bind(urlOrderStateService, FBSServer.orderStateService);
 
-            final LogService logService = new LogService();
             final String urlLogService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + LOG_SERVICE_NAME;
-            Naming.bind(urlLogService, logService);
+            Naming.bind(urlLogService, FBSServer.logService);
 
-            final PermissionService permissionService = new PermissionService();
             final String urlPermissionService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + PERMISSION_SERVICE_NAME;
-            Naming.bind(urlPermissionService, permissionService);
+            Naming.bind(urlPermissionService, FBSServer.permissionService);
 
         } catch (RemoteException e) {
             e.printStackTrace();
