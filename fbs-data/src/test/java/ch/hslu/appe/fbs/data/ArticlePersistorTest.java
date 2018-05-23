@@ -67,9 +67,19 @@ public class ArticlePersistorTest {
         assertTrue(list.contains(article));
     }
 
+    @Test
+    public void delete() {
+
+        persistor.delete(persistor.getByArticleNr(55555).get(0));
+
+        persistor.deleteTestArticles();
+    }
+
+
 
     @After
     public void cleanUp(){
+
 
     }
 }
