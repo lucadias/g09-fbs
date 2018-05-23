@@ -81,6 +81,9 @@ public class CentralStock {
     public String convertArticleNrtoStockNr(int articleNr){
        String Stocknr = String.valueOf(articleNr);
 
+       while(Stocknr.length() > 6){
+           Stocknr = Stocknr.substring(0, Stocknr.length() - 1);
+       }
         while(Stocknr.length() != 6){
             Stocknr = "0" + Stocknr;
         }

@@ -12,17 +12,19 @@ public class CentralStockTest {
 
     @Test
     public void getCentralStockTest(){
-        int amountonCentralStock = cs.getCentralStock(123);
 
-        cs.orderItem(123,3);
+        int amountOnCentralStock = cs.getCentralStock(123999999);
 
-        assertEquals(92, cs.getCentralStock(123));
+        cs.orderItem(123999999,3);
+
+
+        assertEquals(92, cs.getCentralStock(123999999));
     }
 
 
     @Test
     public void orderItemTest(){
-        System.out.println(cs.orderItem(123,5));
+        System.out.println(cs.orderItem(123999999,5));
     }
 
     @Test
@@ -36,3 +38,6 @@ public class CentralStockTest {
         System.out.println(cs.getItemDeliveryDate("123123"));
     }
 }
+
+
+
