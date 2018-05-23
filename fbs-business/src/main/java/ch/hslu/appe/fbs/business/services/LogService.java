@@ -1,6 +1,7 @@
 package ch.hslu.appe.fbs.business.services;
 
 import ch.hslu.appe.fbs.business.manager.LogManager;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteLogService;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public final class LogService extends UnicastRemoteObject implements RemoteLogSe
     }
 
     @Override
-    public List<String> getLogList(final String sessionId) throws IOException {
+    public List<String> getLogList(final String sessionId) throws IOException, UserNotLoggedInException {
         return logManager.getLogList(sessionId);
     }
 }

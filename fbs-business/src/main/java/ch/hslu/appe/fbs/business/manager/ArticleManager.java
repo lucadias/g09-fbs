@@ -1,7 +1,8 @@
 package ch.hslu.appe.fbs.business.manager;
 
 import ch.hslu.appe.fbs.business.utils.ArticleConverter;
-import ch.hslu.appe.fbs.business.utils.UserNotLoggedInException;
+import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.ArticlePersistor;
 import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
@@ -84,7 +85,7 @@ public final class ArticleManager {
      * @param id database id of the article
      * @return article as a DTO
      */
-    public ArticleDTO getById(final String sessionId, final int id) throws RemoteException{
+    public ArticleDTO getById(final String sessionId, final int id) throws UserNotLoggedInException{
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return articleConverter.convertToDTO(articlePersistor.getById(id));
         }
@@ -96,7 +97,7 @@ public final class ArticleManager {
      * @param artNr article number of the article
      * @return articles as a list
      */
-    public List<ArticleDTO> getByArticleNr(final String sessionId, final int artNr) throws RemoteException {
+    public List<ArticleDTO> getByArticleNr(final String sessionId, final int artNr) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return articleConverter.convertToDTO(articlePersistor.getByArticleNr(artNr));
         }
@@ -107,7 +108,7 @@ public final class ArticleManager {
      * Gets all the articles as entities, converts and returns them as a list.
      * @return articles as a DTO list
      */
-    public List<ArticleDTO> getList(final String sessionId) throws RemoteException {
+    public List<ArticleDTO> getList(final String sessionId) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             logger.info("List all Articles from Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
             List<Article> articleList = articlePersistor.getList();
@@ -122,16 +123,16 @@ public final class ArticleManager {
      * @param hash lock hash string for the article
      * @return the saved article as a DTO on success, otherwise null
      */
-    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash) throws RemoteException {
+    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
-            if (lockCheck == FBSFeedback.SUCCESS) {
+            if (lockCheck == FBSFeedback.SUCCESS || articleDTO.getId() == -1) {
                 Article article = articleConverter.convertToEntity(articleDTO);
                 logger.info("Save Article with id: " +article.getIdArticle()+ " to Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 return articleConverter.convertToDTO(articlePersistor.save(article));
             } else {
-                return null;
+                throw new LockCheckFailedException();
             }
         }
         throw new UserNotLoggedInException();
@@ -143,7 +144,7 @@ public final class ArticleManager {
      * @param hash lock hash string for the article
      * @return the saved article as a DTO on success, otherwise null
      */
-    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash) throws RemoteException {
+    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
@@ -154,7 +155,7 @@ public final class ArticleManager {
 
                 return articleConverter.convertToDTO(articlePersistor.save(article));
             } else {
-                return null;
+                throw new LockCheckFailedException();
             }
         }
         throw new UserNotLoggedInException();
@@ -168,7 +169,7 @@ public final class ArticleManager {
      * @param hash lock hash string for the article
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      */
-    public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash) throws RemoteException {
+    public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(id, hash);
 
@@ -182,14 +183,14 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
-    public List<ArticleDTO> sortList(final String sessionId, final SortingType type) throws RemoteException {
+    public List<ArticleDTO> sortList(final String sessionId, final SortingType type) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return sortList(sessionId, articleConverter.convertToDTO(articlePersistor.getList()), type);
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type) throws RemoteException {
+    public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             Comparator<ArticleDTO> comparator;
 
@@ -218,14 +219,14 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
-    public List<ArticleDTO> search(final String sessionId, final String regEx) throws RemoteException {
+    public List<ArticleDTO> search(final String sessionId, final String regEx) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return articleConverter.convertToDTO(articlePersistor.search(regEx));
         }
         throw new UserNotLoggedInException();
     }
 
-    public String lock(final String sessionId, final int id) throws RemoteException {
+    public String lock(final String sessionId, final int id) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
 
@@ -257,7 +258,7 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
-    public FBSFeedback release(final String sessionId, final int id, final String hash) throws RemoteException {
+    public FBSFeedback release(final String sessionId, final int id, final String hash) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
 

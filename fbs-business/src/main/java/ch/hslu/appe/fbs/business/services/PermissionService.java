@@ -2,6 +2,7 @@ package ch.hslu.appe.fbs.business.services;
 
 import ch.hslu.appe.fbs.business.manager.PermissionManager;
 import ch.hslu.appe.fbs.remote.dtos.GroupDTO;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.remoteServices.RemotePermissionService;
 
 import java.rmi.RemoteException;
@@ -29,7 +30,7 @@ public class PermissionService extends UnicastRemoteObject implements RemotePerm
     }
 
     @Override
-    public List<GroupDTO> getGroupsOfEmployee(final String sessionId, final int employeeId) throws RemoteException {
+    public List<GroupDTO> getGroupsOfEmployee(final String sessionId, final int employeeId) throws RemoteException, UserNotLoggedInException {
         return permissionManager.getGroupsOfEmployee(sessionId, employeeId);
     }
 }

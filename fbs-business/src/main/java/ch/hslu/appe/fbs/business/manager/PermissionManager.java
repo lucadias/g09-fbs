@@ -1,7 +1,7 @@
 package ch.hslu.appe.fbs.business.manager;
 
 import ch.hslu.appe.fbs.business.utils.GroupConverter;
-import ch.hslu.appe.fbs.business.utils.UserNotLoggedInException;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.EmployeeGroupsPersistor;
 import ch.hslu.appe.fbs.data.GroupsPersistor;
 import ch.hslu.appe.fbs.model.entities.EmployeeGroups;
@@ -49,7 +49,7 @@ public class PermissionManager {
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public List<GroupDTO> getGroupsOfEmployee(final String sessionId, final int employeeId) throws RemoteException {
+    public List<GroupDTO> getGroupsOfEmployee(final String sessionId, final int employeeId) throws RemoteException, UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             List<EmployeeGroups> employeeGroupsList = employeeGroupsPersistor.getEmployeeGroupsByEmployeeId(employeeId);
             List<Groups> groups = new ArrayList<>();

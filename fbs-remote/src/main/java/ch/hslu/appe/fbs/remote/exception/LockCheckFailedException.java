@@ -1,4 +1,4 @@
-package ch.hslu.appe.fbs.business.utils;
+package ch.hslu.appe.fbs.remote.exception;
 
 import java.rmi.RemoteException;
 
@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
  *
  * @author Mischa Gruber
  */
-public class LockCheckFailedException extends RemoteException {
+public class LockCheckFailedException extends Exception {
 
     public LockCheckFailedException() {
         super("Lock couldn't be acquired.");

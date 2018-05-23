@@ -1,6 +1,7 @@
 package ch.hslu.appe.fbs.remote.remoteServices;
 
 import ch.hslu.appe.fbs.remote.FBSFeedback;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 
 import java.io.IOException;
 import java.rmi.Remote;
@@ -20,5 +21,5 @@ public interface RemoteLogService extends Remote {
      * @return log list
      * @throws RemoteException mandatory
      */
-    List<String> getLogList(String sessionId) throws IOException;
+    List<String> getLogList(String sessionId) throws IOException, UserNotLoggedInException;
 }

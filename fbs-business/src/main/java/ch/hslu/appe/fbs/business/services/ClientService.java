@@ -2,6 +2,7 @@ package ch.hslu.appe.fbs.business.services;
 
 import ch.hslu.appe.fbs.business.manager.ClientManager;
 import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteClientService;
 
 import java.rmi.RemoteException;
@@ -24,12 +25,12 @@ public final class ClientService extends UnicastRemoteObject implements RemoteCl
     }
 
     @Override
-    public ClientDTO getById(final String sessionId, final int id) throws RemoteException {
+    public ClientDTO getById(final String sessionId, final int id) throws RemoteException, UserNotLoggedInException {
         return clientManager.getById(sessionId, id);
     }
 
     @Override
-    public List<ClientDTO> getList(final String sessionId) throws RemoteException {
+    public List<ClientDTO> getList(final String sessionId) throws RemoteException, UserNotLoggedInException  {
         return clientManager.getList(sessionId);
     }
 }

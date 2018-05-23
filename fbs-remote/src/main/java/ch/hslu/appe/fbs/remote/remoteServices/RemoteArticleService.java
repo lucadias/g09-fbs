@@ -3,6 +3,8 @@ package ch.hslu.appe.fbs.remote.remoteServices;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
+import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -22,7 +24,7 @@ public interface RemoteArticleService extends Remote {
      * @return ArticleDTO with the given id
      * @throws RemoteException mandatory
      */
-    ArticleDTO getById(String sessionId, int id) throws RemoteException;
+    ArticleDTO getById(String sessionId, int id) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns an ArticleDTO listwith the given article number.
@@ -31,7 +33,7 @@ public interface RemoteArticleService extends Remote {
      * @return ArticleDTO list with the given article number
      * @throws RemoteException mandatory
      */
-    List<ArticleDTO> getByArticleNr(String sessionId, int artNr) throws RemoteException;
+    List<ArticleDTO> getByArticleNr(String sessionId, int artNr) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns all articles.
@@ -39,7 +41,7 @@ public interface RemoteArticleService extends Remote {
      * @return list with all articles
      * @throws RemoteException mandatory
      */
-    List<ArticleDTO> getList(String sessionId) throws RemoteException;
+    List<ArticleDTO> getList(String sessionId) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Adds an amount of of articles are in stock of a given article id.
@@ -50,7 +52,7 @@ public interface RemoteArticleService extends Remote {
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws RemoteException mandatory
      */
-    FBSFeedback updateStockById(String sessionId, int id, int amount, String hash) throws RemoteException;
+    FBSFeedback updateStockById(String sessionId, int id, int amount, String hash) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns all articles as a sorted list.
@@ -59,7 +61,7 @@ public interface RemoteArticleService extends Remote {
      * @return sorted list of articles
      * @throws RemoteException mandatory
      */
-    List<ArticleDTO> sortList(String sessionId, SortingType type) throws RemoteException;
+    List<ArticleDTO> sortList(String sessionId, SortingType type) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Sorts a given list and returns it.
@@ -69,7 +71,7 @@ public interface RemoteArticleService extends Remote {
      * @return sorted list of orders
      * @throws RemoteException
      */
-    List<ArticleDTO> sortList(String sessionId, List<ArticleDTO> articleDTOs, SortingType type) throws RemoteException;
+    List<ArticleDTO> sortList(String sessionId, List<ArticleDTO> articleDTOs, SortingType type) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns a list of articles which are matching the regular expression.
@@ -78,7 +80,7 @@ public interface RemoteArticleService extends Remote {
      * @return list of matching articles
      * @throws RemoteException mandatory
      */
-    List<ArticleDTO> search(String sessionId, String regEx) throws RemoteException;
+    List<ArticleDTO> search(String sessionId, String regEx) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Saves the article.
@@ -88,7 +90,7 @@ public interface RemoteArticleService extends Remote {
      * @return saved article DTO on success, otherwise null
      * @throws RemoteException mandatory
      */
-    ArticleDTO save(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException;
+    ArticleDTO save(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException;
 
     /**
      * Deletes the article.
@@ -98,7 +100,7 @@ public interface RemoteArticleService extends Remote {
      * @return saved article DTO on success, otherwise null
      * @throws RemoteException mandatory
      */
-    ArticleDTO delete(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException;
+    ArticleDTO delete(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException;
 
     /**
      * Tries to gain the lock of an article.
@@ -107,7 +109,7 @@ public interface RemoteArticleService extends Remote {
      * @return lock hash string on success, null on failure
      * @throws RemoteException mandatory
      */
-    String lock(String sessionId, ArticleDTO articleDTO) throws RemoteException;
+    String lock(String sessionId, ArticleDTO articleDTO) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Releases the lock of an article.
@@ -117,5 +119,5 @@ public interface RemoteArticleService extends Remote {
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws RemoteException
      */
-    FBSFeedback release(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException;
+    FBSFeedback release(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException, UserNotLoggedInException;
 }

@@ -3,6 +3,8 @@ package ch.hslu.appe.fbs.remote.remoteServices;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
+import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 
 import javax.persistence.RollbackException;
 import java.rmi.Remote;
@@ -23,7 +25,7 @@ public interface RemoteOrderService extends Remote {
      * @return OrderDTO with the given id
      * @throws RemoteException mandatory
      */
-    OrderDTO getById(String sessionId, int id) throws RemoteException;
+    OrderDTO getById(String sessionId, int id) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns all orders.
@@ -31,7 +33,7 @@ public interface RemoteOrderService extends Remote {
      * @return list with all orders
      * @throws RemoteException mandatory
      */
-    List<OrderDTO> getList(String sessionId) throws RemoteException;
+    List<OrderDTO> getList(String sessionId) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns all orders of a client by his id.
@@ -40,7 +42,7 @@ public interface RemoteOrderService extends Remote {
      * @return list with all orders of the client
      * @throws RemoteException mandatory
      */
-    List<OrderDTO> getListByClientId(String sessionId, int id) throws RemoteException;
+    List<OrderDTO> getListByClientId(String sessionId, int id) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns a list of orders which are matching the regular expression.
@@ -49,7 +51,7 @@ public interface RemoteOrderService extends Remote {
      * @return list of matching orders
      * @throws RemoteException mandatory
      */
-    List<OrderDTO> search(String sessionId, String regEx) throws RemoteException;
+    List<OrderDTO> search(String sessionId, String regEx) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Saves the order and returns the saved order
@@ -59,7 +61,7 @@ public interface RemoteOrderService extends Remote {
      * @return saved order dto
      * @throws RemoteException mandatory
      */
-    OrderDTO save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, RollbackException;
+    OrderDTO save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException, RollbackException;
 
     /**
      * Deletes the order.
@@ -69,7 +71,7 @@ public interface RemoteOrderService extends Remote {
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws RemoteException mandatory
      */
-    FBSFeedback delete(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException;
+    FBSFeedback delete(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Tries to gain the lock of an order.
@@ -78,7 +80,7 @@ public interface RemoteOrderService extends Remote {
      * @return lock hash string on success, null on failure
      * @throws RemoteException mandatory
      */
-    String lock(String sessionId, OrderDTO orderDTO) throws RemoteException;
+    String lock(String sessionId, OrderDTO orderDTO) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Releases the lock of an order.
@@ -88,7 +90,7 @@ public interface RemoteOrderService extends Remote {
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws RemoteException mandatory
      */
-    FBSFeedback release(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException;
+    FBSFeedback release(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns all orders as a sorted list.
@@ -97,7 +99,7 @@ public interface RemoteOrderService extends Remote {
      * @return sorted list of orders
      * @throws RemoteException mandatory
      */
-    List<OrderDTO> sortList(String sessionId, SortingType type) throws RemoteException;
+    List<OrderDTO> sortList(String sessionId, SortingType type) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Sorts a given list and returns it.
@@ -107,5 +109,5 @@ public interface RemoteOrderService extends Remote {
      * @return sorted list of orders
      * @throws RemoteException mandatory
      */
-    List<OrderDTO> sortList(String sessionId, List<OrderDTO> orderDTOs, SortingType type) throws RemoteException;
+    List<OrderDTO> sortList(String sessionId, List<OrderDTO> orderDTOs, SortingType type) throws RemoteException, UserNotLoggedInException;
 }

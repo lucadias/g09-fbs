@@ -2,6 +2,7 @@ package ch.hslu.appe.fbs.business.services;
 
 import ch.hslu.appe.fbs.business.manager.EmployeeManager;
 import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteEmployeeService;
 
 import java.rmi.RemoteException;
@@ -24,12 +25,12 @@ public final class EmployeeService extends UnicastRemoteObject implements Remote
     }
 
     @Override
-    public EmployeeDTO getById(final String sessionId, final int id) throws RemoteException {
+    public EmployeeDTO getById(final String sessionId, final int id) throws RemoteException, UserNotLoggedInException {
         return employeeManager.getById(sessionId, id);
     }
 
     @Override
-    public List<EmployeeDTO> getList(final String sessionId) throws RemoteException {
+    public List<EmployeeDTO> getList(final String sessionId) throws RemoteException, UserNotLoggedInException {
         return employeeManager.getList(sessionId);
     }
 }

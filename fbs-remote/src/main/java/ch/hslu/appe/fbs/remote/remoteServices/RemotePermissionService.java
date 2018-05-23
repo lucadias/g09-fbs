@@ -1,6 +1,7 @@
 package ch.hslu.appe.fbs.remote.remoteServices;
 
 import ch.hslu.appe.fbs.remote.dtos.GroupDTO;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -20,5 +21,5 @@ public interface RemotePermissionService extends Remote {
      * @return list of employee's groups
      * @throws RemoteException mandatory
      */
-    List<GroupDTO> getGroupsOfEmployee(String sessionId, int employeeId) throws RemoteException;
+    List<GroupDTO> getGroupsOfEmployee(String sessionId, int employeeId) throws RemoteException, UserNotLoggedInException;
 }

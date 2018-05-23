@@ -2,6 +2,7 @@ package ch.hslu.appe.fbs.business.services;
 
 import ch.hslu.appe.fbs.business.manager.OrderStateManager;
 import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteOrderStateService;
 
 import java.rmi.RemoteException;
@@ -24,12 +25,12 @@ public final class OrderStateService extends UnicastRemoteObject implements Remo
     }
 
     @Override
-    public OrderStateDTO getById(final String sessionId, final int id) throws RemoteException {
+    public OrderStateDTO getById(final String sessionId, final int id) throws RemoteException, UserNotLoggedInException {
         return orderStateManager.getById(sessionId, id);
     }
 
     @Override
-    public List<OrderStateDTO> getList(final String sessionId) throws RemoteException {
+    public List<OrderStateDTO> getList(final String sessionId) throws RemoteException, UserNotLoggedInException {
         return orderStateManager.getList(sessionId);
     }
 }
