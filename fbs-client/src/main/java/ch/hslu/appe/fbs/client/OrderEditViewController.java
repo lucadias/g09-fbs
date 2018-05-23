@@ -16,6 +16,8 @@ import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
+import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteClientService;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteEmployeeService;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteOrderStateService;
@@ -169,6 +171,8 @@ public class OrderEditViewController implements Initializable {
             this.fillSearchedArticles();
         } catch(RemoteException e) {
             System.out.println("Error in search: "+e.getMessage());
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -231,6 +235,8 @@ public class OrderEditViewController implements Initializable {
             this.orderDTO = new OrderDTO(Integer.MAX_VALUE);
             System.out.println("Error in RMI: ");
             e.printStackTrace();
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -245,6 +251,8 @@ public class OrderEditViewController implements Initializable {
             this.selectStateChoice();
         } catch(RemoteException e) {
             System.out.println("Error in getting orderStates:"+e.getMessage());
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -268,6 +276,8 @@ public class OrderEditViewController implements Initializable {
             this.selectClientChoice();
         } catch(RemoteException e) {
             System.out.println("Error in getting orderStates:"+e.getMessage());
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -291,6 +301,8 @@ public class OrderEditViewController implements Initializable {
             this.selectEmployeeChoice();
         } catch(RemoteException e) {
             System.out.println("Error in getting orderStates:"+e.getMessage());
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -361,6 +373,8 @@ public class OrderEditViewController implements Initializable {
             }
         } catch(RemoteException e) {
             System.out.println("Error in RMI:"+e.getMessage());
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -425,25 +439,31 @@ public class OrderEditViewController implements Initializable {
      */
     private void saveDTO() {
         System.out.println("save");
-        if(this.orderId != -1) {
-            System.out.println("blue");
-            try {
-                String hash = this.orderService.lock(SESSION, this.orderDTO);
-                this.orderDTO = this.orderService.save(SESSION, this.orderDTO, hash);
-                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);
-            } catch(RemoteException e) {
-                System.out.println("Error in RMI:");
-                e.printStackTrace();
+        try {
+            if(this.orderId != -1) {
+                System.out.println("blue");
+                try {
+                    String hash = this.orderService.lock(SESSION, this.orderDTO);
+                    this.orderDTO = this.orderService.save(SESSION, this.orderDTO, hash);
+                    FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+                } catch(RemoteException e) {
+                    System.out.println("Error in RMI:");
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    this.orderDTO = this.orderService.save(SESSION, this.orderDTO, "");
+                    this.orderId = this.orderDTO.getId();
+                    System.out.println(String.valueOf(this.orderDTO.getId()));
+                } catch(RemoteException e){
+                    System.out.println("Error in RMI:");
+                    e.printStackTrace();
+                }  
             }
-        } else {
-            try {
-                this.orderDTO = this.orderService.save(SESSION, this.orderDTO, "");
-                this.orderId = this.orderDTO.getId();
-                System.out.println(String.valueOf(this.orderDTO.getId()));
-            } catch(RemoteException e){
-                System.out.println("Error in RMI:");
-                e.printStackTrace();
-            }  
+        } catch(LockCheckFailedException e){
+            System.out.println("Failed to get Access to order");
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     

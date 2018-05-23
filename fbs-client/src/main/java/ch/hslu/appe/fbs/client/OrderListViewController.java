@@ -6,6 +6,7 @@ import static ch.hslu.appe.fbs.client.JavaFXViewController.ORDER_SERVICE_NAME;
 
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteOrderService;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -70,6 +71,8 @@ public class OrderListViewController implements Initializable {
         } catch (NotBoundException | MalformedURLException |
             RemoteException e) {
             System.out.println("Error in RMI: "+e);
+        } catch(UserNotLoggedInException e){
+            System.out.println("User is not logged in");
         }
     }    
     

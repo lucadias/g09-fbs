@@ -70,7 +70,7 @@ public class ArticlePersistorTest {
     @Test
     public void delete() {
 
-        persistor.delete(persistor.getByArticleNr(55555).get(0));
+        persistor.deleteByArticleNr(persistor.getByArticleNr(55555).get(0));
 
         persistor.deleteTestArticles();
     }
