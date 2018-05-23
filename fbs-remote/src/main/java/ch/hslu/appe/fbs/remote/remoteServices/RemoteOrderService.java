@@ -4,6 +4,7 @@ import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.OrderedArticleNotUpdatedException;
 import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 
 import javax.persistence.RollbackException;
@@ -61,7 +62,7 @@ public interface RemoteOrderService extends Remote {
      * @return saved order dto
      * @throws RemoteException mandatory
      */
-    OrderDTO save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException, RollbackException;
+    OrderDTO save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException, RollbackException, OrderedArticleNotUpdatedException;
 
     /**
      * Deletes the order.

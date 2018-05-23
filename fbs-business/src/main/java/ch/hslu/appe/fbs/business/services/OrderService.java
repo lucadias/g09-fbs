@@ -3,6 +3,7 @@ package ch.hslu.appe.fbs.business.services;
 import ch.hslu.appe.fbs.business.manager.OrderManager;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.OrderedArticleNotUpdatedException;
 import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteOrderService;
 import ch.hslu.appe.fbs.remote.SortingType;
@@ -55,7 +56,7 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
     }
 
     @Override
-    public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException {
+    public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException, OrderedArticleNotUpdatedException {
         return orderManager.save(sessionId, orderDTO, hash);
     }
 

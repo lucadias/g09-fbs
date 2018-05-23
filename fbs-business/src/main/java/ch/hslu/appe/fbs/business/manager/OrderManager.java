@@ -7,10 +7,12 @@ import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
 import ch.hslu.appe.fbs.remote.dtos.*;
 import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.OrderedArticleNotUpdatedException;
 import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.utils.OrderDateAscComparator;
 import ch.hslu.appe.fbs.remote.utils.OrderDateDescComparator;
 
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
@@ -48,6 +50,7 @@ public final class OrderManager {
     private ClientConverter clientConverter;
 
     private SessionManager sessionManager;
+    private ArticleManager articleManager;
 
     public static OrderManager getInstance() {
         OrderManager result = instance;
@@ -81,6 +84,7 @@ public final class OrderManager {
         this.clientConverter = new ClientConverter();
 
         this.sessionManager = SessionManager.getInstance();
+        this.articleManager = ArticleManager.getInstance();
 
         try {
             this.sha256Digest = MessageDigest.getInstance("SHA-256");
@@ -185,24 +189,87 @@ public final class OrderManager {
         throw new UserNotLoggedInException();
     }
 
-    public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException {
+    public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException, OrderedArticleNotUpdatedException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(orderDTO.getId(), hash);
 
             if (lockCheck == FBSFeedback.SUCCESS || orderDTO.getId() == -1) {
-                List<OrderedArticles> orderedArticlesList = orderedArticleConverter.convertToEntityList(orderDTO.getOrderedArticleDTOList(), orderDTO.getId());
-                for(OrderedArticles orderedArticle : orderedArticlesList) {
-                    orderedArticlePersistor.save(orderedArticle);
+
+                List<OrderedArticleDTO> notSavedOrderedArticleDTOs = saveOrderedArticleDTOList(sessionId, orderDTO.getOrderedArticleDTOList(), orderDTO.getId());
+                Orders order = orderConverter.convertToEntity(orderDTO);
+                Orders savedOrder = orderPersistor.save(order);
+
+                if (notSavedOrderedArticleDTOs.size() > 0) {
+                    throw new OrderedArticleNotUpdatedException(notSavedOrderedArticleDTOs);
                 }
 
-
-                Orders order = orderConverter.convertToEntity(orderDTO);
-                return convertToDTO(orderPersistor.save(order));
+                return convertToDTO(savedOrder);
             } else {
                 throw new LockCheckFailedException();
             }
         }
         throw new UserNotLoggedInException();
+    }
+
+    private List<OrderedArticleDTO> saveOrderedArticleDTOList(final String sessionId, final List<OrderedArticleDTO> orderedArticleDTOList, final int orderId) throws UserNotLoggedInException{
+        List<OrderedArticleDTO> notSavedOrderedArticles = new ArrayList<>();
+
+        if (orderedArticleDTOList.size() > 0) {
+
+            for(OrderedArticleDTO orderedArticleDTO : orderedArticleDTOList) {
+
+                int amountIncreasedBy = 0;
+                boolean updateOrderedArticle = true;
+
+                if (orderedArticleDTO.getId() == -1) {
+                    // New OrderedArticleDTO
+                    amountIncreasedBy = orderedArticleDTO.getAmount();
+                } else {
+                    // Existing OrderedArticleDTO
+
+                    OrderedArticles savedOrderedArticles = orderedArticlePersistor.getById(orderedArticleDTO.getId());
+                    ArticleDTO articleDTO = articleConverter.convertToDTO(articlePersistor.getById(savedOrderedArticles.getArticleIdArticle()));
+                    OrderedArticleDTO savedOrderedArticleDTO = orderedArticleConverter.convertToDTO(savedOrderedArticles, articleDTO);
+
+                    // check amount differences
+                    if(savedOrderedArticleDTO.getAmount() != orderedArticleDTO.getAmount()) {
+                        amountIncreasedBy = orderedArticleDTO.getAmount() - savedOrderedArticleDTO.getAmount();
+                    }
+                }
+
+                if (amountIncreasedBy != 0) {
+                    String lockHash = articleManager.lock(sessionId, orderedArticleDTO.getArticleDTO().getId());
+                    if(lockHash != null) {
+
+                        Article article = articlePersistor.getById(orderedArticleDTO.getArticleDTO().getId());
+                        if (article.getInStock() > amountIncreasedBy) {
+                            article.setInStock(article.getInStock()-amountIncreasedBy);
+                            //TODO: implement reorder if under minStock
+                            articlePersistor.save(article);
+                        } else {
+                            //TODO: Implement getFromCentralStock
+                            updateOrderedArticle = false;
+                        }
+
+                        FBSFeedback feedbackRelease = articleManager.release(sessionId, orderedArticleDTO.getArticleDTO().getId(), lockHash);
+                        if(feedbackRelease == FBSFeedback.SUCCESS) {
+                            // save OrderedArticle
+                        } else {
+                            updateOrderedArticle = false;
+                        }
+                    } else {
+                        updateOrderedArticle = false;
+                    }
+                }
+
+                if (updateOrderedArticle) {
+                    orderedArticlePersistor.save(orderedArticleConverter.convertToEntity(orderedArticleDTO, orderId));
+                } else {
+                    notSavedOrderedArticles.add(orderedArticleDTO);
+                }
+            }
+        }
+        return notSavedOrderedArticles;
     }
 
     public FBSFeedback delete(final String sessionId, final OrderDTO orderDTO, final String hash) throws UserNotLoggedInException {
