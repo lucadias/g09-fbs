@@ -222,6 +222,8 @@ public final class OrderManager {
         if (orderedArticleDTOList == null)
             return notSavedOrderedArticles;
 
+        List<OrderedArticles> orderedArticlesListInDatabase = orderedArticlePersistor.getByOrderId(orderId);
+
         if (orderedArticleDTOList.size() > 0) {
 
             for(OrderedArticleDTO orderedArticleDTO : orderedArticleDTOList) {
@@ -238,6 +240,8 @@ public final class OrderManager {
                     OrderedArticles savedOrderedArticles = orderedArticlePersistor.getById(orderedArticleDTO.getId());
                     ArticleDTO articleDTO = articleConverter.convertToDTO(articlePersistor.getById(savedOrderedArticles.getArticleIdArticle()));
                     OrderedArticleDTO savedOrderedArticleDTO = orderedArticleConverter.convertToDTO(savedOrderedArticles, articleDTO);
+
+                    orderedArticlesListInDatabase.remove(savedOrderedArticles);
 
                     // check amount differences
                     if(savedOrderedArticleDTO.getAmount() != orderedArticleDTO.getAmount()) {
@@ -256,6 +260,7 @@ public final class OrderManager {
                             articlePersistor.save(article);
                         } else {
                             //TODO: Implement getFromCentralStock
+                            System.out.println("Not enough in stock");
                             updateOrderedArticle = false;
                         }
 
@@ -263,9 +268,11 @@ public final class OrderManager {
                         if(feedbackRelease == FBSFeedback.SUCCESS) {
                             // save OrderedArticle
                         } else {
+                            System.out.println("Release Not Success");
                             updateOrderedArticle = false;
                         }
                     } else {
+                        System.out.println("Lock Hash == null");
                         updateOrderedArticle = false;
                     }
                 }
@@ -278,6 +285,31 @@ public final class OrderManager {
                 }
             }
         }
+
+        for(OrderedArticles deletedOrderedArticles : orderedArticlesListInDatabase) {
+            boolean updateOrderedArticle = true;
+            String lockHash = articleManager.lock(sessionId, deletedOrderedArticles.getArticleIdArticle());
+            if (lockHash != null) {
+                Article article = articlePersistor.getById(deletedOrderedArticles.getArticleIdArticle());
+                article.setInStock(article.getInStock() + deletedOrderedArticles.getAmount());
+                articlePersistor.save(article);
+            } else {
+                updateOrderedArticle = false;
+            }
+
+            FBSFeedback feedback = articleManager.release(sessionId, deletedOrderedArticles.getArticleIdArticle(), lockHash);
+            if (feedback != FBSFeedback.SUCCESS)
+                updateOrderedArticle = false;
+
+
+            if (updateOrderedArticle) {
+                orderedArticlePersistor.delete(deletedOrderedArticles);
+            } else {
+                ArticleDTO articleDTO = articleConverter.convertToDTO(articlePersistor.getById(deletedOrderedArticles.getArticleIdArticle()));
+                notSavedOrderedArticles.add(orderedArticleConverter.convertToDTO(deletedOrderedArticles, articleDTO));
+            }
+        }
+
         return notSavedOrderedArticles;
     }
 
