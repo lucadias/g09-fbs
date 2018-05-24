@@ -11,6 +11,8 @@ import ch.hslu.appe.fbs.remote.exception.OrderedArticleNotUpdatedException;
 import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.utils.OrderDateAscComparator;
 import ch.hslu.appe.fbs.remote.utils.OrderDateDescComparator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
@@ -32,6 +34,9 @@ public final class OrderManager {
     private HashMap<String, String> lockpool;
 
     private MessageDigest sha256Digest;
+
+    static final Logger logger = LogManager.getLogger(OrderManager.class.getName());
+
 
     // Persistors
     private OrderPersistor orderPersistor;
@@ -198,7 +203,7 @@ public final class OrderManager {
                 List<OrderedArticleDTO> notSavedOrderedArticleDTOs = saveOrderedArticleDTOList(sessionId, orderDTO.getOrderedArticleDTOList(), orderDTO.getId());
                 Orders order = orderConverter.convertToEntity(orderDTO);
                 Orders savedOrder = orderPersistor.save(order);
-
+                logger.info("Updated Order with id: " + order.getIdOrders() + " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 if (notSavedOrderedArticleDTOs.size() > 0) {
                     throw new OrderedArticleNotUpdatedException(notSavedOrderedArticleDTOs);
                 }
@@ -267,6 +272,7 @@ public final class OrderManager {
 
                 if (updateOrderedArticle) {
                     orderedArticlePersistor.save(orderedArticleConverter.convertToEntity(orderedArticleDTO, orderId));
+                    logger.info("Updated orderedArticles with id: " + orderedArticleDTO.getId() + " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 } else {
                     notSavedOrderedArticles.add(orderedArticleDTO);
                 }

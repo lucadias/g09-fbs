@@ -85,7 +85,7 @@ public class SessionManager {
     public boolean getIsLoggedIn(String sessionId) {
         synchronized (sessionPool) {
             if(sessionPool.containsKey(sessionId)) {
-                logger.info("Check if Employee with ID: "  + this.getEmployeeIdFromSessionId(sessionId)+ " is logged in.");
+                //logger.info("Check if Employee with ID: "  + this.getEmployeeIdFromSessionId(sessionId)+ " is logged in.");
                 return true;
             }
         }

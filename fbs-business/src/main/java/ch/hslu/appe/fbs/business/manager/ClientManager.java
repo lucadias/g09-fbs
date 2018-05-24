@@ -4,6 +4,8 @@ import ch.hslu.appe.fbs.business.utils.ClientConverter;
 import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.ClientPersistor;
 import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -22,6 +24,9 @@ public final class ClientManager {
     private ClientConverter clientConverter;
 
     private SessionManager sessionManager;
+
+    static final Logger logger = LogManager.getLogger(ClientManager.class.getName());
+
 
     /**
      * Returns the singleton instance of the ClientManager.
