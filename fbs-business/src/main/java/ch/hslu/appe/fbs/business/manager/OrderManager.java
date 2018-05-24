@@ -214,6 +214,9 @@ public final class OrderManager {
     private List<OrderedArticleDTO> saveOrderedArticleDTOList(final String sessionId, final List<OrderedArticleDTO> orderedArticleDTOList, final int orderId) throws UserNotLoggedInException{
         List<OrderedArticleDTO> notSavedOrderedArticles = new ArrayList<>();
 
+        if (orderedArticleDTOList == null)
+            return notSavedOrderedArticles;
+
         if (orderedArticleDTOList.size() > 0) {
 
             for(OrderedArticleDTO orderedArticleDTO : orderedArticleDTOList) {
