@@ -62,6 +62,23 @@ public class OrderedArticlePersistor {
         return Util.save(article);
     }
 
+    public FBSFeedback delete(OrderedArticles article) {
+
+        try {
+            Util.transactionBegin();
+            Util.entityManager.remove(article);
+            Util.entityManager.flush();
+            Util.transactionCommit();
+            return FBSFeedback.SUCCESS;
+        } catch (Exception e){
+            System.out.println(e.toString());
+
+            Util.transactionCommit();
+        }
+        return  FBSFeedback.UNKNOWN_ERROR;
+
+    }
+
     /**
      * Returns a List containing every OrderedArticle.
      * @return List&gt;OrderedArticle&lt;

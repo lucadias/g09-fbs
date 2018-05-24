@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotEquals;
  *
  * @author Mischa Gruber
  */
-public class SessionManagerTest {
+public class SessionManagerIT {
 
     private static MessageDigest digest;
 
