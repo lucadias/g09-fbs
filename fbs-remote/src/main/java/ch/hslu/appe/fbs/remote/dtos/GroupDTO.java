@@ -3,11 +3,11 @@ package ch.hslu.appe.fbs.remote.dtos;
 import java.io.Serializable;
 
 /**
- * DTO of Groups entity
+ * DTO of Groups entity.
  *
  * @author Mischa Gruber
  */
-public class GroupDTO implements Serializable {
+public final class GroupDTO implements Serializable {
 
     public static final long serialVersionUID = 1L;
 

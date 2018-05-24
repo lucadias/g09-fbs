@@ -7,7 +7,6 @@ import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 /**

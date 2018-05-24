@@ -14,9 +14,7 @@ import ch.hslu.appe.fbs.remote.utils.OrderDateDescComparator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
-import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -268,9 +266,7 @@ public final class OrderManager {
                         }
 
                         FBSFeedback feedbackRelease = articleManager.release(sessionId, orderedArticleDTO.getArticleDTO().getId(), lockHash);
-                        if(feedbackRelease == FBSFeedback.SUCCESS) {
-                            // save OrderedArticle
-                        } else {
+                        if(feedbackRelease != FBSFeedback.SUCCESS) {
                             System.out.println("Release Not Success");
                             updateOrderedArticle = false;
                         }

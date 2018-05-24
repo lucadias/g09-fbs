@@ -7,9 +7,7 @@ import ch.hslu.appe.fbs.remote.FBSFeedback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.security.MessageDigest;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Manager for sessions as a singleton.
@@ -61,7 +59,7 @@ public class SessionManager {
      */
     private String createNewSessionId(int employeeId) {
         String sessionId = SessionIdGenerator.getNewId();
-        Integer employeeIdInteger = new Integer(employeeId);
+        Integer employeeIdInteger = Integer.valueOf(employeeId);
 
         synchronized (sessionPool) {
             logger.info("Create new Session for Employee with ID: "  + employeeId);
@@ -85,7 +83,7 @@ public class SessionManager {
     public boolean getIsLoggedIn(String sessionId) {
         synchronized (sessionPool) {
             if(sessionPool.containsKey(sessionId)) {
-                //logger.info("Check if Employee with ID: "  + this.getEmployeeIdFromSessionId(sessionId)+ " is logged in.");
+                //LOGGER.info("Check if Employee with ID: "  + this.getEmployeeIdFromSessionId(sessionId)+ " is logged in.");
                 return true;
             }
         }
@@ -102,15 +100,9 @@ public class SessionManager {
         System.out.println("employee: " + username);
         Employee employee = employeePersistor.getByUserName(username);
         if (employee != null) {
-            if (employee.getUsername().equals(username)) {
-                System.out.println("database: " + employee.getPassword());
-                System.out.println("client: " + passwordHash);
-                
-                if(employee.getPassword().equals(passwordHash)) {
-                    logger.info("Login attempt successful Employee: " +username);
-                    return createNewSessionId(employee.getIdEmployees());
-
-                }
+            if (employee.getUsername().equals(username) && employee.getPassword().equals(passwordHash)) {
+                logger.info("Login attempt successful Employee: " +username);
+                return createNewSessionId(employee.getIdEmployees());
             }
         }
         logger.info("Login attempt unsuccessful Employee: " +username);
@@ -125,7 +117,7 @@ public class SessionManager {
      */
     public FBSFeedback logout(String sessionId, String username) {
         Employee employee = employeePersistor.getByUserName(username);
-        Integer userId = new Integer(employee.getIdEmployees());
+        Integer userId = Integer.valueOf(employee.getIdEmployees());
 
         synchronized (sessionPool) {
             if(sessionPool.containsKey(sessionId)) {

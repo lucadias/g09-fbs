@@ -1,8 +1,5 @@
-
-
 package ch.hslu.appe.fbs.business.utils;
 
-import ch.hslu.appe.stock.Reservation;
 import ch.hslu.appe.stock.Stock;
 import ch.hslu.appe.stock.StockException;
 import ch.hslu.appe.stock.StockFactory;

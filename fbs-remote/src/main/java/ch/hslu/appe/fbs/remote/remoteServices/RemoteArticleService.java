@@ -74,7 +74,7 @@ public interface RemoteArticleService extends Remote {
      * @param articleDTOs list to sort
      * @param type how the list has to be sorted
      * @return sorted list of orders
-     * @throws RemoteException
+     * @throws RemoteException mandatory
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<ArticleDTO> sortList(String sessionId, List<ArticleDTO> articleDTOs, SortingType type) throws RemoteException, UserNotLoggedInException;

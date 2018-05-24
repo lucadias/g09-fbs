@@ -1,6 +1,5 @@
-package ch.hslu.appe.fbs.business.manager;
+package ch.hslu.appe.fbs.business.utils;
 
-import ch.hslu.appe.fbs.business.utils.CentralStock;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -13,6 +12,7 @@ public class CentralStockTest {
     @Test
     public void testGetCentralStockTest(){
 
+        // TODO: WTF?
         int amountOnCentralStock = cs.getCentralStock(123999999);
 
         cs.orderItem(123999999,3);

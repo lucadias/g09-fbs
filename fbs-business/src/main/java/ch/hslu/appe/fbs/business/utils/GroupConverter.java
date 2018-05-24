@@ -1,9 +1,7 @@
 package ch.hslu.appe.fbs.business.utils;
 
 import ch.hslu.appe.fbs.model.entities.Groups;
-import ch.hslu.appe.fbs.model.entities.OrderState;
 import ch.hslu.appe.fbs.remote.dtos.GroupDTO;
-import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
 
 import java.util.ArrayList;
 import java.util.List;
