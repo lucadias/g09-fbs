@@ -32,7 +32,7 @@ import java.util.Date;
 public final class ArticleManager {
     private static ArticleManager instance = null;
 
-    private static Object mutex = new Object();
+    private static final Object mutex = new Object();
     private HashMap<String, String> lockpool;
 
     private ArticlePersistor articlePersistor;
@@ -40,10 +40,9 @@ public final class ArticleManager {
 
     private ArticleConverter articleConverter;
 
-    static final Logger LOGGER = LogManager.getLogger(ArticleManager.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ArticleManager.class.getName());
 
     private SessionManager sessionManager;
-
 
     /**
      * Returns the singleton instance of the ArticleManager.
@@ -196,6 +195,13 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
+    /**
+     * Returns all articles as a sorted list.
+     * @param sessionId session id to gain access
+     * @param type how the list has to be sorted
+     * @return sorted list of articles
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
     public List<ArticleDTO> sortList(final String sessionId, final SortingType type) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return sortList(sessionId, articleConverter.convertToDTO(articlePersistor.getList()), type);
@@ -203,6 +209,14 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
+    /**
+     * Sorts a given list and returns it.
+     * @param sessionId session id to gain access
+     * @param articleDTOs list to sort
+     * @param type how the list has to be sorted
+     * @return sorted list of orders
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
     public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             Comparator<ArticleDTO> comparator;
@@ -232,13 +246,27 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
-    public List<ArticleDTO> search(final String sessionId, final String regEx) throws UserNotLoggedInException {
+    /**
+     * Returns a list of articles which are matching the search string.
+     * @param sessionId session id to gain access
+     * @param searchString search string for the search query
+     * @return list of matching articles
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<ArticleDTO> search(final String sessionId, final String searchString) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
-            return articleConverter.convertToDTO(articlePersistor.search(regEx));
+            return articleConverter.convertToDTO(articlePersistor.search(searchString));
         }
         throw new UserNotLoggedInException();
     }
 
+    /**
+     * Tries to gain the lock of an article.
+     * @param sessionId session id to gain access
+     * @param id database id of the article to gain the lock
+     * @return lock hash string on success, null on failure
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
     public String lock(final String sessionId, final int id) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
@@ -248,12 +276,12 @@ public final class ArticleManager {
                     return null;
                 } else {
                     String toHash = String.valueOf(id) + (new Date()).toString();
-                    String hash = "";
+                    String hash;
                     if (sha256Digest != null) {
                         byte[] hashBytes = sha256Digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
                         StringBuffer hexString = new StringBuffer();
-                        for (int i = 0; i < hashBytes.length; i++) {
-                            String hex = Integer.toHexString(0xff & hashBytes[i]);
+                        for (byte hashByte : hashBytes) {
+                            String hex = Integer.toHexString(0xff & hashByte);
                             if (hex.length() == 1) {
                                 hexString.append('0');
                             }
@@ -273,6 +301,14 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
+    /**
+     * Releases the lock of an article.
+     * @param sessionId session id to gain access
+     * @param id database id of the article to release the lock
+     * @param hash lock hash string of the article
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
     public FBSFeedback release(final String sessionId, final int id, final String hash) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
@@ -297,6 +333,12 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
+    /**
+     * Checks if the given hash equals the hash for the article.
+     * @param id database id of the article to check for the lock
+     * @param hash lock hash string of the article
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     */
     private FBSFeedback checkLock(final int id, final String hash) {
         synchronized (lockpool) {
 

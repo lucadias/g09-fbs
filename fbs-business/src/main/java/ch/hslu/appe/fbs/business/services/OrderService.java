@@ -25,15 +25,13 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
 
     /**
      * Constructor of the OrderService.
-     * @throws RemoteException
+     * @throws RemoteException mandatory
      */
     public OrderService() throws RemoteException {
         super();
 
         orderManager = OrderManager.getInstance();
     }
-
-    //TODO: implement getListByClientId
 
     @Override
     public OrderDTO getById(final String sessionId, final int id) throws UserNotLoggedInException {
@@ -47,7 +45,7 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
 
     @Override
     public List<OrderDTO> getListByClientId(final String sessionId, final int id) throws UserNotLoggedInException {
-        return null;
+        return orderManager.getListByClientId(sessionId, id);
     }
 
     @Override
@@ -56,12 +54,14 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
     }
 
     @Override
-    public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException, OrderedArticleNotUpdatedException {
+    public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash)
+            throws UserNotLoggedInException, LockCheckFailedException, OrderedArticleNotUpdatedException {
         return orderManager.save(sessionId, orderDTO, hash);
     }
 
     @Override
-    public FBSFeedback delete(final String sessionId, final OrderDTO orderDTO, final String hash) throws UserNotLoggedInException {
+    public FBSFeedback delete(final String sessionId, final OrderDTO orderDTO, final String hash)
+            throws UserNotLoggedInException {
         return orderManager.delete(sessionId, orderDTO, hash);
     }
 
@@ -71,7 +71,8 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
     }
 
     @Override
-    public FBSFeedback release(final String sessionId, final OrderDTO orderDTO, final String hash) throws UserNotLoggedInException {
+    public FBSFeedback release(final String sessionId, final OrderDTO orderDTO, final String hash)
+            throws UserNotLoggedInException {
         return orderManager.release(sessionId, orderDTO.getId(), hash);
     }
 
@@ -81,7 +82,8 @@ public final class OrderService extends UnicastRemoteObject implements RemoteOrd
     }
 
     @Override
-    public List<OrderDTO> sortList(final String sessionId, final List<OrderDTO> orderDTOs, final SortingType type) throws UserNotLoggedInException {
+    public List<OrderDTO> sortList(final String sessionId, final List<OrderDTO> orderDTOs, final SortingType type)
+            throws UserNotLoggedInException {
         return orderManager.sortList(sessionId, orderDTOs, type);
     }
 }

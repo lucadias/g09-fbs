@@ -10,7 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 /**
- * JavaDoc
+ * Server implementation of the RemoteClientService interface.
  *
  * @author Mischa Gruber
  */
@@ -19,8 +19,12 @@ public final class ClientService extends UnicastRemoteObject implements RemoteCl
     public static final long serialVersionUID = 1L;
     private transient ClientManager clientManager;
 
-    public ClientService() throws RemoteException {super();
-
+    /**
+     * Constructor of the ClientService.
+     * @throws RemoteException mandatory
+     */
+    public ClientService() throws RemoteException {
+        super();
         clientManager = ClientManager.getInstance();
     }
 

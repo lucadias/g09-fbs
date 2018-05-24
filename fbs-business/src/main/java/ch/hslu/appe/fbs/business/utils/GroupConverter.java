@@ -47,8 +47,9 @@ public final class GroupConverter {
      */
     public Groups convertToEntity(final GroupDTO groupDTO) {
         Groups groups = new Groups();
-        if (groupDTO.getId() != -1)
+        if (groupDTO.getId() != -1) {
             groups.setIdGroups(groupDTO.getId());
+        }
         groups.setName(groupDTO.getName());
 
         return groups;

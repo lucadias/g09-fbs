@@ -10,21 +10,21 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 /**
- * JavaDoc
+ * Manager for clients as a singleton.
  *
  * @author Mischa Gruber
  */
 public final class ClientManager {
     private static ClientManager instance = null;
 
-    private static Object mutex = new Object();
+    private static final Object mutex = new Object();
 
     private ClientPersistor clientPersistor;
     private ClientConverter clientConverter;
 
     private SessionManager sessionManager;
 
-    static final Logger logger = LogManager.getLogger(ClientManager.class.getName());
+    static final Logger LOGGER = LogManager.getLogger(ClientManager.class.getName());
 
 
     /**
@@ -53,6 +53,13 @@ public final class ClientManager {
         this.sessionManager = SessionManager.getInstance();
     }
 
+    /**
+     * Gets the client by the database id as an entity, converts it to a DTO and returns it.
+     * @param sessionId session id to gain access
+     * @param id database id of the client
+     * @return client as a DTO
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
     public ClientDTO getById(final String sessionId, final int id) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return clientConverter.convertToDTO(clientPersistor.getById(id));
@@ -60,6 +67,12 @@ public final class ClientManager {
         throw new UserNotLoggedInException();
     }
 
+    /**
+     * Gets all the clients as entities, converts and returns them as a list.
+     * @param sessionId session id to gain access
+     * @return clients as a DTO list
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
     public List<ClientDTO> getList(final String sessionId) throws UserNotLoggedInException  {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return clientConverter.convertToDTO(clientPersistor.getList());

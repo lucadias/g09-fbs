@@ -10,7 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 /**
- * JavaDoc
+ * Server implementation of the RemoteLogService interface.
  *
  * @author Mischa Gruber
  */
@@ -19,9 +19,12 @@ public final class LogService extends UnicastRemoteObject implements RemoteLogSe
     public static final long serialVersionUID = 1L;
     private transient LogManager logManager;
 
+    /**
+     * Constructor of the LogService.
+     * @throws RemoteException mandatory
+     */
     public LogService() throws RemoteException {
         super();
-
         this.logManager = LogManager.getInstance();
     }
 

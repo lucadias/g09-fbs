@@ -10,7 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 /**
- * JavaDoc
+ * Server implementation of the RemoteEmployeeService interface.
  *
  * @author Mischa Gruber
  */
@@ -19,8 +19,12 @@ public final class EmployeeService extends UnicastRemoteObject implements Remote
     public static final long serialVersionUID = 1L;
     private transient EmployeeManager employeeManager;
 
-    public EmployeeService() throws RemoteException {super();
-
+    /**
+     * Constructor of the ArticleService.
+     * @throws RemoteException mandatory
+     */
+    public EmployeeService() throws RemoteException {
+        super();
         employeeManager = EmployeeManager.getInstance();
     }
 

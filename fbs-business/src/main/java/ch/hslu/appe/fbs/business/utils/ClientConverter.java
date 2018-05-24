@@ -49,8 +49,9 @@ public final class ClientConverter {
      */
     public Client convertToEntity(final ClientDTO clientDTO) {
         Client client = new Client();
-        if (clientDTO.getId() != -1)
+        if (clientDTO.getId() != -1) {
             client.setIdClients(clientDTO.getId());
+        }
         client.setSurname(clientDTO.getSurname());
         client.setFirstname(clientDTO.getFirstname());
         client.setAddress(clientDTO.getAddress());

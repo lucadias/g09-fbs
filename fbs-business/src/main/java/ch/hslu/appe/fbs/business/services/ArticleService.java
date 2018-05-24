@@ -28,7 +28,6 @@ public final class ArticleService extends UnicastRemoteObject implements RemoteA
      */
     public ArticleService() throws RemoteException {
         super();
-
         articleManager = ArticleManager.getInstance();
     }
 

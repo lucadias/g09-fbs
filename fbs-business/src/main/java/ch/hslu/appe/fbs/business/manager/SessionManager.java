@@ -14,16 +14,16 @@ import java.util.HashMap;
  *
  * @author Mischa Gruber
  */
-public class SessionManager {
+public final class SessionManager {
 
     private static SessionManager instance = null;
-    private static Object mutex = new Object();
+    private static final Object mutex = new Object();
 
     private HashMap<String, Integer> sessionPool;
 
     private EmployeePersistor employeePersistor;
 
-    static final Logger logger = LogManager.getLogger(SessionManager.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(SessionManager.class.getName());
 
 
     /**
@@ -57,20 +57,24 @@ public class SessionManager {
      * @param employeeId database id of the employee
      * @return new created session id
      */
-    private String createNewSessionId(int employeeId) {
+    private String createNewSessionId(final int employeeId) {
         String sessionId = SessionIdGenerator.getNewId();
         Integer employeeIdInteger = Integer.valueOf(employeeId);
 
         synchronized (sessionPool) {
-            logger.info("Create new Session for Employee with ID: "  + employeeId);
+            LOGGER.info("Create new Session for Employee with ID: "  + employeeId);
             sessionPool.put(sessionId, employeeIdInteger);
         }
 
         return sessionId;
     }
 
-    public int getEmployeeIdFromSessionId(String sessionId) {
-
+    /**
+     * Returns the employee id of the given session id.
+     * @param sessionId the session id that should be converted
+     * @return employee id, which is assigned to the session id
+     */
+    public int getEmployeeIdFromSessionId(final String sessionId) {
         synchronized (sessionPool) {
             if(sessionPool.containsKey(sessionId)) {
                 return sessionPool.get(sessionId);
@@ -80,10 +84,16 @@ public class SessionManager {
         return -1;
     }
 
-    public boolean getIsLoggedIn(String sessionId) {
+    /**
+     * Returns if the session id is logged in.
+     * @param sessionId the session id that has to be checked.
+     * @return true if the session id is logged id, otherwise false
+     */
+    public boolean getIsLoggedIn(final String sessionId) {
         synchronized (sessionPool) {
-            if(sessionPool.containsKey(sessionId)) {
-                //LOGGER.info("Check if Employee with ID: "  + this.getEmployeeIdFromSessionId(sessionId)+ " is logged in.");
+            if (sessionPool.containsKey(sessionId)) {
+                //LOGGER.info("Check if Employee with ID: "  +
+                // this.getEmployeeIdFromSessionId(sessionId)+ " is logged in.");
                 return true;
             }
         }
@@ -96,16 +106,16 @@ public class SessionManager {
      * @param passwordHash password as a sha-256 hash of the employee
      * @return session id string on success, null on failure
      */
-    public String login(String username, String passwordHash) {
+    public String login(final String username, final String passwordHash) {
         System.out.println("employee: " + username);
         Employee employee = employeePersistor.getByUserName(username);
         if (employee != null) {
             if (employee.getUsername().equals(username) && employee.getPassword().equals(passwordHash)) {
-                logger.info("Login attempt successful Employee: " +username);
+                LOGGER.info("Login attempt successful Employee: " + username);
                 return createNewSessionId(employee.getIdEmployees());
             }
         }
-        logger.info("Login attempt unsuccessful Employee: " +username);
+        LOGGER.info("Login attempt unsuccessful Employee: " + username);
         return null;
     }
 
@@ -115,15 +125,15 @@ public class SessionManager {
      * @param username username of the session id
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      */
-    public FBSFeedback logout(String sessionId, String username) {
+    public FBSFeedback logout(final String sessionId, final String username) {
         Employee employee = employeePersistor.getByUserName(username);
         Integer userId = Integer.valueOf(employee.getIdEmployees());
 
         synchronized (sessionPool) {
-            if(sessionPool.containsKey(sessionId)) {
-                if(sessionPool.get(sessionId).equals(userId)) {
+            if (sessionPool.containsKey(sessionId)) {
+                if (sessionPool.get(sessionId).equals(userId)) {
                     sessionPool.remove(sessionId);
-                    logger.info("Logout attempt successful Employee: " +username);
+                    LOGGER.info("Logout attempt successful Employee: " + username);
                     return FBSFeedback.SUCCESS;
                 } else {
                     return FBSFeedback.SESSION_ID_USERNAME_NOT_MATCHING;

@@ -1,6 +1,13 @@
 package ch.hslu.appe.fbs.business;
 
-import ch.hslu.appe.fbs.business.services.*;
+import ch.hslu.appe.fbs.business.services.ArticleService;
+import ch.hslu.appe.fbs.business.services.ClientService;
+import ch.hslu.appe.fbs.business.services.LoginService;
+import ch.hslu.appe.fbs.business.services.OrderService;
+import ch.hslu.appe.fbs.business.services.EmployeeService;
+import ch.hslu.appe.fbs.business.services.OrderStateService;
+import ch.hslu.appe.fbs.business.services.LogService;
+import ch.hslu.appe.fbs.business.services.PermissionService;
 
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
@@ -16,15 +23,15 @@ import java.rmi.registry.Registry;
  */
 public final class FBSServer {
 
-    public static final int REGISTRY_PORT = 1099;
-    public static final String ARTICLE_SERVICE_NAME = "ArticleService";
-    public static final String ORDER_SERVICE_NAME = "OrderService";
-    public static final String LOGIN_SERVICE_NAME = "LoginService";
-    public static final String CLIENT_SERVICE_NAME = "ClientService";
-    public static final String EMPLOYEE_SERVICE_NAME = "EmployeeService";
-    public static final String ORDER_STATE_SERVICE_NAME = "OrderStateService";
-    public static final String LOG_SERVICE_NAME = "LogService";
-    public static final String PERMISSION_SERVICE_NAME = "PermissionService";
+    private static final int REGISTRY_PORT = 1099;
+    private static final String ARTICLE_SERVICE_NAME = "ArticleService";
+    private static final String ORDER_SERVICE_NAME = "OrderService";
+    private static final String LOGIN_SERVICE_NAME = "LoginService";
+    private static final String CLIENT_SERVICE_NAME = "ClientService";
+    private static final String EMPLOYEE_SERVICE_NAME = "EmployeeService";
+    private static final String ORDER_STATE_SERVICE_NAME = "OrderStateService";
+    private static final String LOG_SERVICE_NAME = "LogService";
+    private static final String PERMISSION_SERVICE_NAME = "PermissionService";
 
     private static ArticleService articleService;
     private static OrderService orderService;
@@ -107,11 +114,7 @@ public final class FBSServer {
                     + String.valueOf(REGISTRY_PORT) + "/" + PERMISSION_SERVICE_NAME;
             Naming.bind(urlPermissionService, FBSServer.permissionService);
 
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (AlreadyBoundException e) {
+        } catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
             e.printStackTrace();
         }
     }

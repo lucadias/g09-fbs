@@ -13,15 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * JavaDoc
+ * Manager for permission as a singleton.
  *
  * @author Mischa Gruber
  */
-public class PermissionManager {
+public final class PermissionManager {
 
     private static PermissionManager instance = null;
 
-    private static Object mutex = new Object();
+    private static final Object mutex = new Object();
 
     private EmployeeGroupsPersistor employeeGroupsPersistor;
     private GroupsPersistor groupsPersistor;
@@ -29,6 +29,10 @@ public class PermissionManager {
 
     private SessionManager sessionManager;
 
+    /**
+     * Returns the singleton instance of the PermissionManager.
+     * @return single instance
+     */
     public static PermissionManager getInstance() {
         PermissionManager result = instance;
         if (result == null) {
@@ -42,6 +46,9 @@ public class PermissionManager {
         return result;
     }
 
+    /**
+     * Private constructor for the single pattern.
+     */
     private PermissionManager() {
         this.employeeGroupsPersistor = new EmployeeGroupsPersistor();
         this.groupsPersistor = new GroupsPersistor();
@@ -49,12 +56,20 @@ public class PermissionManager {
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public List<GroupDTO> getGroupsOfEmployee(final String sessionId, final int employeeId) throws RemoteException, UserNotLoggedInException {
+    /**
+     * Returns a list of groups, in which the employee is.
+     * @param sessionId session id to gain access
+     * @param employeeId database id of the employee
+     * @return a list of groups of the employee
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<GroupDTO> getGroupsOfEmployee(final String sessionId, final int employeeId)
+            throws RemoteException, UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             List<EmployeeGroups> employeeGroupsList = employeeGroupsPersistor.getEmployeeGroupsByEmployeeId(employeeId);
             List<Groups> groups = new ArrayList<>();
 
-            for(EmployeeGroups employeeGroup : employeeGroupsList) {
+            for (EmployeeGroups employeeGroup : employeeGroupsList) {
                 groups.add(groupsPersistor.getById(employeeGroup.getGroupsIdGroups()));
             }
 

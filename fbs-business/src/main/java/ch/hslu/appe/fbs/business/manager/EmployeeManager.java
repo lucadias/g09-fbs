@@ -9,14 +9,14 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 /**
- * JavaDoc
+ * Manager for employees as a singleton.
  *
  * @author Mischa Gruber
  */
 public final class EmployeeManager {
     private static EmployeeManager instance = null;
 
-    private static Object mutex = new Object();
+    private static final Object mutex = new Object();
 
     private EmployeePersistor employeePersistor;
     private EmployeeConverter employeeConverter;
@@ -49,6 +49,13 @@ public final class EmployeeManager {
         this.sessionManager = SessionManager.getInstance();
     }
 
+    /**
+     * Gets the employee by the database id as an entity, converts it to a DTO and returns it.
+     * @param sessionId session id to gain access
+     * @param id database id of the employee
+     * @return employee as a DTO
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
     public EmployeeDTO getById(final String sessionId, final int id) throws RemoteException, UserNotLoggedInException  {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return employeeConverter.convertToDTO(employeePersistor.getById(id));
@@ -56,6 +63,12 @@ public final class EmployeeManager {
         throw new UserNotLoggedInException();
     }
 
+    /**
+     * Gets all the employees as entities, converts and returns them as a list.
+     * @param sessionId session id to gain access
+     * @return employees as a DTO list
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
     public List<EmployeeDTO> getList(final String sessionId) throws RemoteException, UserNotLoggedInException  {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return employeeConverter.convertToDTO(employeePersistor.getList());

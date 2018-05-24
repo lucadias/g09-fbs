@@ -46,8 +46,9 @@ public final class OrderStateConverter {
      */
     public OrderState convertToEntity(final OrderStateDTO orderStateDTO) {
         OrderState orderState = new OrderState();
-        if (orderStateDTO.getId() != -1)
+        if (orderStateDTO.getId() != -1) {
             orderState.setIdOrderState(orderStateDTO.getId());
+        }
         orderState.setState(orderStateDTO.getState());
 
         return orderState;

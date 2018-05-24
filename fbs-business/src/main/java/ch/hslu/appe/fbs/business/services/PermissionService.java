@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Mischa Gruber
  */
-public class PermissionService extends UnicastRemoteObject implements RemotePermissionService {
+public final class PermissionService extends UnicastRemoteObject implements RemotePermissionService {
 
     public static final long serialVersionUID = 1L;
     private transient PermissionManager permissionManager;
@@ -30,7 +30,8 @@ public class PermissionService extends UnicastRemoteObject implements RemotePerm
     }
 
     @Override
-    public List<GroupDTO> getGroupsOfEmployee(final String sessionId, final int employeeId) throws RemoteException, UserNotLoggedInException {
+    public List<GroupDTO> getGroupsOfEmployee(final String sessionId, final int employeeId)
+            throws RemoteException, UserNotLoggedInException {
         return permissionManager.getGroupsOfEmployee(sessionId, employeeId);
     }
 }

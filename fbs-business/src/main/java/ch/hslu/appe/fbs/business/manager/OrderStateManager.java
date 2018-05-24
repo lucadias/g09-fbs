@@ -9,14 +9,14 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 /**
- * JavaDoc
+ * Manager for order states as a singleton.
  *
  * @author Mischa Gruber
  */
 public final class OrderStateManager {
     private static OrderStateManager instance = null;
 
-    private static Object mutex = new Object();
+    private static final Object mutex = new Object();
 
     private OrderStatePersistor orderStatePersistor;
     private OrderStateConverter orderStateConverter;
@@ -49,14 +49,27 @@ public final class OrderStateManager {
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public OrderStateDTO getById(final String sessionId, final int id) throws RemoteException, UserNotLoggedInException {
+    /**
+     * Returns a OrderStateDTO object with the given id.
+     * @param sessionId session id to gain access
+     * @param id database id of the order state
+     * @return OrderStateDTO with the given id
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public OrderStateDTO getById(final String sessionId, final int id) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return orderStateConverter.convertToDTO(orderStatePersistor.getById(id));
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<OrderStateDTO> getList(final String sessionId) throws RemoteException, UserNotLoggedInException {
+    /**
+     * Returns all order states.
+     * @param sessionId session id to gain access
+     * @return list with all order states
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<OrderStateDTO> getList(final String sessionId) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return orderStateConverter.convertToDTO(orderStatePersistor.getList());
         }

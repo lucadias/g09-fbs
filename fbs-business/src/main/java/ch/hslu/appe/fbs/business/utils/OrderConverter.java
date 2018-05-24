@@ -49,8 +49,9 @@ public final class OrderConverter {
      */
     public Orders convertToEntity(final OrderDTO orderDTO) {
         Orders order = new Orders();
-        if (orderDTO.getId() != -1)
+        if (orderDTO.getId() != -1) {
             order.setIdOrders(orderDTO.getId());
+        }
         order.setDate(orderDTO.getDate());
         order.setTotalPrice(orderDTO.getTotalPrice());
         order.setOrderStateIdOrderState(orderDTO.getOrderStateDTO().getId());
