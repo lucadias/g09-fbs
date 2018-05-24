@@ -17,6 +17,7 @@ import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
 import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.OrderedArticleNotUpdatedException;
 import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteClientService;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteEmployeeService;
@@ -464,6 +465,8 @@ public class OrderEditViewController implements Initializable {
             System.out.println("Failed to get Access to order");
         } catch(UserNotLoggedInException e) {
             System.out.println("User is not logged in");
+        } catch(OrderedArticleNotUpdatedException e) {
+            System.out.println("Article not updated");
         }
     }
     
