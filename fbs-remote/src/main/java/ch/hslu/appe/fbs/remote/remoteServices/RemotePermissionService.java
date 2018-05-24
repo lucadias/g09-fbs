@@ -22,5 +22,6 @@ public interface RemotePermissionService extends Remote {
      * @throws RemoteException mandatory
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    List<GroupDTO> getGroupsOfEmployee(String sessionId, int employeeId) throws RemoteException, UserNotLoggedInException;
+    List<GroupDTO> getGroupsOfEmployee(String sessionId, int employeeId)
+            throws RemoteException, UserNotLoggedInException;
 }

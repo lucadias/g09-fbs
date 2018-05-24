@@ -17,7 +17,7 @@ import java.util.HashMap;
 public final class SessionManager {
 
     private static SessionManager instance = null;
-    private static final Object mutex = new Object();
+    private static final Object MUTEX = new Object();
 
     private HashMap<String, Integer> sessionPool;
 
@@ -33,7 +33,7 @@ public final class SessionManager {
     public static SessionManager getInstance() {
         SessionManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new SessionManager();
@@ -76,7 +76,7 @@ public final class SessionManager {
      */
     public int getEmployeeIdFromSessionId(final String sessionId) {
         synchronized (sessionPool) {
-            if(sessionPool.containsKey(sessionId)) {
+            if (sessionPool.containsKey(sessionId)) {
                 return sessionPool.get(sessionId);
             }
         }

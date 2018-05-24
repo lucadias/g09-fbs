@@ -17,7 +17,7 @@ public final class LogManager {
 
     private static LogManager instance = null;
 
-    private static final Object mutex = new Object();
+    private static final Object MUTEX = new Object();
 
     private SessionManager sessionManager;
 
@@ -28,7 +28,7 @@ public final class LogManager {
     public static LogManager getInstance() {
         LogManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new LogManager();
@@ -57,7 +57,7 @@ public final class LogManager {
         List<String> logs = new ArrayList<>();
         if (sessionManager.getIsLoggedIn(sessionId)) {
             try (BufferedReader br = new BufferedReader(new FileReader("FBSLogs.log"))) {
-                for (String line;(line = br.readLine()) != null;) {
+                for (String line; (line = br.readLine()) != null;) {
                     logs.add(line);
                     System.out.println(line); // process the line.
                 }

@@ -47,7 +47,8 @@ public final class ArticleService extends UnicastRemoteObject implements RemoteA
     }
 
     @Override
-    public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash) throws UserNotLoggedInException {
+    public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash)
+            throws UserNotLoggedInException {
         return articleManager.updateStockById(sessionId, id, amount, hash);
     }
 
@@ -57,7 +58,8 @@ public final class ArticleService extends UnicastRemoteObject implements RemoteA
     }
 
     @Override
-    public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type) throws UserNotLoggedInException {
+    public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type)
+            throws UserNotLoggedInException {
         return articleManager.sortList(sessionId, articleDTOs, type);
     }
 
@@ -67,12 +69,14 @@ public final class ArticleService extends UnicastRemoteObject implements RemoteA
     }
 
     @Override
-    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException {
+    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash)
+            throws UserNotLoggedInException, LockCheckFailedException {
         return articleManager.save(sessionId, articleDTO, hash);
     }
 
     @Override
-    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException {
+    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash)
+            throws UserNotLoggedInException, LockCheckFailedException {
         return articleManager.delete(sessionId, articleDTO, hash);
     }
 
@@ -82,7 +86,8 @@ public final class ArticleService extends UnicastRemoteObject implements RemoteA
     }
 
     @Override
-    public FBSFeedback release(final String sessionId, final ArticleDTO articleDTO, final String hash) throws UserNotLoggedInException {
+    public FBSFeedback release(final String sessionId, final ArticleDTO articleDTO, final String hash)
+            throws UserNotLoggedInException {
         return articleManager.release(sessionId, articleDTO.getId(), hash);
     }
 }

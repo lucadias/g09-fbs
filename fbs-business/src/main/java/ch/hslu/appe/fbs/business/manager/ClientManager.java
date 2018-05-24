@@ -17,7 +17,7 @@ import java.util.List;
 public final class ClientManager {
     private static ClientManager instance = null;
 
-    private static final Object mutex = new Object();
+    private static final Object MUTEX = new Object();
 
     private ClientPersistor clientPersistor;
     private ClientConverter clientConverter;
@@ -34,7 +34,7 @@ public final class ClientManager {
     public static ClientManager getInstance() {
         ClientManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new ClientManager();

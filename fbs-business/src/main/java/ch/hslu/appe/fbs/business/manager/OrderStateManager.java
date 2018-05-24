@@ -5,7 +5,6 @@ import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.OrderStatePersistor;
 import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -16,7 +15,7 @@ import java.util.List;
 public final class OrderStateManager {
     private static OrderStateManager instance = null;
 
-    private static final Object mutex = new Object();
+    private static final Object MUTEX = new Object();
 
     private OrderStatePersistor orderStatePersistor;
     private OrderStateConverter orderStateConverter;
@@ -30,7 +29,7 @@ public final class OrderStateManager {
     public static OrderStateManager getInstance() {
         OrderStateManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new OrderStateManager();

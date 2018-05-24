@@ -70,7 +70,9 @@ public interface RemoteOrderService extends Remote {
      * @throws RollbackException is thrown if there was an error in the entity manager
      * @throws OrderedArticleNotUpdatedException is thrown if any OrderedArticle couldn't get updated
      */
-    OrderDTO save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException, RollbackException, OrderedArticleNotUpdatedException;
+    OrderDTO save(String sessionId, OrderDTO orderDTO, String hash)
+            throws RemoteException, UserNotLoggedInException, LockCheckFailedException,
+            RollbackException, OrderedArticleNotUpdatedException;
 
     /**
      * Deletes the order.
@@ -81,7 +83,8 @@ public interface RemoteOrderService extends Remote {
      * @throws RemoteException mandatory
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    FBSFeedback delete(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException;
+    FBSFeedback delete(String sessionId, OrderDTO orderDTO, String hash)
+            throws RemoteException, UserNotLoggedInException;
 
     /**
      * Tries to gain the lock of an order.
@@ -102,7 +105,8 @@ public interface RemoteOrderService extends Remote {
      * @throws RemoteException mandatory
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    FBSFeedback release(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException;
+    FBSFeedback release(String sessionId, OrderDTO orderDTO, String hash)
+            throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns all orders as a sorted list.
@@ -123,5 +127,6 @@ public interface RemoteOrderService extends Remote {
      * @throws RemoteException mandatory
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    List<OrderDTO> sortList(String sessionId, List<OrderDTO> orderDTOs, SortingType type) throws RemoteException, UserNotLoggedInException;
+    List<OrderDTO> sortList(String sessionId, List<OrderDTO> orderDTOs, SortingType type)
+            throws RemoteException, UserNotLoggedInException;
 }

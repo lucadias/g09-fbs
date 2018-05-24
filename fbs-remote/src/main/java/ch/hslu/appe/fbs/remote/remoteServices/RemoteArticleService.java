@@ -56,7 +56,8 @@ public interface RemoteArticleService extends Remote {
      * @throws RemoteException mandatory
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    FBSFeedback updateStockById(String sessionId, int id, int amount, String hash) throws RemoteException, UserNotLoggedInException;
+    FBSFeedback updateStockById(String sessionId, int id, int amount, String hash)
+            throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns all articles as a sorted list.
@@ -77,7 +78,8 @@ public interface RemoteArticleService extends Remote {
      * @throws RemoteException mandatory
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    List<ArticleDTO> sortList(String sessionId, List<ArticleDTO> articleDTOs, SortingType type) throws RemoteException, UserNotLoggedInException;
+    List<ArticleDTO> sortList(String sessionId, List<ArticleDTO> articleDTOs, SortingType type)
+            throws RemoteException, UserNotLoggedInException;
 
     /**
      * Returns a list of articles which are matching the search string.
@@ -99,7 +101,8 @@ public interface RemoteArticleService extends Remote {
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      * @throws LockCheckFailedException is thrown if the lock check has failed
      */
-    ArticleDTO save(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException;
+    ArticleDTO save(String sessionId, ArticleDTO articleDTO, String hash)
+            throws RemoteException, UserNotLoggedInException, LockCheckFailedException;
 
     /**
      * Deletes the article.
@@ -111,7 +114,8 @@ public interface RemoteArticleService extends Remote {
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      * @throws LockCheckFailedException is thrown if the lock check has failed
      */
-    ArticleDTO delete(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException;
+    ArticleDTO delete(String sessionId, ArticleDTO articleDTO, String hash)
+            throws RemoteException, UserNotLoggedInException, LockCheckFailedException;
 
     /**
      * Tries to gain the lock of an article.
@@ -132,5 +136,6 @@ public interface RemoteArticleService extends Remote {
      * @throws RemoteException mandatory
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    FBSFeedback release(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException, UserNotLoggedInException;
+    FBSFeedback release(String sessionId, ArticleDTO articleDTO, String hash)
+            throws RemoteException, UserNotLoggedInException;
 }

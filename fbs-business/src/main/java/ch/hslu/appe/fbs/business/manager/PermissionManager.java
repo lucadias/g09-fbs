@@ -21,7 +21,7 @@ public final class PermissionManager {
 
     private static PermissionManager instance = null;
 
-    private static final Object mutex = new Object();
+    private static final Object MUTEX = new Object();
 
     private EmployeeGroupsPersistor employeeGroupsPersistor;
     private GroupsPersistor groupsPersistor;
@@ -36,7 +36,7 @@ public final class PermissionManager {
     public static PermissionManager getInstance() {
         PermissionManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new PermissionManager();
@@ -64,7 +64,7 @@ public final class PermissionManager {
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     public List<GroupDTO> getGroupsOfEmployee(final String sessionId, final int employeeId)
-            throws RemoteException, UserNotLoggedInException {
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             List<EmployeeGroups> employeeGroupsList = employeeGroupsPersistor.getEmployeeGroupsByEmployeeId(employeeId);
             List<Groups> groups = new ArrayList<>();

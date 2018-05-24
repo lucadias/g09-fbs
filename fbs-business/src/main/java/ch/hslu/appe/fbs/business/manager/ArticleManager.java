@@ -32,7 +32,7 @@ import java.util.Date;
 public final class ArticleManager {
     private static ArticleManager instance = null;
 
-    private static final Object mutex = new Object();
+    private static final Object MUTEX = new Object();
     private HashMap<String, String> lockpool;
 
     private ArticlePersistor articlePersistor;
@@ -51,7 +51,7 @@ public final class ArticleManager {
     public static ArticleManager getInstance() {
         ArticleManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new ArticleManager();
@@ -114,7 +114,8 @@ public final class ArticleManager {
      */
     public List<ArticleDTO> getList(final String sessionId) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
-            LOGGER.info("List all Articles from Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+            LOGGER.info("List all Articles from Database | Employee: " +
+                    sessionManager.getEmployeeIdFromSessionId(sessionId));
             List<Article> articleList = articlePersistor.getList();
             return articleConverter.convertToDTO(articleList);
         }
@@ -130,13 +131,15 @@ public final class ArticleManager {
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      * @throws LockCheckFailedException is thrown if the lock check has failed
      */
-    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException {
+    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash)
+            throws UserNotLoggedInException, LockCheckFailedException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
             if (lockCheck == FBSFeedback.SUCCESS || articleDTO.getId() == -1) {
                 Article article = articleConverter.convertToEntity(articleDTO);
-                LOGGER.info("Save Article with id: " +article.getIdArticle() + " to Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                LOGGER.info("Save Article with id: " + article.getIdArticle() + " to Database | Employee: "
+                        + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 return articleConverter.convertToDTO(articlePersistor.save(article));
             } else {
                 throw new LockCheckFailedException();
@@ -154,13 +157,15 @@ public final class ArticleManager {
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      * @throws LockCheckFailedException is thrown if the lock check has failed
      */
-    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash) throws UserNotLoggedInException, LockCheckFailedException {
+    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash)
+            throws UserNotLoggedInException, LockCheckFailedException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
             if (lockCheck == FBSFeedback.SUCCESS) {
                 Article article = articleConverter.convertToEntity(articleDTO);
-                LOGGER.info("Deleted Article with id: " +article.getIdArticle() + " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                LOGGER.info("Deleted Article with id: " + article.getIdArticle() +
+                        " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 article.setAvailable(false);
 
                 return articleConverter.convertToDTO(articlePersistor.save(article));
@@ -181,12 +186,14 @@ public final class ArticleManager {
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash) throws UserNotLoggedInException {
+    public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash)
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(id, hash);
 
             if (lockCheck == FBSFeedback.SUCCESS) {
-                LOGGER.info("Update Article Stock with id: " + id + " | New Amount:" + amount + " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                LOGGER.info("Update Article Stock with id: " + id + " | New Amount:" + amount +
+                        " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 return articlePersistor.updateStockById(id, amount);
             } else {
                 return lockCheck;
@@ -217,7 +224,8 @@ public final class ArticleManager {
      * @return sorted list of orders
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type) throws UserNotLoggedInException {
+    public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type)
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             Comparator<ArticleDTO> comparator;
 
@@ -309,7 +317,8 @@ public final class ArticleManager {
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    public FBSFeedback release(final String sessionId, final int id, final String hash) throws UserNotLoggedInException {
+    public FBSFeedback release(final String sessionId, final int id, final String hash)
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
 

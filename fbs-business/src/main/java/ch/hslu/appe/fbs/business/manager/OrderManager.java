@@ -21,9 +21,15 @@ import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.model.entities.Employee;
 import ch.hslu.appe.fbs.model.entities.Client;
 
+import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
+import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
+import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
+import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
+import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
+import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
+
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
-import ch.hslu.appe.fbs.remote.dtos.*;
 import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
 import ch.hslu.appe.fbs.remote.exception.OrderedArticleNotUpdatedException;
 import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
@@ -51,7 +57,7 @@ public final class OrderManager {
 
     private static OrderManager instance = null;
 
-    private static final Object mutex = new Object();
+    private static final Object MUTEX = new Object();
     private HashMap<String, String> lockpool;
 
     private MessageDigest sha256Digest;
@@ -84,7 +90,7 @@ public final class OrderManager {
     public static OrderManager getInstance() {
         OrderManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new OrderManager();
@@ -306,8 +312,8 @@ public final class OrderManager {
                         saveOrderedArticleDTOList(sessionId, orderDTO.getOrderedArticleDTOList(), orderDTO.getId());
                 Orders order = orderConverter.convertToEntity(orderDTO);
                 Orders savedOrder = orderPersistor.save(order);
-                LOGGER.info("Updated Order with id: " + order.getIdOrders() + " | Employee: " +
-                        sessionManager.getEmployeeIdFromSessionId(sessionId));
+                LOGGER.info("Updated Order with id: " + order.getIdOrders() + " | Employee: "
+                        + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 if (notSavedOrderedArticleDTOs.size() > 0) {
                     throw new OrderedArticleNotUpdatedException(notSavedOrderedArticleDTOs);
                 }
@@ -355,7 +361,7 @@ public final class OrderManager {
                     // Existing OrderedArticleDTO
 
                     OrderedArticles savedOrderedArticles = orderedArticlePersistor.getById(orderedArticleDTO.getId());
-                    ArticleDTO articleDTO =articleConverter.convertToDTO(
+                    ArticleDTO articleDTO = articleConverter.convertToDTO(
                             articlePersistor.getById(savedOrderedArticles.getArticleIdArticle()));
                     OrderedArticleDTO savedOrderedArticleDTO = orderedArticleConverter.convertToDTO(
                             savedOrderedArticles, articleDTO);
@@ -398,8 +404,8 @@ public final class OrderManager {
 
                 if (updateOrderedArticle) {
                     orderedArticlePersistor.save(orderedArticleConverter.convertToEntity(orderedArticleDTO, orderId));
-                    LOGGER.info("Updated orderedArticles with id: " + orderedArticleDTO.getId() +
-                            " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                    LOGGER.info("Updated orderedArticles with id: " + orderedArticleDTO.getId()
+                            + " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 } else {
                     notSavedOrderedArticles.add(orderedArticleDTO);
                 }
@@ -419,14 +425,15 @@ public final class OrderManager {
 
             FBSFeedback feedback =
                     articleManager.release(sessionId, deletedOrderedArticles.getArticleIdArticle(), lockHash);
-            if (feedback != FBSFeedback.SUCCESS)
+            if (feedback != FBSFeedback.SUCCESS) {
                 updateOrderedArticle = false;
+            }
 
 
             if (updateOrderedArticle) {
                 orderedArticlePersistor.delete(deletedOrderedArticles);
             } else {
-                ArticleDTO articleDTO =articleConverter.convertToDTO(
+                ArticleDTO articleDTO = articleConverter.convertToDTO(
                         articlePersistor.getById(deletedOrderedArticles.getArticleIdArticle()));
                 notSavedOrderedArticles.add(orderedArticleConverter.convertToDTO(deletedOrderedArticles, articleDTO));
             }
@@ -483,7 +490,9 @@ public final class OrderManager {
                         StringBuffer hexString = new StringBuffer();
                         for (byte hashByte : hashBytes) {
                             String hex = Integer.toHexString(0xff & hashByte);
-                            if (hex.length() == 1) hexString.append('0');
+                            if (hex.length() == 1){
+                                hexString.append('0');
+                            }
                             hexString.append(hex);
                         }
                         hash = hexString.toString();

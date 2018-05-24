@@ -16,7 +16,7 @@ import java.util.List;
 public final class EmployeeManager {
     private static EmployeeManager instance = null;
 
-    private static final Object mutex = new Object();
+    private static final Object MUTEX = new Object();
 
     private EmployeePersistor employeePersistor;
     private EmployeeConverter employeeConverter;
@@ -30,7 +30,7 @@ public final class EmployeeManager {
     public static EmployeeManager getInstance() {
         EmployeeManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new EmployeeManager();
@@ -56,7 +56,7 @@ public final class EmployeeManager {
      * @return employee as a DTO
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    public EmployeeDTO getById(final String sessionId, final int id) throws RemoteException, UserNotLoggedInException  {
+    public EmployeeDTO getById(final String sessionId, final int id) throws UserNotLoggedInException  {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return employeeConverter.convertToDTO(employeePersistor.getById(id));
         }
@@ -69,7 +69,7 @@ public final class EmployeeManager {
      * @return employees as a DTO list
      * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    public List<EmployeeDTO> getList(final String sessionId) throws RemoteException, UserNotLoggedInException  {
+    public List<EmployeeDTO> getList(final String sessionId) throws UserNotLoggedInException  {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return employeeConverter.convertToDTO(employeePersistor.getList());
         }
