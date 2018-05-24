@@ -28,6 +28,7 @@ import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -156,6 +157,29 @@ public class OrderEditViewController implements Initializable {
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());
+        }
+    }
+    
+    @FXML
+    public void delete(ActionEvent event) {
+        String hash = "";
+        try {
+            hash = this.orderService.lock(SESSION, this.orderDTO);
+            FBSFeedback feedback = this.orderService.delete(SESSION, this.orderDTO, hash);
+        } catch(RemoteException e) {
+            System.out.println("Error in RMI:");
+            e.printStackTrace();
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
+        } finally {
+            try {
+                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);  
+            } catch(RemoteException e) {
+                System.out.println("Error in RMI:");
+                e.printStackTrace();
+            } catch(UserNotLoggedInException e) {
+                System.out.println("User is not logged in");
+            }
         }
     }
     
@@ -439,34 +463,37 @@ public class OrderEditViewController implements Initializable {
      * This method saves the orderDTO
      */
     private void saveDTO() {
-        System.out.println("save");
+        String hash = "";
         try {
             if(this.orderId != -1) {
-                System.out.println("blue");
-                try {
-                    String hash = this.orderService.lock(SESSION, this.orderDTO);
-                    this.orderDTO = this.orderService.save(SESSION, this.orderDTO, hash);
-                    FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);
-                } catch(RemoteException e) {
-                    System.out.println("Error in RMI:");
-                    e.printStackTrace();
-                }
+                hash = this.orderService.lock(SESSION, this.orderDTO);
+                this.orderDTO = this.orderService.save(SESSION, this.orderDTO, hash);
             } else {
-                try {
-                    this.orderDTO = this.orderService.save(SESSION, this.orderDTO, "");
-                    this.orderId = this.orderDTO.getId();
-                    System.out.println(String.valueOf(this.orderDTO.getId()));
-                } catch(RemoteException e){
-                    System.out.println("Error in RMI:");
-                    e.printStackTrace();
-                }  
+                this.orderDTO = this.orderService.save(SESSION, this.orderDTO, "");
+                this.orderId = this.orderDTO.getId();
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                this.orderDTO.setDate(timestamp);
+                System.out.println(String.valueOf(this.orderDTO.getId()));
             }
+        } catch(RemoteException e){
+            System.out.println("Error in RMI:");
+            e.printStackTrace();
         } catch(LockCheckFailedException e){
             System.out.println("Failed to get Access to order");
         } catch(UserNotLoggedInException e) {
             System.out.println("User is not logged in");
         } catch(OrderedArticleNotUpdatedException e) {
             System.out.println("Article not updated");
+            System.out.println(e.getNotUpdatedOrderedArticleList());
+        } finally {
+            try {
+                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);  
+            } catch(RemoteException e) {
+                System.out.println("Error in RMI:");
+                e.printStackTrace();
+            } catch(UserNotLoggedInException e) {
+                System.out.println("User is not logged in");
+            }
         }
     }
     
