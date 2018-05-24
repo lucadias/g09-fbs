@@ -14,7 +14,22 @@ import java.util.List;
  */
 public interface RemoteOrderStateService extends Remote {
 
-    OrderStateDTO getById(final String sessionId, final int id) throws RemoteException, UserNotLoggedInException;
+    /**
+     * Returns a OrderStateDTO object with the given id.
+     * @param sessionId session id to gain access
+     * @param id database id of the order state
+     * @return OrderStateDTO with the given id
+     * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    OrderStateDTO getById(String sessionId, int id) throws RemoteException, UserNotLoggedInException;
 
-    List<OrderStateDTO> getList(final String sessionId) throws RemoteException, UserNotLoggedInException;
+    /**
+     * Returns all order states.
+     * @param sessionId session id to gain access
+     * @return list with all order states
+     * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    List<OrderStateDTO> getList(String sessionId) throws RemoteException, UserNotLoggedInException;
 }

@@ -83,23 +83,25 @@ public final class OrderedArticleDTO implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
+        }
 
-        if(obj == null || obj.getClass()!= this.getClass())
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
+        }
 
         OrderedArticleDTO orderedArticleDTO = (OrderedArticleDTO) obj;
 
-        return (orderedArticleDTO.getId() == this.id);
+        return orderedArticleDTO.getId() == this.id;
     }
 
     @Override
     public int hashCode() {
         return this.id;
     }
-    
+
     @Override
     public String toString() {
         return String.valueOf(this.getId());

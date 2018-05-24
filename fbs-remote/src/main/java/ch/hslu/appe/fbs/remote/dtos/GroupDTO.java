@@ -44,7 +44,32 @@ public class GroupDTO implements Serializable {
      * Sets the name of the group.
      * @param name the name to set
      */
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        GroupDTO groupDTO = (GroupDTO) obj;
+
+        return groupDTO.getId() == this.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
     }
 }

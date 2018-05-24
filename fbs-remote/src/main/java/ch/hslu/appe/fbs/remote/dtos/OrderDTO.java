@@ -136,23 +136,25 @@ public final class OrderDTO implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
+        }
 
-        if(obj == null || obj.getClass()!= this.getClass())
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
+        }
 
         OrderDTO orderDTO = (OrderDTO) obj;
 
-        return (orderDTO.getId() == this.id);
+        return orderDTO.getId() == this.id;
     }
 
     @Override
     public int hashCode() {
         return this.id;
     }
-    
+
     @Override
     public String toString() {
         return String.valueOf(this.getId());

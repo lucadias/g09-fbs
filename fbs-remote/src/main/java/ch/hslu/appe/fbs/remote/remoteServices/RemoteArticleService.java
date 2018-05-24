@@ -23,15 +23,17 @@ public interface RemoteArticleService extends Remote {
      * @param id database id of the article
      * @return ArticleDTO with the given id
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     ArticleDTO getById(String sessionId, int id) throws RemoteException, UserNotLoggedInException;
 
     /**
-     * Returns an ArticleDTO listwith the given article number.
+     * Returns an ArticleDTO list with the given article number.
      * @param sessionId session id to gain access
      * @param artNr article number of the articles
      * @return ArticleDTO list with the given article number
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<ArticleDTO> getByArticleNr(String sessionId, int artNr) throws RemoteException, UserNotLoggedInException;
 
@@ -40,6 +42,7 @@ public interface RemoteArticleService extends Remote {
      * @param sessionId session id to gain access
      * @return list with all articles
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<ArticleDTO> getList(String sessionId) throws RemoteException, UserNotLoggedInException;
 
@@ -51,6 +54,7 @@ public interface RemoteArticleService extends Remote {
      * @param hash hash lock of the article
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     FBSFeedback updateStockById(String sessionId, int id, int amount, String hash) throws RemoteException, UserNotLoggedInException;
 
@@ -60,6 +64,7 @@ public interface RemoteArticleService extends Remote {
      * @param type how the list has to be sorted
      * @return sorted list of articles
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<ArticleDTO> sortList(String sessionId, SortingType type) throws RemoteException, UserNotLoggedInException;
 
@@ -70,17 +75,19 @@ public interface RemoteArticleService extends Remote {
      * @param type how the list has to be sorted
      * @return sorted list of orders
      * @throws RemoteException
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<ArticleDTO> sortList(String sessionId, List<ArticleDTO> articleDTOs, SortingType type) throws RemoteException, UserNotLoggedInException;
 
     /**
-     * Returns a list of articles which are matching the regular expression.
+     * Returns a list of articles which are matching the search string.
      * @param sessionId session id to gain access
-     * @param regEx regular expression for the search query
+     * @param searchString search string for the search query
      * @return list of matching articles
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    List<ArticleDTO> search(String sessionId, String regEx) throws RemoteException, UserNotLoggedInException;
+    List<ArticleDTO> search(String sessionId, String searchString) throws RemoteException, UserNotLoggedInException;
 
     /**
      * Saves the article.
@@ -89,6 +96,8 @@ public interface RemoteArticleService extends Remote {
      * @param hash lock hash of the article
      * @return saved article DTO on success, otherwise null
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     * @throws LockCheckFailedException is thrown if the lock check has failed
      */
     ArticleDTO save(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException;
 
@@ -99,6 +108,8 @@ public interface RemoteArticleService extends Remote {
      * @param hash lock hash of the article
      * @return saved article DTO on success, otherwise null
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     * @throws LockCheckFailedException is thrown if the lock check has failed
      */
     ArticleDTO delete(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException;
 
@@ -108,6 +119,7 @@ public interface RemoteArticleService extends Remote {
      * @param articleDTO article to gain the lock
      * @return lock hash string on success, null on failure
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     String lock(String sessionId, ArticleDTO articleDTO) throws RemoteException, UserNotLoggedInException;
 
@@ -117,7 +129,8 @@ public interface RemoteArticleService extends Remote {
      * @param articleDTO article to release the lock
      * @param hash lock hash string of the article
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
-     * @throws RemoteException
+     * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     FBSFeedback release(String sessionId, ArticleDTO articleDTO, String hash) throws RemoteException, UserNotLoggedInException;
 }

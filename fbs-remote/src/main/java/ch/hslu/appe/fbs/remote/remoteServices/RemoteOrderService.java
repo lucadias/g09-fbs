@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Remote interface for the order service.
- *luca
+ *
  * @author Mischa Gruber
  */
 public interface RemoteOrderService extends Remote {
@@ -25,6 +25,7 @@ public interface RemoteOrderService extends Remote {
      * @param id database id of the order
      * @return OrderDTO with the given id
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     OrderDTO getById(String sessionId, int id) throws RemoteException, UserNotLoggedInException;
 
@@ -33,6 +34,7 @@ public interface RemoteOrderService extends Remote {
      * @param sessionId session id to gain access
      * @return list with all orders
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<OrderDTO> getList(String sessionId) throws RemoteException, UserNotLoggedInException;
 
@@ -42,25 +44,31 @@ public interface RemoteOrderService extends Remote {
      * @param id id of the client
      * @return list with all orders of the client
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<OrderDTO> getListByClientId(String sessionId, int id) throws RemoteException, UserNotLoggedInException;
 
     /**
-     * Returns a list of orders which are matching the regular expression.
+     * Returns a list of orders which are matching the search string.
      * @param sessionId session id to gain access
-     * @param regEx regular expression for the search query
+     * @param searchString search string for the search query
      * @return list of matching orders
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    List<OrderDTO> search(String sessionId, String regEx) throws RemoteException, UserNotLoggedInException;
+    List<OrderDTO> search(String sessionId, String searchString) throws RemoteException, UserNotLoggedInException;
 
     /**
-     * Saves the order and returns the saved order
+     * Saves the order and returns the saved order.
      * @param sessionId session id to gain access
      * @param orderDTO order to save
      * @param hash lock hash of the order
      * @return saved order dto
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     * @throws LockCheckFailedException is thrown if the lock check has failed
+     * @throws RollbackException is thrown if there was an error in the entity manager
+     * @throws OrderedArticleNotUpdatedException is thrown if any OrderedArticle couldn't get updated
      */
     OrderDTO save(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException, LockCheckFailedException, RollbackException, OrderedArticleNotUpdatedException;
 
@@ -71,6 +79,7 @@ public interface RemoteOrderService extends Remote {
      * @param hash lock hash of the order
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     FBSFeedback delete(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException;
 
@@ -80,6 +89,7 @@ public interface RemoteOrderService extends Remote {
      * @param orderDTO order to gain the lock
      * @return lock hash string on success, null on failure
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     String lock(String sessionId, OrderDTO orderDTO) throws RemoteException, UserNotLoggedInException;
 
@@ -90,6 +100,7 @@ public interface RemoteOrderService extends Remote {
      * @param hash lock hash of the order
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     FBSFeedback release(String sessionId, OrderDTO orderDTO, String hash) throws RemoteException, UserNotLoggedInException;
 
@@ -99,6 +110,7 @@ public interface RemoteOrderService extends Remote {
      * @param type how the list has to be sorted
      * @return sorted list of orders
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<OrderDTO> sortList(String sessionId, SortingType type) throws RemoteException, UserNotLoggedInException;
 
@@ -109,6 +121,7 @@ public interface RemoteOrderService extends Remote {
      * @param type how the list has to be sorted
      * @return sorted list of orders
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<OrderDTO> sortList(String sessionId, List<OrderDTO> orderDTOs, SortingType type) throws RemoteException, UserNotLoggedInException;
 }

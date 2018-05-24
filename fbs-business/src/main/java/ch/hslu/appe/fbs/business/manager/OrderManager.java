@@ -228,6 +228,8 @@ public final class OrderManager {
 
             for(OrderedArticleDTO orderedArticleDTO : orderedArticleDTOList) {
 
+                System.out.println("Controlling OrderedArticleDTO with ID: " + orderedArticleDTO.getId());
+
                 int amountIncreasedBy = 0;
                 boolean updateOrderedArticle = true;
 
@@ -250,11 +252,12 @@ public final class OrderManager {
                 }
 
                 if (amountIncreasedBy != 0) {
+                    System.out.println("increased by " + amountIncreasedBy + " from " + orderedArticleDTO.getId());
                     String lockHash = articleManager.lock(sessionId, orderedArticleDTO.getArticleDTO().getId());
                     if(lockHash != null) {
 
                         Article article = articlePersistor.getById(orderedArticleDTO.getArticleDTO().getId());
-                        if (article.getInStock() > amountIncreasedBy) {
+                        if (article.getInStock() >= amountIncreasedBy) {
                             article.setInStock(article.getInStock()-amountIncreasedBy);
                             //TODO: implement reorder if under minStock
                             articlePersistor.save(article);

@@ -15,11 +15,12 @@ import java.util.List;
 public interface RemotePermissionService extends Remote {
 
     /**
-     * Returns a list of groups, in which a employee is
+     * Returns a list of groups, in which a employee is.
      * @param sessionId session id to gain access
      * @param employeeId database id of employee
      * @return list of employee's groups
      * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
     List<GroupDTO> getGroupsOfEmployee(String sessionId, int employeeId) throws RemoteException, UserNotLoggedInException;
 }
