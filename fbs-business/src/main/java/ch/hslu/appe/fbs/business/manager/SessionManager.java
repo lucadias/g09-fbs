@@ -4,6 +4,8 @@ import ch.hslu.appe.fbs.business.utils.SessionIdGenerator;
 import ch.hslu.appe.fbs.data.EmployeePersistor;
 import ch.hslu.appe.fbs.model.entities.Employee;
 import ch.hslu.appe.fbs.remote.FBSFeedback;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.security.MessageDigest;
 import java.util.HashMap;
@@ -22,6 +24,9 @@ public class SessionManager {
     private HashMap<String, Integer> sessionPool;
 
     private EmployeePersistor employeePersistor;
+
+    static final Logger logger = LogManager.getLogger(SessionManager.class.getName());
+
 
     /**
      * Returns the singleton instance of the SessionManager.
@@ -59,6 +64,7 @@ public class SessionManager {
         Integer employeeIdInteger = new Integer(employeeId);
 
         synchronized (sessionPool) {
+            logger.info("Create new Session for Employee with ID: "  + employeeId);
             sessionPool.put(sessionId, employeeIdInteger);
         }
 
@@ -79,6 +85,7 @@ public class SessionManager {
     public boolean getIsLoggedIn(String sessionId) {
         synchronized (sessionPool) {
             if(sessionPool.containsKey(sessionId)) {
+                logger.info("Check if Employee with ID: "  + this.getEmployeeIdFromSessionId(sessionId)+ " is logged in.");
                 return true;
             }
         }
@@ -100,10 +107,13 @@ public class SessionManager {
                 System.out.println("client: " + passwordHash);
                 
                 if(employee.getPassword().equals(passwordHash)) {
+                    logger.info("Login attempt successful Employee: " +username);
                     return createNewSessionId(employee.getIdEmployees());
+
                 }
             }
         }
+        logger.info("Login attempt unsuccessful Employee: " +username);
         return null;
     }
 
@@ -121,6 +131,7 @@ public class SessionManager {
             if(sessionPool.containsKey(sessionId)) {
                 if(sessionPool.get(sessionId).equals(userId)) {
                     sessionPool.remove(sessionId);
+                    logger.info("Logout attempt successful Employee: " +username);
                     return FBSFeedback.SUCCESS;
                 } else {
                     return FBSFeedback.SESSION_ID_USERNAME_NOT_MATCHING;

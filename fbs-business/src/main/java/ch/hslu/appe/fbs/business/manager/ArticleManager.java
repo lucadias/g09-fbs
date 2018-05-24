@@ -150,7 +150,7 @@ public final class ArticleManager {
 
             if (lockCheck == FBSFeedback.SUCCESS) {
                 Article article = articleConverter.convertToEntity(articleDTO);
-                logger.info("Deleted Article with id: " +article.getIdArticle()+ " to Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                logger.info("Deleted Article with id: " +article.getIdArticle()+ " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 article.setAvailable(false);
 
                 return articleConverter.convertToDTO(articlePersistor.save(article));
