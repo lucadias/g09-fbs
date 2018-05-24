@@ -9,7 +9,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 
-public class ArticlePersistorTest {
+public class ArticlePersistorIT {
 
 
     private ArticlePersistor persistor = new ArticlePersistor();
