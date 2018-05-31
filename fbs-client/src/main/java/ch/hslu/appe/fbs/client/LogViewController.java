@@ -23,7 +23,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Text;
 
 /**
@@ -61,16 +63,18 @@ public class LogViewController implements Initializable {
             this.logList = this.logService.getLogList(SESSION);
             int i = 1;
             for(String logEntry : this.logList) {
-                Text logEntryText = new Text();
+                TextArea logEntryText = new TextArea();
                 logEntryText.setText(logEntry);
                 logEntryText.minHeight(40);
                 logEntryText.minWidth(590);
+                logEntryText.setEditable(false);
                 if(i == 1) {
                     logEntryText.setStyle("-fx-margin: 50 0 10 10;");
                 } else {
                     logEntryText.setStyle("-fx-margin: 0 0 0 10;");
                 }
-                this.logGrid.setMinHeight(40);
+                RowConstraints rc = new RowConstraints(30);
+                this.logGrid.getRowConstraints().add(rc);
                 this.logGrid.add(logEntryText, 0, i);
                 i++;
             }
