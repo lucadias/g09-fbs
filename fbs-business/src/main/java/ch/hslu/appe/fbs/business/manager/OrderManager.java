@@ -184,10 +184,14 @@ public final class OrderManager {
             employeeDTO = employeeConverter.convertToDTO(employee);
         }
 
-        Client client = clientPersistor.getById(orders.getClientIdClients());
         ClientDTO clientDTO = null;
-        if (client != null) {
-            clientDTO = clientConverter.convertToDTO(client);
+        Integer clientId = orders.getClientIdClients();
+        if (clientId != null) {
+            Client client = clientPersistor.getById(clientId);
+            if (client != null) {
+                clientDTO = clientConverter.convertToDTO(client);
+            }
+
         }
 
         return orderConverter.convertToDTO(orders, orderStateDTO, orderedArticleDTOList, employeeDTO, clientDTO);
