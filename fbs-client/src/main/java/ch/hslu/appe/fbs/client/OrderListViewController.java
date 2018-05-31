@@ -53,7 +53,8 @@ public class OrderListViewController implements Initializable {
             JavaFXViewController.getInstance().setView(orderEdit);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
         }
     }
 
@@ -70,7 +71,8 @@ public class OrderListViewController implements Initializable {
             this.fillList();
         } catch (NotBoundException | MalformedURLException |
             RemoteException e) {
-            System.out.println("Error in RMI: "+e);
+            System.out.println("Error in RMI: ");
+            e.printStackTrace();
         } catch(UserNotLoggedInException e){
             System.out.println("User is not logged in");
         }
@@ -82,18 +84,27 @@ public class OrderListViewController implements Initializable {
             Label orderNumber = new Label(String.valueOf(order.getId()));
             orderNumber.setFont(new Font("Arial", 18));
             orderNumber.setPrefWidth(80);
-            String clientName = order.getClientDTO().getFirstname() + " " + order.getClientDTO().getSurname();
-            Label client = new Label(String.valueOf(clientName));
-            client.setFont(new Font("Arial", 18));
-            client.setPrefWidth(130);
-            String employeeName = order.getEmployeeDTO().getUsername();
-            Label employee = new Label(String.valueOf(employeeName));
-            employee.setFont(new Font("Arial", 18));
-            employee.setPrefWidth(130);
-            String orderState = order.getOrderStateDTO().getState();
-            Label state = new Label(String.valueOf(orderState));
-            state.setFont(new Font("Arial", 18));
-            state.setPrefWidth(100);
+            if(order.getClientDTO() != null) {
+                String clientName = order.getClientDTO().getFirstname() + " " + order.getClientDTO().getSurname();
+                Label client = new Label(String.valueOf(clientName));
+                client.setFont(new Font("Arial", 18));
+                client.setPrefWidth(130);
+                this.orderGrid.add(client, 1, i);
+            }
+            if(order.getEmployeeDTO() != null) {
+                String employeeName = order.getEmployeeDTO().getUsername();
+                Label employee = new Label(String.valueOf(employeeName));
+                employee.setFont(new Font("Arial", 18));
+                employee.setPrefWidth(130);
+                this.orderGrid.add(employee, 2, i);
+            }
+            if(order.getOrderStateDTO() != null) {
+                String orderState = order.getOrderStateDTO().getState();
+                Label state = new Label(String.valueOf(orderState));
+                state.setFont(new Font("Arial", 18));
+                state.setPrefWidth(100);
+                this.orderGrid.add(state, 3, i);
+            }
             Button details = new Button();
             details.setText("Details");
             details.setPrefWidth(100);
@@ -104,9 +115,6 @@ public class OrderListViewController implements Initializable {
                 }
             });
             this.orderGrid.add(orderNumber, 0, i);
-            this.orderGrid.add(client, 1, i);
-            this.orderGrid.add(employee, 2, i);
-            this.orderGrid.add(state, 3, i);
             this.orderGrid.add(details, 4, i);
             i++;
             System.out.println("new order: "+order.getId());
@@ -123,7 +131,8 @@ public class OrderListViewController implements Initializable {
             JavaFXViewController.getInstance().setView(order);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
         }
     }
     

@@ -115,7 +115,8 @@ public class OrderEditViewController implements Initializable {
                 JavaFXViewController.getInstance().setView(orderDetail);
                 JavaFXViewController.getInstance().repaint();
             } catch (IOException e) {
-                System.out.println("Error loading fxml: "+e.getMessage());
+                System.out.println("Error loading fxml: ");
+                e.printStackTrace();
             }
         } else {
             try {
@@ -126,7 +127,8 @@ public class OrderEditViewController implements Initializable {
                 JavaFXViewController.getInstance().setView(orders);
                 JavaFXViewController.getInstance().repaint();
             } catch (IOException e) {
-                System.out.println("Error loading fxml: "+e.getMessage());
+                System.out.println("Error loading fxml: ");
+                e.printStackTrace();
             }
         }
     }
@@ -156,7 +158,8 @@ public class OrderEditViewController implements Initializable {
             JavaFXViewController.getInstance().setView(orderDetail);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
         }
     }
     
@@ -195,7 +198,8 @@ public class OrderEditViewController implements Initializable {
             this.searchArticleList = this.articleService.search(SESSION, searchString);
             this.fillSearchedArticles();
         } catch(RemoteException e) {
-            System.out.println("Error in search: "+e.getMessage());
+            System.out.println("Error in search: ");
+            e.printStackTrace();
         } catch(UserNotLoggedInException e) {
             System.out.println("User is not logged in");
         }
@@ -227,7 +231,8 @@ public class OrderEditViewController implements Initializable {
         } catch (NotBoundException | MalformedURLException |
             RemoteException e) {
             this.orderDTO = new OrderDTO(Integer.MAX_VALUE);
-            System.out.println("Error in RMI: "+e);
+            System.out.println("Error in RMI: ");
+            e.printStackTrace();
         }
     }
     /**
@@ -285,7 +290,8 @@ public class OrderEditViewController implements Initializable {
             this.stateChoice.setItems(this.stateObservableList);
             this.selectStateChoice();
         } catch(RemoteException e) {
-            System.out.println("Error in getting orderStates:"+e.getMessage());
+            System.out.println("Error in getting orderStates:");
+            e.printStackTrace();
         } catch(UserNotLoggedInException e) {
             System.out.println("User is not logged in");
         }
@@ -310,7 +316,8 @@ public class OrderEditViewController implements Initializable {
             this.clientChoice.setItems(this.clientObservableList);
             this.selectClientChoice();
         } catch(RemoteException e) {
-            System.out.println("Error in getting orderStates:"+e.getMessage());
+            System.out.println("Error in getting orderStates:");
+            e.printStackTrace();
         } catch(UserNotLoggedInException e) {
             System.out.println("User is not logged in");
         }
@@ -335,7 +342,8 @@ public class OrderEditViewController implements Initializable {
             this.employeeChoice.setItems(this.employeeObservableList);
             this.selectEmployeeChoice();
         } catch(RemoteException e) {
-            System.out.println("Error in getting orderStates:"+e.getMessage());
+            System.out.println("Error in getting orderStates:");
+            e.printStackTrace();
         } catch(UserNotLoggedInException e) {
             System.out.println("User is not logged in");
         }
@@ -407,7 +415,8 @@ public class OrderEditViewController implements Initializable {
                 i++;
             }
         } catch(RemoteException e) {
-            System.out.println("Error in RMI:"+e.getMessage());
+            System.out.println("Error in RMI:");
+            e.printStackTrace();
         } catch(UserNotLoggedInException e) {
             System.out.println("User is not logged in");
         }
@@ -518,7 +527,8 @@ public class OrderEditViewController implements Initializable {
             JavaFXViewController.getInstance().setView(orderEdit);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
         }
     }
 }

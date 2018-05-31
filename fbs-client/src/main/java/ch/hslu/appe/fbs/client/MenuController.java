@@ -54,7 +54,8 @@ public class MenuController implements Initializable {
             JavaFXViewController.getInstance().setView(dashboard);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
         }
     }
     
@@ -68,7 +69,8 @@ public class MenuController implements Initializable {
             JavaFXViewController.getInstance().setView(dashboard);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
         }
     }
     
@@ -82,7 +84,8 @@ public class MenuController implements Initializable {
             JavaFXViewController.getInstance().setView(orders);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
         }
     }
     
@@ -109,7 +112,8 @@ public class MenuController implements Initializable {
             JavaFXViewController.getInstance().setView(logView);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
         }
     }    
 }

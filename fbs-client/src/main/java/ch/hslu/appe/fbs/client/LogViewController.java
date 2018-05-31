@@ -59,10 +59,18 @@ public class LogViewController implements Initializable {
     public void getNewLogs(ActionEvent event) {
         try {
             this.logList = this.logService.getLogList(SESSION);
-            int i = 0;
+            int i = 1;
             for(String logEntry : this.logList) {
                 Text logEntryText = new Text();
                 logEntryText.setText(logEntry);
+                logEntryText.minHeight(40);
+                logEntryText.minWidth(590);
+                if(i == 1) {
+                    logEntryText.setStyle("-fx-margin: 50 0 10 10;");
+                } else {
+                    logEntryText.setStyle("-fx-margin: 0 0 0 10;");
+                }
+                this.logGrid.setMinHeight(40);
                 this.logGrid.add(logEntryText, 0, i);
                 i++;
             }
