@@ -55,11 +55,10 @@ public final class OrderConverter {
         order.setDate(orderDTO.getDate());
         order.setTotalPrice(orderDTO.getTotalPrice());
         order.setOrderStateIdOrderState(orderDTO.getOrderStateDTO().getId());
-        if (orderDTO.getEmployeeDTO() != null) {
-            order.setEmployeeIdEmployee(orderDTO.getEmployeeDTO().getId());
+        order.setEmployeeIdEmployee(orderDTO.getEmployeeDTO().getId());
+        if (orderDTO.getClientDTO() != null) {
+            order.setClientIdClients(orderDTO.getClientDTO().getId());
         }
-        order.setClientIdClients(orderDTO.getClientDTO().getId());
-
         return order;
     }
 }
