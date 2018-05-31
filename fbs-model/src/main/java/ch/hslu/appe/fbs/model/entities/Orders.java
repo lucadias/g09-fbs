@@ -12,7 +12,7 @@ public class Orders {
     private Timestamp date;
     private Double totalPrice;
     private int orderStateIdOrderState;
-    private int clientIdClients;
+    private Integer clientIdClients;
 
     @Id
     @Column(name = "idOrders", nullable = false)
@@ -67,11 +67,11 @@ public class Orders {
 
     @Basic
     @Column(name = "Client_idClients", nullable = false)
-    public int getClientIdClients() {
+    public Integer getClientIdClients() {
         return clientIdClients;
     }
 
-    public void setClientIdClients(int clientIdClients) {
+    public void setClientIdClients(Integer clientIdClients) {
         this.clientIdClients = clientIdClients;
     }
 
