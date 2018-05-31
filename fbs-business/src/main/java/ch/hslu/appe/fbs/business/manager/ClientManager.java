@@ -62,7 +62,7 @@ public final class ClientManager {
      */
     public ClientDTO getById(final String sessionId, final int id) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
-            return clientConverter.convertToDTO(clientPersistor.getById(id));
+            return clientConverter.convertToDTO(clientPersistor.getById(Integer.valueOf(id)));
         }
         throw new UserNotLoggedInException();
     }
