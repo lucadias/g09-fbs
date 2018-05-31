@@ -459,13 +459,11 @@ public class OrderEditViewController implements Initializable {
      * @param amount The amount of the articleDTO which should be added to the order
      */
     private void addToOrder(ArticleDTO article, int amount) {
-        for(int i=0; i<amount; i++) {
-            OrderedArticleDTO orderedArticle = new OrderedArticleDTO(-1);
-            orderedArticle.setAmount(amount);
-            orderedArticle.setArticleDTO(article);
-            this.orderedArticleList.add(orderedArticle);
-            this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
-        }
+        OrderedArticleDTO orderedArticle = new OrderedArticleDTO(-1);
+        orderedArticle.setAmount(amount);
+        orderedArticle.setArticleDTO(article);
+        this.orderedArticleList.add(orderedArticle);
+        this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
         this.saveDTO();
         this.refresh();
     }
