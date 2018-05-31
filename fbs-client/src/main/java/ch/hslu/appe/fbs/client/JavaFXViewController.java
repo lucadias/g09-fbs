@@ -21,6 +21,7 @@ public final class JavaFXViewController {
     public static final String ORDERSTATE_SERVICE_NAME = "OrderStateService";
     public static final String EMPLOYEE_SERVICE_NAME = "EmployeeService";
     public static final String CLIENT_SERVICE_NAME = "ClientService";
+    public static final String LOG_SERVICE_NAME = "LogService";
     private Node currentView;
     private ArrayList<RepaintRequestListener> repaintRequestListeners = new ArrayList<>();
     private static JavaFXViewController viewControllerInstance = null;

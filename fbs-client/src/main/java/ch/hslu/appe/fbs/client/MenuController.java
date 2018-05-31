@@ -102,15 +102,14 @@ public class MenuController implements Initializable {
     
     @FXML
     public void logButtonPressed(ActionEvent event) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("/fxml/LogView.fxml"));
-//            Parent logView = loader.load();
-//            for(StateChangeListener listener:stateChangeListeners) {
-//                listener.stateChanged(logView);
-//            }
-//        } catch (IOException e) {
-//            System.out.println("Error loading fxml: "+e.getMessage());
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/LogView.fxml"));
+            Parent logView = loader.load();
+            JavaFXViewController.getInstance().setView(logView);
+            JavaFXViewController.getInstance().repaint();
+        } catch (IOException e) {
+            System.out.println("Error loading fxml: "+e.getMessage());
+        }
     }    
 }
