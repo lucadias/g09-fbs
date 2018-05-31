@@ -250,6 +250,12 @@ public class OrderEditViewController implements Initializable {
             } else {
                 this.orderDTO = new OrderDTO(-1);
                 this.orderedArticleList = new ArrayList<>();
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                this.orderDTO.setDate(timestamp);
+                //int employeeId = this.employeeService.ge
+                //EmployeeDTO employeeDTO = new EmployeeDTO(id);
+                //this.orderDTO.setEmployeeDTO(employeeDTO);
+                OrderStateDTO orderState = new OrderStateDTO(1);
                 this.saveDTO();
             }
             this.fillStateChoice();
@@ -472,8 +478,6 @@ public class OrderEditViewController implements Initializable {
             } else {
                 this.orderDTO = this.orderService.save(SESSION, this.orderDTO, "");
                 this.orderId = this.orderDTO.getId();
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                this.orderDTO.setDate(timestamp);
                 System.out.println(String.valueOf(this.orderDTO.getId()));
             }
         } catch(RemoteException e){
