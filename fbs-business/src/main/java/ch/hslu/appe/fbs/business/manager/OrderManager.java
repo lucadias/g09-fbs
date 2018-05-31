@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Manager for orders as a singleton.
@@ -303,10 +304,19 @@ public final class OrderManager {
      */
     public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash)
             throws UserNotLoggedInException, LockCheckFailedException, OrderedArticleNotUpdatedException {
+
+
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(orderDTO.getId(), hash);
 
             if (lockCheck == FBSFeedback.SUCCESS || orderDTO.getId() == -1) {
+                System.out.println("sleep for 10 seconds");
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("sleep done");
 
                 List<OrderedArticleDTO> notSavedOrderedArticleDTOs =
                         saveOrderedArticleDTOList(sessionId, orderDTO.getOrderedArticleDTOList(), orderDTO.getId());

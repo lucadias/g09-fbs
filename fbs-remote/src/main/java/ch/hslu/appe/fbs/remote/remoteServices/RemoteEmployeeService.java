@@ -25,6 +25,16 @@ public interface RemoteEmployeeService extends Remote {
     EmployeeDTO getById(String sessionId, int id) throws RemoteException, UserNotLoggedInException;
 
     /**
+     * Returns an EmployeeDTO object with the givern username.
+     * @param sessionId session id to gain access
+     * @param username username of the employee
+     * @return and employee dto with the given username
+     * @throws RemoteException mandatory
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    EmployeeDTO getByUsername(String sessionId, String username) throws RemoteException, UserNotLoggedInException;
+
+    /**
      * Returns all employees.
      * @param sessionId session id to gain access
      * @return list with all employees
