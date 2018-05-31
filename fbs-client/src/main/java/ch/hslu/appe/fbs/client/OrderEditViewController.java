@@ -252,10 +252,13 @@ public class OrderEditViewController implements Initializable {
                 this.orderedArticleList = new ArrayList<>();
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 this.orderDTO.setDate(timestamp);
-                //int employeeId = this.employeeService.ge
-                //EmployeeDTO employeeDTO = new EmployeeDTO(id);
-                //this.orderDTO.setEmployeeDTO(employeeDTO);
+                EmployeeDTO employeeDTO = this.employeeService.getByUsername(SESSION, Client.username);
+                this.orderDTO.setEmployeeDTO(employeeDTO);
                 OrderStateDTO orderState = new OrderStateDTO(1);
+                this.orderDTO.setOrderStateDTO(orderState);
+                if(employeeDTO == null || orderState == null) {
+                    System.out.println("something was null");
+                }
                 this.saveDTO();
             }
             this.fillStateChoice();
