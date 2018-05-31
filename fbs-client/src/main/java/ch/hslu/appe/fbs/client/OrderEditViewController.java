@@ -250,6 +250,7 @@ public class OrderEditViewController implements Initializable {
             } else {
                 this.orderDTO = new OrderDTO(-1);
                 this.orderedArticleList = new ArrayList<>();
+                this.saveDTO();
             }
             this.fillStateChoice();
             this.fillClientChoice();
