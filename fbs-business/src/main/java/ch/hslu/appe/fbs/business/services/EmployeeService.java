@@ -34,6 +34,12 @@ public final class EmployeeService extends UnicastRemoteObject implements Remote
     }
 
     @Override
+    public EmployeeDTO getByUsername(final String sessionId, final String username)
+            throws RemoteException, UserNotLoggedInException {
+        return employeeManager.getByUsername(sessionId, username);
+    }
+
+    @Override
     public List<EmployeeDTO> getList(final String sessionId) throws RemoteException, UserNotLoggedInException {
         return employeeManager.getList(sessionId);
     }

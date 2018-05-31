@@ -63,6 +63,13 @@ public final class EmployeeManager {
         throw new UserNotLoggedInException();
     }
 
+    public EmployeeDTO getByUsername(final String sessionId, final String username) throws UserNotLoggedInException {
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            return employeeConverter.convertToDTO(employeePersistor.getByUserName(username));
+        }
+        throw new UserNotLoggedInException();
+    }
+
     /**
      * Gets all the employees as entities, converts and returns them as a list.
      * @param sessionId session id to gain access
