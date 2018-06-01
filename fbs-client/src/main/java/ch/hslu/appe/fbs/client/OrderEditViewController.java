@@ -32,6 +32,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -150,6 +152,15 @@ public class OrderEditViewController implements Initializable {
         ClientDTO client = (ClientDTO)this.clientChoice.getValue();
         this.orderDTO.setClientDTO(client);
         this.saveDTO();
+        try {  
+            FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+        } catch (RemoteException e) {
+            System.out.println("Error in RMI: ");
+            e.printStackTrace();
+        } catch (UserNotLoggedInException ex) {
+            System.out.println("User is not logged in");
+        }
+        this.hash = null;
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/OrderDetailView.fxml"));
@@ -243,13 +254,29 @@ public class OrderEditViewController implements Initializable {
      * Then it fills the ui components with the orderDTO's values
      * @param id the id of the orderDTO
      */
-    public void setId(int id) {
+    public boolean setId(int id) {
         this.orderId = id;
         try {
             if(this.orderId != -1) {
                 OrderDTO currentOrder = orderService.getById(SESSION, this.orderId);
                 this.orderDTO = currentOrder;
                 this.hash = this.getHash();
+                 if(this.hash == null) {
+                    try {
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("/fxml/OrderDetailView.fxml"));
+                        Parent orderDetail = (Parent) loader.load();
+                        OrderDetailViewController orderDetailViewController = (OrderDetailViewController) loader.getController();
+                        orderDetailViewController.setId(this.orderId);
+                        JavaFXViewController.getInstance().setView(orderDetail);
+                        JavaFXViewController.getInstance().repaint();
+                    } catch (IOException e) {
+                        System.out.println("Error loading fxml: ");
+                        e.printStackTrace();
+                    } finally {
+                        return false;
+                    }
+                }
                 String date = String.valueOf(this.orderDTO.getDate());
                 this.orderDate.setText(date);
                 String number = String.valueOf(this.orderDTO.getId());
@@ -282,6 +309,7 @@ public class OrderEditViewController implements Initializable {
         } catch(UserNotLoggedInException e) {
             System.out.println("User is not logged in");
         }
+        return true;
     }
     
     /**
@@ -505,15 +533,15 @@ public class OrderEditViewController implements Initializable {
             System.out.println("Article not updated");
             System.out.println(e.getNotUpdatedOrderedArticleList());
         } finally {
-            try {
-                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);  
-                this.hash = null;
-            } catch(RemoteException e) {
-                System.out.println("Error in RMI:");
-                e.printStackTrace();
-            } catch(UserNotLoggedInException e) {
-                System.out.println("User is not logged in");
-            }
+//            try {
+//                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);  
+//                this.hash = null;
+//            } catch(RemoteException e) {
+//                System.out.println("Error in RMI:");
+//                e.printStackTrace();
+//            } catch(UserNotLoggedInException e) {
+//                System.out.println("User is not logged in");
+//            }
         }
     }
     

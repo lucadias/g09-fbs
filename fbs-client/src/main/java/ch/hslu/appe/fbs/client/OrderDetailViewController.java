@@ -93,9 +93,11 @@ public class OrderDetailViewController implements Initializable {
             loader.setLocation(getClass().getResource("/fxml/OrderEditView.fxml"));
             Parent orderEdit = (Parent) loader.load();
             OrderEditViewController orderEditViewController = (OrderEditViewController) loader.getController();
-            orderEditViewController.setId(this.orderId);
-            JavaFXViewController.getInstance().setView(orderEdit);
-            JavaFXViewController.getInstance().repaint();
+            boolean success = orderEditViewController.setId(this.orderId);
+            if(success) {
+                JavaFXViewController.getInstance().setView(orderEdit);
+                JavaFXViewController.getInstance().repaint();
+            }
         } catch (IOException e) {
             System.out.println("Error loading fxml: "+e.getMessage());
         }
