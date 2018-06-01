@@ -170,6 +170,7 @@ public class OrderEditViewController implements Initializable {
         try {
             hash = this.getHash();
             FBSFeedback feedback = this.orderService.delete(SESSION, this.orderDTO, hash);
+            System.out.println(feedback);
         } catch(RemoteException e) {
             System.out.println("Error in RMI:");
             e.printStackTrace();
@@ -246,9 +247,9 @@ public class OrderEditViewController implements Initializable {
         this.orderId = id;
         try {
             if(this.orderId != -1) {
-                this.hash = this.getHash();
                 OrderDTO currentOrder = orderService.getById(SESSION, this.orderId);
                 this.orderDTO = currentOrder;
+                this.hash = this.getHash();
                 String date = String.valueOf(this.orderDTO.getDate());
                 this.orderDate.setText(date);
                 String number = String.valueOf(this.orderDTO.getId());
@@ -536,6 +537,7 @@ public class OrderEditViewController implements Initializable {
     
     private String getHash() throws RemoteException, UserNotLoggedInException {
         if(this.hash == null) {
+            System.out.println(this.orderDTO);
             String newHash = this.orderService.lock(SESSION, this.orderDTO);
             this.hash = newHash;
             return newHash;
