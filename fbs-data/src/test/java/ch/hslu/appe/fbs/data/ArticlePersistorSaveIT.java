@@ -9,7 +9,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 
-public class ArticlePersistorSaveTest {
+public class ArticlePersistorSaveIT {
 
 
     private ArticlePersistor persistor = new ArticlePersistor();
@@ -31,7 +31,7 @@ public class ArticlePersistorSaveTest {
     }
 
     @Test
-    public void save(){
+    public void testSave(){
         System.out.println(persistor.save(article).getIdArticle());
         System.out.println(article.getIdArticle());
 
@@ -51,4 +51,8 @@ public class ArticlePersistorSaveTest {
 
     }
 
+    @After
+    public void cleanUp(){
+        persistor.deleteTestArticles();
+    }
 }

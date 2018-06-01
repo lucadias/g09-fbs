@@ -52,8 +52,21 @@ public class OrderPersistor {
      * @param order Orders
      * @return FBSFeedback
      */
-    public FBSFeedback save(Orders order) {
-        return Util.save(order);
+    public Orders save(Orders order) {
+        try {
+            Util.transactionBegin();
+            if(order.getIdOrders() == 0){
+                Util.entityManager.persist(order);
+            } else {
+                Util.entityManager.merge(order);
+            }
+            Util.entityManager.flush();
+            Util.transactionCommit();
+        } catch (Exception e){
+            System.out.println(e.toString());
+            Util.transactionCommit();
+        }
+        return order;
     }
 
     /**

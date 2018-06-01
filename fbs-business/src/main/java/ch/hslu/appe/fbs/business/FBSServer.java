@@ -1,6 +1,13 @@
 package ch.hslu.appe.fbs.business;
 
-import ch.hslu.appe.fbs.business.services.*;
+import ch.hslu.appe.fbs.business.services.ArticleService;
+import ch.hslu.appe.fbs.business.services.ClientService;
+import ch.hslu.appe.fbs.business.services.LoginService;
+import ch.hslu.appe.fbs.business.services.OrderService;
+import ch.hslu.appe.fbs.business.services.EmployeeService;
+import ch.hslu.appe.fbs.business.services.OrderStateService;
+import ch.hslu.appe.fbs.business.services.LogService;
+import ch.hslu.appe.fbs.business.services.PermissionService;
 
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
@@ -16,14 +23,39 @@ import java.rmi.registry.Registry;
  */
 public final class FBSServer {
 
-    public static final int REGISTRY_PORT = 1099;
-    public static final String ARTICLE_SERVICE_NAME = "ArticleService";
-    public static final String ORDER_SERVICE_NAME = "OrderService";
-    public static final String LOGIN_SERVICE_NAME = "LoginService";
-    public static final String CLIENT_SERVICE_NAME = "ClientService";
-    public static final String EMPLOYEE_SERVICE_NAME = "EmployeeService";
-    public static final String ORDER_STATE_SERVICE_NAME = "OrderStateService";
-    public static final String LOG_SERVICE_NAME = "LogService";
+    private static final int REGISTRY_PORT = 1099;
+    private static final String ARTICLE_SERVICE_NAME = "ArticleService";
+    private static final String ORDER_SERVICE_NAME = "OrderService";
+    private static final String LOGIN_SERVICE_NAME = "LoginService";
+    private static final String CLIENT_SERVICE_NAME = "ClientService";
+    private static final String EMPLOYEE_SERVICE_NAME = "EmployeeService";
+    private static final String ORDER_STATE_SERVICE_NAME = "OrderStateService";
+    private static final String LOG_SERVICE_NAME = "LogService";
+    private static final String PERMISSION_SERVICE_NAME = "PermissionService";
+
+    private static ArticleService articleService;
+    private static OrderService orderService;
+    private static LoginService loginService;
+    private static ClientService clientService;
+    private static EmployeeService employeeService;
+    private static OrderStateService orderStateService;
+    private static LogService logService;
+    private static PermissionService permissionService;
+
+    static {
+        try {
+            FBSServer.articleService = new ArticleService();
+            FBSServer.orderService = new OrderService();
+            FBSServer.loginService = new LoginService();
+            FBSServer.clientService = new ClientService();
+            FBSServer.employeeService = new EmployeeService();
+            FBSServer.orderStateService = new OrderStateService();
+            FBSServer.logService = new LogService();
+            FBSServer.permissionService = new PermissionService();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Constructor of the FBSServer.
@@ -50,48 +82,39 @@ public final class FBSServer {
 
         // Bind Services
         try {
-            final ArticleService articleService = new ArticleService();
             final String urlArticleService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + ARTICLE_SERVICE_NAME;
-            Naming.bind(urlArticleService, articleService);
+            Naming.bind(urlArticleService, FBSServer.articleService);
 
-            final OrderService orderService = new OrderService();
             final String urlOrderService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + ORDER_SERVICE_NAME;
-            Naming.bind(urlOrderService, orderService);
+            Naming.bind(urlOrderService, FBSServer.orderService);
 
-            final LoginService loginService = new LoginService();
             final String urlLoginService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + LOGIN_SERVICE_NAME;
-            Naming.bind(urlLoginService, loginService);
+            Naming.bind(urlLoginService, FBSServer.loginService);
 
-            final ClientService clientService = new ClientService();
             final String urlClientService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + CLIENT_SERVICE_NAME;
-            Naming.bind(urlClientService, clientService);
+            Naming.bind(urlClientService, FBSServer.clientService);
 
-            final EmployeeService employeeService = new EmployeeService();
             final String urlEmployeeService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + EMPLOYEE_SERVICE_NAME;
-            Naming.bind(urlEmployeeService, employeeService);
+            Naming.bind(urlEmployeeService, FBSServer.employeeService);
 
-            final OrderStateService orderStateService = new OrderStateService();
             final String urlOrderStateService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + ORDER_STATE_SERVICE_NAME;
-            Naming.bind(urlOrderStateService, orderStateService);
+            Naming.bind(urlOrderStateService, FBSServer.orderStateService);
 
-            final LogService logService = new LogService();
             final String urlLogService = "rmi://localhost:"
                     + String.valueOf(REGISTRY_PORT) + "/" + LOG_SERVICE_NAME;
-            Naming.bind(urlLogService, logService);
+            Naming.bind(urlLogService, FBSServer.logService);
 
+            final String urlPermissionService = "rmi://localhost:"
+                    + String.valueOf(REGISTRY_PORT) + "/" + PERMISSION_SERVICE_NAME;
+            Naming.bind(urlPermissionService, FBSServer.permissionService);
 
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (AlreadyBoundException e) {
+        } catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
             e.printStackTrace();
         }
     }

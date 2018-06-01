@@ -117,23 +117,25 @@ public final class EmployeeDTO implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
+        }
 
-        if(obj == null || obj.getClass()!= this.getClass())
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
+        }
 
-        EmployeeDTO employeeDTO= (EmployeeDTO) obj;
+        EmployeeDTO employeeDTO = (EmployeeDTO) obj;
 
-        return (employeeDTO.getId() == this.id);
+        return employeeDTO.getId() == this.id;
     }
 
     @Override
     public int hashCode() {
         return this.id;
     }
-    
+
     @Override
     public String toString() {
         return this.getUsername();

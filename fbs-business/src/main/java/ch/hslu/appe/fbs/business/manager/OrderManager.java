@@ -1,21 +1,56 @@
 package ch.hslu.appe.fbs.business.manager;
 
-import ch.hslu.appe.fbs.business.utils.*;
-import ch.hslu.appe.fbs.data.*;
-import ch.hslu.appe.fbs.model.entities.*;
+import ch.hslu.appe.fbs.business.utils.OrderConverter;
+import ch.hslu.appe.fbs.business.utils.ArticleConverter;
+import ch.hslu.appe.fbs.business.utils.OrderStateConverter;
+import ch.hslu.appe.fbs.business.utils.OrderedArticleConverter;
+import ch.hslu.appe.fbs.business.utils.EmployeeConverter;
+import ch.hslu.appe.fbs.business.utils.ClientConverter;
+
+import ch.hslu.appe.fbs.data.OrderPersistor;
+import ch.hslu.appe.fbs.data.ArticlePersistor;
+import ch.hslu.appe.fbs.data.OrderStatePersistor;
+import ch.hslu.appe.fbs.data.OrderedArticlePersistor;
+import ch.hslu.appe.fbs.data.EmployeePersistor;
+import ch.hslu.appe.fbs.data.ClientPersistor;
+
+import ch.hslu.appe.fbs.model.entities.Orders;
+import ch.hslu.appe.fbs.model.entities.OrderState;
+import ch.hslu.appe.fbs.model.entities.OrderedArticles;
+import ch.hslu.appe.fbs.model.entities.Article;
+import ch.hslu.appe.fbs.model.entities.Employee;
+import ch.hslu.appe.fbs.model.entities.Client;
+
+import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
+import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
+import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
+import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
+import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
+import ch.hslu.appe.fbs.remote.dtos.ClientDTO;
+
 import ch.hslu.appe.fbs.remote.FBSFeedback;
 import ch.hslu.appe.fbs.remote.SortingType;
-import ch.hslu.appe.fbs.remote.dtos.*;
+import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.OrderedArticleNotUpdatedException;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.utils.OrderDateAscComparator;
 import ch.hslu.appe.fbs.remote.utils.OrderDateDescComparator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 /**
- * OrderManager
+ * Manager for orders as a singleton.
  *
  * @author Mischa Gruber
  */
@@ -23,10 +58,12 @@ public final class OrderManager {
 
     private static OrderManager instance = null;
 
-    private static Object mutex = new Object();
+    private static final Object MUTEX = new Object();
     private HashMap<String, String> lockpool;
 
     private MessageDigest sha256Digest;
+
+    private static final Logger LOGGER = LogManager.getLogger(OrderManager.class.getName());
 
     // Persistors
     private OrderPersistor orderPersistor;
@@ -45,11 +82,16 @@ public final class OrderManager {
     private ClientConverter clientConverter;
 
     private SessionManager sessionManager;
+    private ArticleManager articleManager;
 
+    /**
+     * Returns the singleton instance of the OrderManager.
+     * @return single instance
+     */
     public static OrderManager getInstance() {
         OrderManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new OrderManager();
@@ -59,6 +101,9 @@ public final class OrderManager {
         return result;
     }
 
+    /**
+     * Private constructor for the single pattern.
+     */
     private OrderManager() {
 
         this.lockpool = new HashMap<>();
@@ -78,6 +123,7 @@ public final class OrderManager {
         this.clientConverter = new ClientConverter();
 
         this.sessionManager = SessionManager.getInstance();
+        this.articleManager = ArticleManager.getInstance();
 
         try {
             this.sha256Digest = MessageDigest.getInstance("SHA-256");
@@ -86,31 +132,46 @@ public final class OrderManager {
         }
     }
 
-    public OrderDTO getById(final String sessionId, final int id) {
+    /**
+     * Returns an OrderDTO object with the given id.
+     * @param sessionId session id to gain access
+     * @param id database id of the order
+     * @return OrderDTO with the given id
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public OrderDTO getById(final String sessionId, final int id) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return convertToDTO(orderPersistor.getById(id));
         }
         throw new UserNotLoggedInException();
     }
 
-    private OrderDTO convertToDTO(Orders orders) {
+    /**
+     * Converts a order entity to an dto, without additional dto that have to be passed.
+     * @param orders the order to be converted
+     * @return the converted order
+     */
+    private OrderDTO convertToDTO(final Orders orders) {
 
-        if (orders == null)
+        if (orders == null) {
             return null;
+        }
 
         OrderState orderState = orderStatePersistor.getById(orders.getOrderStateIdOrderState());
         OrderStateDTO orderStateDTO = null;
-        if (orderState != null)
+        if (orderState != null) {
             orderStateDTO = orderStateConverter.convertToDTO(orderState);
+        }
 
         List<OrderedArticles> orderedArticlesList = orderedArticlePersistor.getByOrderId(orders.getIdOrders());
         List<OrderedArticleDTO> orderedArticleDTOList = new ArrayList<>();
         if (orderedArticlesList != null) {
-            for(OrderedArticles orderedArticles : orderedArticlesList) {
+            for (OrderedArticles orderedArticles : orderedArticlesList) {
                 Article article = articlePersistor.getById(orderedArticles.getArticleIdArticle());
                 ArticleDTO articleDTO = null;
-                if (article != null)
+                if (article != null) {
                     articleDTO = articleConverter.convertToDTO(article);
+                }
 
                 OrderedArticleDTO orderedArticleDTO = orderedArticleConverter.convertToDTO(orderedArticles, articleDTO);
                 orderedArticleDTOList.add(orderedArticleDTO);
@@ -119,28 +180,46 @@ public final class OrderManager {
 
         Employee employee = employeePersistor.getById(orders.getEmployeeIdEmployee());
         EmployeeDTO employeeDTO = null;
-        if (employee != null)
+        if (employee != null) {
             employeeDTO = employeeConverter.convertToDTO(employee);
+        }
 
-        Client client = clientPersistor.getById(orders.getClientIdClients());
         ClientDTO clientDTO = null;
-        if (client != null)
-            clientDTO = clientConverter.convertToDTO(client);
+        Integer clientId = orders.getClientIdClients();
+        if (clientId != null) {
+            Client client = clientPersistor.getById(clientId);
+            if (client != null) {
+                clientDTO = clientConverter.convertToDTO(client);
+            }
+
+        }
 
         return orderConverter.convertToDTO(orders, orderStateDTO, orderedArticleDTOList, employeeDTO, clientDTO);
     }
 
-    public List<OrderDTO> getList(final String sessionId) {
+    /**
+     * Returns all orders.
+     * @param sessionId session id to gain access
+     * @return list with all orders
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<OrderDTO> getList(final String sessionId) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return getList(sessionId, null);
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<OrderDTO> getList(final String sessionId, final String regEx) {
+    /**
+     * Returns a list of orders which are matching the search string.
+     * @param sessionId session id to gain access
+     * @param searchString search string for the search query
+     * @return list of matching orders
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<OrderDTO> getList(final String sessionId, final String searchString) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
-            // TODO: Implement regEx
-
+            // TODO: Implement searchString
             List<Orders> ordersList = orderPersistor.getAll();
             List<OrderDTO> orderDTOList = new ArrayList<>();
 
@@ -152,14 +231,49 @@ public final class OrderManager {
         throw new UserNotLoggedInException();
     }
 
-    public List<OrderDTO> sortList(final String sessionId, final SortingType type) {
+    /**
+     * Returns all orders of a client by his database id.
+     * @param sessionId session id to gain access
+     * @param id database id of the client
+     * @return list with all orders of the client
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<OrderDTO> getListByClientId(final String sessionId, final int id) throws UserNotLoggedInException {
+        if (sessionManager.getIsLoggedIn(sessionId)) {
+            List<Orders> ordersList = orderPersistor.getListByClientId(id);
+            List<OrderDTO> orderDTOList = new ArrayList<>();
+            for (Orders order : ordersList) {
+                orderDTOList.add(convertToDTO(order));
+            }
+            return orderDTOList;
+        }
+        throw new UserNotLoggedInException();
+    }
+
+    /**
+     * Returns all orders as a sorted list.
+     * @param sessionId session id to gain access
+     * @param type how the list has to be sorted
+     * @return sorted list of orders
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<OrderDTO> sortList(final String sessionId, final SortingType type) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return sortList(sessionId, getList(sessionId), type);
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<OrderDTO> sortList(final String sessionId, final List<OrderDTO> orderDTOList, final SortingType type) {
+    /**
+     * Sorts a given list and returns it.
+     * @param sessionId session id to gain access
+     * @param orderDTOList list to sort
+     * @param type how the list has to be sorted
+     * @return sorted list of orders$
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<OrderDTO> sortList(final String sessionId, final List<OrderDTO> orderDTOList, final SortingType type)
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             Comparator<OrderDTO> comparator;
 
@@ -182,21 +296,176 @@ public final class OrderManager {
         throw new UserNotLoggedInException();
     }
 
-    public FBSFeedback save(final String sessionId, final OrderDTO orderDTO, final String hash) {
+    /**
+     * Saves the order and returns the saved order.
+     * @param sessionId session id to gain access
+     * @param orderDTO order to save
+     * @param hash lock hash of the order
+     * @return saved order dto
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     * @throws LockCheckFailedException is thrown if the lock check has failed
+     * @throws OrderedArticleNotUpdatedException is thrown if any OrderedArticle couldn't get updated
+     */
+    public OrderDTO save(final String sessionId, final OrderDTO orderDTO, final String hash)
+            throws UserNotLoggedInException, LockCheckFailedException, OrderedArticleNotUpdatedException {
+
+
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(orderDTO.getId(), hash);
 
-            if (lockCheck == FBSFeedback.SUCCESS) {
+            if (lockCheck == FBSFeedback.SUCCESS || orderDTO.getId() == -1) {
+                System.out.println("sleep for 10 seconds");
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("sleep done");
+
+                List<OrderedArticleDTO> notSavedOrderedArticleDTOs =
+                        saveOrderedArticleDTOList(sessionId, orderDTO.getOrderedArticleDTOList(), orderDTO.getId());
                 Orders order = orderConverter.convertToEntity(orderDTO);
-                return orderPersistor.save(order);
+                Orders savedOrder = orderPersistor.save(order);
+                LOGGER.info("Updated Order with id: " + order.getIdOrders() + " | Employee: "
+                        + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                if (notSavedOrderedArticleDTOs.size() > 0) {
+                    throw new OrderedArticleNotUpdatedException(notSavedOrderedArticleDTOs);
+                }
+
+                return convertToDTO(savedOrder);
             } else {
-                return lockCheck;
+                throw new LockCheckFailedException();
             }
         }
         throw new UserNotLoggedInException();
     }
 
-    public FBSFeedback delete(final String sessionId, final OrderDTO orderDTO, final String hash) {
+    /**
+     * Saves a list of OrderedArticleDTOs and returns a list of dtos, which couldn't be saved.
+     * @param sessionId session id to gain access
+     * @param orderedArticleDTOList the list of OrderedArticle to be saved
+     * @param orderId the id of the order, which contains the OrderedArticles
+     * @return a list with those dtos, which couldn't be saved
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    private List<OrderedArticleDTO> saveOrderedArticleDTOList(final String sessionId,
+                                                              final List<OrderedArticleDTO> orderedArticleDTOList,
+                                                              final int orderId) throws UserNotLoggedInException {
+        List<OrderedArticleDTO> notSavedOrderedArticles = new ArrayList<>();
+
+        if (orderedArticleDTOList == null) {
+            return notSavedOrderedArticles;
+        }
+
+        List<OrderedArticles> orderedArticlesListInDatabase = orderedArticlePersistor.getByOrderId(orderId);
+
+        if (orderedArticleDTOList.size() > 0) {
+
+            for (OrderedArticleDTO orderedArticleDTO : orderedArticleDTOList) {
+
+                System.out.println("Controlling OrderedArticleDTO with ID: " + orderedArticleDTO.getId());
+
+                int amountIncreasedBy = 0;
+                boolean updateOrderedArticle = true;
+
+                if (orderedArticleDTO.getId() == -1) {
+                    // New OrderedArticleDTO
+                    amountIncreasedBy = orderedArticleDTO.getAmount();
+                } else {
+                    // Existing OrderedArticleDTO
+
+                    OrderedArticles savedOrderedArticles = orderedArticlePersistor.getById(orderedArticleDTO.getId());
+                    ArticleDTO articleDTO = articleConverter.convertToDTO(
+                            articlePersistor.getById(savedOrderedArticles.getArticleIdArticle()));
+                    OrderedArticleDTO savedOrderedArticleDTO = orderedArticleConverter.convertToDTO(
+                            savedOrderedArticles, articleDTO);
+
+                    orderedArticlesListInDatabase.remove(savedOrderedArticles);
+
+                    // check amount differences
+                    if (savedOrderedArticleDTO.getAmount() != orderedArticleDTO.getAmount()) {
+                        amountIncreasedBy = orderedArticleDTO.getAmount() - savedOrderedArticleDTO.getAmount();
+                    }
+                }
+
+                if (amountIncreasedBy != 0) {
+                    System.out.println("increased by " + amountIncreasedBy + " from " + orderedArticleDTO.getId());
+                    String lockHash = articleManager.lock(sessionId, orderedArticleDTO.getArticleDTO().getId());
+                    if (lockHash != null) {
+
+                        Article article = articlePersistor.getById(orderedArticleDTO.getArticleDTO().getId());
+                        if (article.getInStock() >= amountIncreasedBy) {
+                            article.setInStock(article.getInStock() - amountIncreasedBy);
+                            //TODO: implement reorder if under minStock
+                            articlePersistor.save(article);
+                        } else {
+                            //TODO: Implement getFromCentralStock
+                            System.out.println("Not enough in stock");
+                            updateOrderedArticle = false;
+                        }
+
+                        FBSFeedback feedbackRelease =
+                                articleManager.release(sessionId, orderedArticleDTO.getArticleDTO().getId(), lockHash);
+                        if (feedbackRelease != FBSFeedback.SUCCESS) {
+                            System.out.println("Release Not Success");
+                            updateOrderedArticle = false;
+                        }
+                    } else {
+                        System.out.println("Lock Hash == null");
+                        updateOrderedArticle = false;
+                    }
+                }
+
+                if (updateOrderedArticle) {
+                    orderedArticlePersistor.save(orderedArticleConverter.convertToEntity(orderedArticleDTO, orderId));
+                    LOGGER.info("Updated orderedArticles with id: " + orderedArticleDTO.getId()
+                            + " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                } else {
+                    notSavedOrderedArticles.add(orderedArticleDTO);
+                }
+            }
+        }
+
+        for (OrderedArticles deletedOrderedArticles : orderedArticlesListInDatabase) {
+            boolean updateOrderedArticle = true;
+            String lockHash = articleManager.lock(sessionId, deletedOrderedArticles.getArticleIdArticle());
+            if (lockHash != null) {
+                Article article = articlePersistor.getById(deletedOrderedArticles.getArticleIdArticle());
+                article.setInStock(article.getInStock() + deletedOrderedArticles.getAmount());
+                articlePersistor.save(article);
+            } else {
+                updateOrderedArticle = false;
+            }
+
+            FBSFeedback feedback =
+                    articleManager.release(sessionId, deletedOrderedArticles.getArticleIdArticle(), lockHash);
+            if (feedback != FBSFeedback.SUCCESS) {
+                updateOrderedArticle = false;
+            }
+
+
+            if (updateOrderedArticle) {
+                orderedArticlePersistor.delete(deletedOrderedArticles);
+            } else {
+                ArticleDTO articleDTO = articleConverter.convertToDTO(
+                        articlePersistor.getById(deletedOrderedArticles.getArticleIdArticle()));
+                notSavedOrderedArticles.add(orderedArticleConverter.convertToDTO(deletedOrderedArticles, articleDTO));
+            }
+        }
+
+        return notSavedOrderedArticles;
+    }
+
+    /**
+     * Deletes the order.
+     * @param sessionId session id to gain access
+     * @param orderDTO order to delete
+     * @param hash lock hash of the order
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public FBSFeedback delete(final String sessionId, final OrderDTO orderDTO, final String hash)
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(orderDTO.getId(), hash);
 
@@ -204,7 +473,7 @@ public final class OrderManager {
                 Orders order = orderConverter.convertToEntity(orderDTO);
                 // Canceled
                 order.setOrderStateIdOrderState(5);
-                return orderPersistor.save(order);
+                return FBSFeedback.SUCCESS;
             } else {
                 return lockCheck;
             }
@@ -212,10 +481,15 @@ public final class OrderManager {
         throw new UserNotLoggedInException();
     }
 
-    //TODO: Orders delete mit orderstate = annul order annull funktion?
-
-    //TODO: lock, release, check - as interface
-    public String lock(final String sessionId, final int id) {
+    /**
+     * Tries to gain the lock of an order.
+     * @param sessionId session id to gain access
+     * @param id database id of the order to gain the lock
+     * @return lock hash string on success, null on failure
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public String lock(final String sessionId, final int id) throws UserNotLoggedInException {
+        //TODO: lock, release, check - as interface
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
 
@@ -228,9 +502,11 @@ public final class OrderManager {
                     if (sha256Digest != null) {
                         byte[] hashBytes = sha256Digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
                         StringBuffer hexString = new StringBuffer();
-                        for (int i = 0; i < hashBytes.length; i++) {
-                            String hex = Integer.toHexString(0xff & hashBytes[i]);
-                            if(hex.length() == 1) hexString.append('0');
+                        for (byte hashByte : hashBytes) {
+                            String hex = Integer.toHexString(0xff & hashByte);
+                            if (hex.length() == 1){
+                                hexString.append('0');
+                            }
                             hexString.append(hex);
                         }
                         hash = hexString.toString();
@@ -247,7 +523,16 @@ public final class OrderManager {
         throw new UserNotLoggedInException();
     }
 
-    public FBSFeedback release(final String sessionId, final int id, final String hash) {
+    /**
+     * Releases the lock of an order.
+     * @param sessionId session id to gain access
+     * @param id database id of the order to release the lock
+     * @param hash lock hash of the order
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public FBSFeedback release(final String sessionId, final int id, final String hash)
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
 
@@ -269,6 +554,12 @@ public final class OrderManager {
         throw new UserNotLoggedInException();
     }
 
+    /**
+     * Checks if the given hash equals the hash for the order.
+     * @param id database id of the order to check for the lock
+     * @param hash lock hash string of the order
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     */
     private FBSFeedback checkLock(final int id, final String hash) {
         synchronized (lockpool) {
 

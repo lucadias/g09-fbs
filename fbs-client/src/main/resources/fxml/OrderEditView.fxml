@@ -21,9 +21,14 @@
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
             </Button>
+            <Button mnemonicParsing="false" onAction="#delete" text="Löschen">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
             <ChoiceBox fx:id="clientChoice" prefHeight="40.0" prefWidth="100.0">
                <HBox.margin>
-                  <Insets left="200.0" top="5.0" />
+                  <Insets left="165.0" top="5.0" />
                </HBox.margin>
             </ChoiceBox>
          </children>

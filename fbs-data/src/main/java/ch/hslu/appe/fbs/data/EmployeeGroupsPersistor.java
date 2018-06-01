@@ -33,10 +33,27 @@ public class EmployeeGroupsPersistor {
     }
 
 
+    // Get EmployeeGroups by Employee (int idEmployee)
+
+    //getemployeegroups by groupsid
+
+    public List<EmployeeGroups> getEmployeeGroupsByEmployeeId(int employeeId){
 
 
-    public EmployeeGroups getByEmployeeGroupsNr(int employeeGroupsNr) {
-        return this.getById(employeeGroupsNr);
+        //noinspection JpaQlInspection
+        String query = "SELECT e FROM EmployeeGroups e WHERE e.employeeIdEmployees = :employeeId";
+
+        return this.entitymanager.createQuery(query)
+                .setParameter("employeeId", employeeId)
+                .getResultList();
+    }
+
+    public List<EmployeeGroups> getEmployeeGroupsByGroupId(int groupId){
+        String query = "SELECT e FROM EmployeeGroups e WHERE e.groupsIdGroups = :groupId";
+
+        return this.entitymanager.createQuery(query)
+                .setParameter("groupId", groupId)
+                .getResultList();
     }
 
     /**

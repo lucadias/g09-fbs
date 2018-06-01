@@ -5,6 +5,7 @@ import static ch.hslu.appe.fbs.client.Client.SESSION;
 import static ch.hslu.appe.fbs.client.JavaFXViewController.ARTICLE_SERVICE_NAME;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteArticleService;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -68,6 +69,8 @@ public class ArticleListViewController implements Initializable {
         } catch (NotBoundException | MalformedURLException |
             RemoteException e) {
             System.out.println("Error in RMI: "+e);
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     

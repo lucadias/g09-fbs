@@ -49,23 +49,25 @@ public final class OrderStateDTO implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
+        }
 
-        if(obj == null || obj.getClass()!= this.getClass())
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
+        }
 
         OrderStateDTO orderStateDTO = (OrderStateDTO) obj;
 
-        return (orderStateDTO.getId() == this.id);
+        return orderStateDTO.getId() == this.id;
     }
 
     @Override
     public int hashCode() {
         return this.id;
     }
-    
+
     @Override
     public String toString() {
         return this.getState();

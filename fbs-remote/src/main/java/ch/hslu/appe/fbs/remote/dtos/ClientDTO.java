@@ -102,23 +102,25 @@ public final class ClientDTO implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
+        }
 
-        if(obj == null || obj.getClass()!= this.getClass())
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
+        }
 
         ClientDTO clientDTO = (ClientDTO) obj;
 
-        return (clientDTO.getId() == this.id);
+        return clientDTO.getId() == this.id;
     }
 
     @Override
     public int hashCode() {
         return this.id;
     }
-    
+
     @Override
     public String toString() {
         return this.getFirstname() + " " + this.getSurname();

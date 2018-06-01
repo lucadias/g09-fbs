@@ -7,6 +7,7 @@ import ch.hslu.appe.fbs.remote.remoteServices.RemoteOrderService;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -143,6 +144,8 @@ public class OrderDetailViewController implements Initializable {
         } catch(RemoteException e) {
             this.orderDTO = new OrderDTO(Integer.MAX_VALUE);
             System.out.println("Error in RMI: "+e);
+        } catch(UserNotLoggedInException e){
+            System.out.println("User is not logged in");
         }
     }
     

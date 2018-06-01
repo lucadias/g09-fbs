@@ -1,7 +1,8 @@
 package ch.hslu.appe.fbs.business.manager;
 
 import ch.hslu.appe.fbs.business.utils.ArticleConverter;
-import ch.hslu.appe.fbs.business.utils.UserNotLoggedInException;
+import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.data.ArticlePersistor;
 import ch.hslu.appe.fbs.model.entities.Article;
 import ch.hslu.appe.fbs.remote.dtos.ArticleDTO;
@@ -31,7 +32,7 @@ import java.util.Date;
 public final class ArticleManager {
     private static ArticleManager instance = null;
 
-    private static Object mutex = new Object();
+    private static final Object MUTEX = new Object();
     private HashMap<String, String> lockpool;
 
     private ArticlePersistor articlePersistor;
@@ -39,10 +40,9 @@ public final class ArticleManager {
 
     private ArticleConverter articleConverter;
 
-    static final Logger logger = LogManager.getLogger(ArticleManager.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ArticleManager.class.getName());
 
     private SessionManager sessionManager;
-
 
     /**
      * Returns the singleton instance of the ArticleManager.
@@ -51,7 +51,7 @@ public final class ArticleManager {
     public static ArticleManager getInstance() {
         ArticleManager result = instance;
         if (result == null) {
-            synchronized (mutex) {
+            synchronized (MUTEX) {
                 result = instance;
                 if (result == null) {
                     instance = result = new ArticleManager();
@@ -80,10 +80,12 @@ public final class ArticleManager {
 
     /**
      * Gets the article by the database id as an entity, converts it to a DTO and returns it.
+     * @param sessionId session id to gain access
      * @param id database id of the article
      * @return article as a DTO
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    public ArticleDTO getById(final String sessionId, final int id) {
+    public ArticleDTO getById(final String sessionId, final int id) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return articleConverter.convertToDTO(articlePersistor.getById(id));
         }
@@ -92,10 +94,12 @@ public final class ArticleManager {
 
     /**
      * Gets the articles by the article number as entites, converts them to a DTOs and returns them as a list.
+     * @param sessionId session id to gain access
      * @param artNr article number of the article
      * @return articles as a list
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    public List<ArticleDTO> getByArticleNr(final String sessionId, final int artNr) {
+    public List<ArticleDTO> getByArticleNr(final String sessionId, final int artNr) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return articleConverter.convertToDTO(articlePersistor.getByArticleNr(artNr));
         }
@@ -104,11 +108,14 @@ public final class ArticleManager {
 
     /**
      * Gets all the articles as entities, converts and returns them as a list.
+     * @param sessionId session id to gain access
      * @return articles as a DTO list
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    public List<ArticleDTO> getList(final String sessionId) {
+    public List<ArticleDTO> getList(final String sessionId) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
-            logger.info("List all Articles from Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+            LOGGER.info("List all Articles from Database | Employee: " +
+                    sessionManager.getEmployeeIdFromSessionId(sessionId));
             List<Article> articleList = articlePersistor.getList();
             return articleConverter.convertToDTO(articleList);
         }
@@ -117,20 +124,25 @@ public final class ArticleManager {
 
     /**
      * Converts the given DTO article to an entity and passes it to the persistor.
+     * @param sessionId session id to gain access
      * @param articleDTO article to save as a DTO
      * @param hash lock hash string for the article
      * @return the saved article as a DTO on success, otherwise null
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     * @throws LockCheckFailedException is thrown if the lock check has failed
      */
-    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash) {
+    public ArticleDTO save(final String sessionId, final ArticleDTO articleDTO, final String hash)
+            throws UserNotLoggedInException, LockCheckFailedException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
-            if (lockCheck == FBSFeedback.SUCCESS) {
+            if (lockCheck == FBSFeedback.SUCCESS || articleDTO.getId() == -1) {
                 Article article = articleConverter.convertToEntity(articleDTO);
-                logger.info("Save Article with id: " +article.getIdArticle()+ " to Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                LOGGER.info("Save Article with id: " + article.getIdArticle() + " to Database | Employee: "
+                        + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 return articleConverter.convertToDTO(articlePersistor.save(article));
             } else {
-                return null;
+                throw new LockCheckFailedException();
             }
         }
         throw new UserNotLoggedInException();
@@ -138,22 +150,27 @@ public final class ArticleManager {
 
     /**
      * Converts the given DTO article to an entity, sets the availability to false and passes it to the persistor.
+     * @param sessionId session id to gain access
      * @param articleDTO article to delete as a DTO
      * @param hash lock hash string for the article
      * @return the saved article as a DTO on success, otherwise null
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     * @throws LockCheckFailedException is thrown if the lock check has failed
      */
-    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash) {
+    public ArticleDTO delete(final String sessionId, final ArticleDTO articleDTO, final String hash)
+            throws UserNotLoggedInException, LockCheckFailedException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(articleDTO.getId(), hash);
 
             if (lockCheck == FBSFeedback.SUCCESS) {
                 Article article = articleConverter.convertToEntity(articleDTO);
-                logger.info("Deleted Article with id: " +article.getIdArticle()+ " to Database | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                LOGGER.info("Deleted Article with id: " + article.getIdArticle() +
+                        " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 article.setAvailable(false);
 
                 return articleConverter.convertToDTO(articlePersistor.save(article));
             } else {
-                return null;
+                throw new LockCheckFailedException();
             }
         }
         throw new UserNotLoggedInException();
@@ -162,17 +179,21 @@ public final class ArticleManager {
     /**
      * Updates the amount of stock of an article by adding the given amount.
      * Amount is added and not set, so no absolute setter.
+     * @param sessionId session id to gain access
      * @param id database id of the article
      * @param amount amount that has to be added
      * @param hash lock hash string for the article
      * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
      */
-    public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash) {
+    public FBSFeedback updateStockById(final String sessionId, final int id, final int amount, final String hash)
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             FBSFeedback lockCheck = checkLock(id, hash);
 
             if (lockCheck == FBSFeedback.SUCCESS) {
-                logger.info("Update Article Stock with id: " +id+ " | New Amount:" +amount+" | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
+                LOGGER.info("Update Article Stock with id: " + id + " | New Amount:" + amount +
+                        " | Employee: " + sessionManager.getEmployeeIdFromSessionId(sessionId));
                 return articlePersistor.updateStockById(id, amount);
             } else {
                 return lockCheck;
@@ -181,14 +202,30 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
-    public List<ArticleDTO> sortList(final String sessionId, final SortingType type) {
+    /**
+     * Returns all articles as a sorted list.
+     * @param sessionId session id to gain access
+     * @param type how the list has to be sorted
+     * @return sorted list of articles
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<ArticleDTO> sortList(final String sessionId, final SortingType type) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             return sortList(sessionId, articleConverter.convertToDTO(articlePersistor.getList()), type);
         }
         throw new UserNotLoggedInException();
     }
 
-    public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type) {
+    /**
+     * Sorts a given list and returns it.
+     * @param sessionId session id to gain access
+     * @param articleDTOs list to sort
+     * @param type how the list has to be sorted
+     * @return sorted list of orders
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<ArticleDTO> sortList(final String sessionId, final List<ArticleDTO> articleDTOs, final SortingType type)
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             Comparator<ArticleDTO> comparator;
 
@@ -217,14 +254,28 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
-    public List<ArticleDTO> search(final String sessionId, final String regEx) {
+    /**
+     * Returns a list of articles which are matching the search string.
+     * @param sessionId session id to gain access
+     * @param searchString search string for the search query
+     * @return list of matching articles
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public List<ArticleDTO> search(final String sessionId, final String searchString) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
-            return articleConverter.convertToDTO(articlePersistor.search(regEx));
+            return articleConverter.convertToDTO(articlePersistor.search(searchString));
         }
         throw new UserNotLoggedInException();
     }
 
-    public String lock(final String sessionId, final int id) {
+    /**
+     * Tries to gain the lock of an article.
+     * @param sessionId session id to gain access
+     * @param id database id of the article to gain the lock
+     * @return lock hash string on success, null on failure
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public String lock(final String sessionId, final int id) throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
 
@@ -233,13 +284,15 @@ public final class ArticleManager {
                     return null;
                 } else {
                     String toHash = String.valueOf(id) + (new Date()).toString();
-                    String hash = "";
+                    String hash;
                     if (sha256Digest != null) {
                         byte[] hashBytes = sha256Digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
                         StringBuffer hexString = new StringBuffer();
-                        for (int i = 0; i < hashBytes.length; i++) {
-                            String hex = Integer.toHexString(0xff & hashBytes[i]);
-                            if(hex.length() == 1) hexString.append('0');
+                        for (byte hashByte : hashBytes) {
+                            String hex = Integer.toHexString(0xff & hashByte);
+                            if (hex.length() == 1) {
+                                hexString.append('0');
+                            }
                             hexString.append(hex);
                         }
                         hash = hexString.toString();
@@ -256,7 +309,16 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
-    public FBSFeedback release(final String sessionId, final int id, final String hash) {
+    /**
+     * Releases the lock of an article.
+     * @param sessionId session id to gain access
+     * @param id database id of the article to release the lock
+     * @param hash lock hash string of the article
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     * @throws UserNotLoggedInException is thrown if the sessionId is invalid
+     */
+    public FBSFeedback release(final String sessionId, final int id, final String hash)
+            throws UserNotLoggedInException {
         if (sessionManager.getIsLoggedIn(sessionId)) {
             synchronized (lockpool) {
 
@@ -280,6 +342,12 @@ public final class ArticleManager {
         throw new UserNotLoggedInException();
     }
 
+    /**
+     * Checks if the given hash equals the hash for the article.
+     * @param id database id of the article to check for the lock
+     * @param hash lock hash string of the article
+     * @return FBSFeedback.SUCCESS on success, otherwise a specific feedback
+     */
     private FBSFeedback checkLock(final int id, final String hash) {
         synchronized (lockpool) {
 

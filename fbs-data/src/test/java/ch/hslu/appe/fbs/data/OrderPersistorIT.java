@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @Ignore
-public class OrderPersistorTest {
+public class OrderPersistorIT {
 
     private static OrderPersistor persistor = new OrderPersistor();
     private static Orders orders = new Orders();

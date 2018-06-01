@@ -35,16 +35,35 @@ public final class OrderedArticleConverter {
      * The additional DTO have to be converted separately before or after this operation to save
      * all data informations.
      * @param orderedArticleDTO OrderedArticle to be converted
+     * @param orderId database id of the parent order
      * @return converted OrderedArticle
      */
-    public OrderedArticles convertToEntity(final OrderedArticleDTO orderedArticleDTO) {
+    public OrderedArticles convertToEntity(final OrderedArticleDTO orderedArticleDTO, final int orderId) {
         OrderedArticles orderedArticles = new OrderedArticles();
-        orderedArticles.setIdOrderedArticles(orderedArticleDTO.getId());
+        if (orderedArticleDTO.getId() != -1) {
+            orderedArticles.setIdOrderedArticles(orderedArticleDTO.getId());
+        }
         orderedArticles.setArticleIdArticle(orderedArticleDTO.getArticleDTO().getId());
-        orderedArticles.setOrdersIdOrder(orderedArticleDTO.getArticleDTO().getId());
+        orderedArticles.setOrdersIdOrder(orderId);
         orderedArticles.setAmount(orderedArticleDTO.getAmount());
         orderedArticles.setTotalPrice(orderedArticleDTO.getTotalPrice());
 
         return orderedArticles;
+    }
+
+    /**
+     * Converts a list of OrderedArticleDTOs into entities.
+     * @param orderedArticlesDTOList the list with the ordered articles that have to be converted
+     * @param orderId the database id of the parent order
+     * @return a list of converted OrderedArticles
+     */
+    public List<OrderedArticles> convertToEntityList(final List<OrderedArticleDTO> orderedArticlesDTOList,
+                                                     final int orderId) {
+        List<OrderedArticles> orderedArticlesEntityList = new ArrayList<>();
+        for (OrderedArticleDTO orderedArticlesDTO : orderedArticlesDTOList) {
+            orderedArticlesEntityList.add(convertToEntity(orderedArticlesDTO, orderId));
+        }
+
+        return orderedArticlesEntityList;
     }
 }

@@ -95,8 +95,7 @@ public final class ArticlePersistor {
 
         try {
             Util.transactionBegin();
-            if(article.getIdArticle() == -1){
-                article.setIdArticle(null);
+            if(article.getIdArticle() == null){
                 Util.entityManager.persist(article);
             } else {
                 Util.entityManager.merge(article);
@@ -108,6 +107,44 @@ public final class ArticlePersistor {
             Util.transactionCommit();
         }
         return article;
+    }
+
+    public FBSFeedback delete(Article article) {
+
+        try {
+            Util.transactionBegin();
+            Util.entityManager.remove(article);
+            Util.entityManager.flush();
+            Util.transactionCommit();
+            return FBSFeedback.SUCCESS;
+        } catch (Exception e){
+            System.out.println(e.toString());
+
+            Util.transactionCommit();
+        }
+        return  FBSFeedback.UNKNOWN_ERROR;
+
+    }
+
+    public FBSFeedback deleteTestArticles() {
+
+        for(Article ta : this.getByArticleNr(9999)){
+            try {
+                Util.transactionBegin();
+                Util.entityManager.remove(ta);
+                Util.entityManager.flush();
+                Util.transactionCommit();
+
+            } catch (Exception e){
+                System.out.println(e.toString());
+                Util.transactionCommit();
+                return  FBSFeedback.UNKNOWN_ERROR;
+
+            }
+
+
+        }
+        return  FBSFeedback.SUCCESS;
     }
 
     /**

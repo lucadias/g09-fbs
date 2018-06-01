@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 @Ignore
-public class OrderedArticlePersistorTest {
+public class OrderedArticlePersistorIT {
     public static OrderedArticles article;
     public static OrderedArticlePersistor persistor = new OrderedArticlePersistor();
 

@@ -9,7 +9,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 
-public class ArticlePersistorTest {
+public class ArticlePersistorIT {
 
 
     private ArticlePersistor persistor = new ArticlePersistor();
@@ -18,7 +18,6 @@ public class ArticlePersistorTest {
     @Before
     public void setup(){
         article = new Article();
-        article.setIdArticle(-1);
         article.setName("Main Board123");
         article.setAvailable(true);
         article.setArticlenumber(9999);
@@ -26,17 +25,17 @@ public class ArticlePersistorTest {
         article.setInStock(10);
         article.setMinInStock(2);
         article.setPrice(130.00);
-        persistor.save(article);
+        this.article = persistor.save(article);
 
     }
 
     @Test
-    public void save() {
+    public void testSave() {
         assertEquals(article, persistor.save(article));
     }
 
     @Test
-    public void getById() {
+    public void testGetById() {
         Article testarticle = persistor.getById(article.getIdArticle());
         System.out.println(article.getClass()+" "+testarticle.getClass());
         assertEquals(article, testarticle);
@@ -44,21 +43,18 @@ public class ArticlePersistorTest {
 
     @Ignore
     @Test
-    public void getByArticleNr() {
+    public void testGetByArticleNr() {
         List<Article> list = persistor.getByArticleNr(article.getArticlenumber());
-        for (Article testarticle : list){
-            System.out.println(testarticle.getIdArticle()+" "+article.getIdArticle());
-            assertEquals(this.article, testarticle);
-        }
+        assertTrue(list.contains(this.article));
     }
 
     @Test
-    public void updateStockById() {
+    public void testUpdateStockById() {
         persistor.updateStockById(article.getIdArticle(), 200);
     }
 
     @Test
-    public void getListWithParam() {
+    public void testGetListWithParam() {
         List<Article> list = persistor.getList("main");
         for (Article article : list){
             System.out.println(article.getArticlenumber());
@@ -66,7 +62,7 @@ public class ArticlePersistorTest {
     }
 
     @Test
-    public void getList() {
+    public void testGetList() {
         List<Article> list = persistor.getList();
 
         assertTrue(list.contains(article));
@@ -75,6 +71,6 @@ public class ArticlePersistorTest {
 
     @After
     public void cleanUp(){
-
+        persistor.deleteTestArticles();
     }
 }

@@ -36,6 +36,7 @@ public class Util {
             return FBSFeedback.SUCCESS;
         } catch (Exception e){
             System.out.println(e.toString());
+            e.printStackTrace();
             Util.transactionCommit();
             return FBSFeedback.UNKNOWN_ERROR;
         }

@@ -33,12 +33,6 @@ public class GroupsPersistor {
     }
 
 
-
-
-    public Groups getByGroupsNr(int groupsNr) {
-        return this.getById(groupsNr);
-    }
-
     /**
      * saves or updates an Groups.
      *

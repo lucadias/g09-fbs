@@ -18,7 +18,9 @@ public final class SessionIdGenerator {
     /**
      * Private constructor to prevent having a public one.
      */
-    private SessionIdGenerator() {}
+    private SessionIdGenerator() {
+
+    }
 
     /**
      * Generates a new session id string.

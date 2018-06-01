@@ -16,6 +16,9 @@ import ch.hslu.appe.fbs.remote.dtos.EmployeeDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderStateDTO;
 import ch.hslu.appe.fbs.remote.dtos.OrderedArticleDTO;
+import ch.hslu.appe.fbs.remote.exception.LockCheckFailedException;
+import ch.hslu.appe.fbs.remote.exception.OrderedArticleNotUpdatedException;
+import ch.hslu.appe.fbs.remote.exception.UserNotLoggedInException;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteClientService;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteEmployeeService;
 import ch.hslu.appe.fbs.remote.remoteServices.RemoteOrderStateService;
@@ -25,6 +28,7 @@ import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -65,6 +69,7 @@ public class OrderEditViewController implements Initializable {
     private ObservableList<EmployeeDTO> employeeObservableList;
     private OrderDTO orderDTO;
     private int orderId;
+    private String hash;
     
     @FXML
     private Label orderNumber;
@@ -111,7 +116,8 @@ public class OrderEditViewController implements Initializable {
                 JavaFXViewController.getInstance().setView(orderDetail);
                 JavaFXViewController.getInstance().repaint();
             } catch (IOException e) {
-                System.out.println("Error loading fxml: "+e.getMessage());
+                System.out.println("Error loading fxml: ");
+                e.printStackTrace();
             }
         } else {
             try {
@@ -122,7 +128,8 @@ public class OrderEditViewController implements Initializable {
                 JavaFXViewController.getInstance().setView(orders);
                 JavaFXViewController.getInstance().repaint();
             } catch (IOException e) {
-                System.out.println("Error loading fxml: "+e.getMessage());
+                System.out.println("Error loading fxml: ");
+                e.printStackTrace();
             }
         }
     }
@@ -142,17 +149,7 @@ public class OrderEditViewController implements Initializable {
         this.orderDTO.setEmployeeDTO(employee);
         ClientDTO client = (ClientDTO)this.clientChoice.getValue();
         this.orderDTO.setClientDTO(client);
-        try {
-            String hash = this.orderService.lock(SESSION, this.orderDTO);
-            System.out.println("Hash in save is: "+hash);
-            FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
-            System.out.println("Feedback is: "+feedback.toString());
-            feedback = this.orderService.release(SESSION, this.orderDTO, hash);
-            System.out.println("Second feedback is: "+ feedback.toString());
-            //ToDo: need to get orderId here and set orderDTO. Otherwise there are to many Nullpointers
-        } catch(RemoteException e) {
-            System.out.println("Error while saving: "+e.getMessage());
-        }
+        this.saveDTO();
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/OrderDetailView.fxml"));
@@ -162,7 +159,33 @@ public class OrderEditViewController implements Initializable {
             JavaFXViewController.getInstance().setView(orderDetail);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
+        }
+    }
+    
+    @FXML
+    public void delete(ActionEvent event) {
+        String hash = "";
+        try {
+            hash = this.getHash();
+            FBSFeedback feedback = this.orderService.delete(SESSION, this.orderDTO, hash);
+            System.out.println(feedback);
+        } catch(RemoteException e) {
+            System.out.println("Error in RMI:");
+            e.printStackTrace();
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
+        } finally {
+            try {
+                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+                this.hash = null;
+            } catch(RemoteException e) {
+                System.out.println("Error in RMI:");
+                e.printStackTrace();
+            } catch(UserNotLoggedInException e) {
+                System.out.println("User is not logged in");
+            }
         }
     }
     
@@ -178,7 +201,10 @@ public class OrderEditViewController implements Initializable {
             this.searchArticleList = this.articleService.search(SESSION, searchString);
             this.fillSearchedArticles();
         } catch(RemoteException e) {
-            System.out.println("Error in search: "+e.getMessage());
+            System.out.println("Error in search: ");
+            e.printStackTrace();
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -208,7 +234,8 @@ public class OrderEditViewController implements Initializable {
         } catch (NotBoundException | MalformedURLException |
             RemoteException e) {
             this.orderDTO = new OrderDTO(Integer.MAX_VALUE);
-            System.out.println("Error in RMI: "+e);
+            System.out.println("Error in RMI: ");
+            e.printStackTrace();
         }
     }
     /**
@@ -222,6 +249,7 @@ public class OrderEditViewController implements Initializable {
             if(this.orderId != -1) {
                 OrderDTO currentOrder = orderService.getById(SESSION, this.orderId);
                 this.orderDTO = currentOrder;
+                this.hash = this.getHash();
                 String date = String.valueOf(this.orderDTO.getDate());
                 this.orderDate.setText(date);
                 String number = String.valueOf(this.orderDTO.getId());
@@ -231,6 +259,16 @@ public class OrderEditViewController implements Initializable {
             } else {
                 this.orderDTO = new OrderDTO(-1);
                 this.orderedArticleList = new ArrayList<>();
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                this.orderDTO.setDate(timestamp);
+                EmployeeDTO employeeDTO = this.employeeService.getByUsername(SESSION, Client.username);
+                this.orderDTO.setEmployeeDTO(employeeDTO);
+                OrderStateDTO orderState = new OrderStateDTO(1);
+                this.orderDTO.setOrderStateDTO(orderState);
+                if(employeeDTO == null || orderState == null) {
+                    System.out.println("something was null");
+                }
+                this.saveDTO();
             }
             this.fillStateChoice();
             this.fillClientChoice();
@@ -239,7 +277,10 @@ public class OrderEditViewController implements Initializable {
             this.fillAllArticles();
         } catch(RemoteException e) {
             this.orderDTO = new OrderDTO(Integer.MAX_VALUE);
-            System.out.println("Error in RMI: "+e);
+            System.out.println("Error in RMI: ");
+            e.printStackTrace();
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -253,7 +294,10 @@ public class OrderEditViewController implements Initializable {
             this.stateChoice.setItems(this.stateObservableList);
             this.selectStateChoice();
         } catch(RemoteException e) {
-            System.out.println("Error in getting orderStates:"+e.getMessage());
+            System.out.println("Error in getting orderStates:");
+            e.printStackTrace();
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -276,7 +320,10 @@ public class OrderEditViewController implements Initializable {
             this.clientChoice.setItems(this.clientObservableList);
             this.selectClientChoice();
         } catch(RemoteException e) {
-            System.out.println("Error in getting orderStates:"+e.getMessage());
+            System.out.println("Error in getting orderStates:");
+            e.printStackTrace();
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -299,7 +346,10 @@ public class OrderEditViewController implements Initializable {
             this.employeeChoice.setItems(this.employeeObservableList);
             this.selectEmployeeChoice();
         } catch(RemoteException e) {
-            System.out.println("Error in getting orderStates:"+e.getMessage());
+            System.out.println("Error in getting orderStates:");
+            e.printStackTrace();
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -369,7 +419,10 @@ public class OrderEditViewController implements Initializable {
                 i++;
             }
         } catch(RemoteException e) {
-            System.out.println("Error in RMI:"+e.getMessage());
+            System.out.println("Error in RMI:");
+            e.printStackTrace();
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
         }
     }
     
@@ -407,23 +460,13 @@ public class OrderEditViewController implements Initializable {
      * @param amount The amount of the articleDTO which should be added to the order
      */
     private void addToOrder(ArticleDTO article, int amount) {
-        for(int i=0; i<amount; i++) {
-            OrderedArticleDTO orderedArticle = new OrderedArticleDTO(-1);
-            orderedArticle.setAmount(amount);
-            orderedArticle.setArticleDTO(article);
-            this.orderedArticleList.add(orderedArticle);
-            this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
-        }
-        try {
-            String hash = this.orderService.lock(SESSION, this.orderDTO);
-            System.out.println(hash);
-            FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
-            System.out.println(feedback+" "+hash);
-            feedback = this.orderService.release(SESSION, this.orderDTO, hash);
-            this.refresh();
-        } catch(RemoteException e) {
-            System.out.println("Error in RMI:"+e.getMessage());
-        }
+        OrderedArticleDTO orderedArticle = new OrderedArticleDTO(-1);
+        orderedArticle.setAmount(amount);
+        orderedArticle.setArticleDTO(article);
+        this.orderedArticleList.add(orderedArticle);
+        this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
+        this.saveDTO();
+        this.refresh();
     }
     
     /**
@@ -433,15 +476,44 @@ public class OrderEditViewController implements Initializable {
     private void removeFromOrder(OrderedArticleDTO article) {
         this.orderedArticleList.remove(article);
         this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
+        this.saveDTO();
+        this.refresh();
+    }
+    
+    /**
+     * This method saves the orderDTO
+     */
+    private void saveDTO() {
+        String hash = "";
         try {
-            String hash = this.orderService.lock(SESSION, this.orderDTO);
-            FBSFeedback feedback = this.orderService.save(SESSION, this.orderDTO, hash);
-            System.out.println(feedback+" "+hash);
-            feedback = this.orderService.release(SESSION, this.orderDTO, hash);
-            System.out.println(feedback+" "+hash);
-            this.refresh();
-        } catch(RemoteException e) {
-            System.out.println("Error in RMI:"+e.getMessage());
+            if(this.orderId != -1) {
+                hash = this.getHash();
+                this.orderDTO = this.orderService.save(SESSION, this.orderDTO, hash);
+            } else {
+                this.orderDTO = this.orderService.save(SESSION, this.orderDTO, "");
+                this.orderId = this.orderDTO.getId();
+                System.out.println(String.valueOf(this.orderDTO.getId()));
+            }
+        } catch(RemoteException e){
+            System.out.println("Error in RMI:");
+            e.printStackTrace();
+        } catch(LockCheckFailedException e){
+            System.out.println("Failed to get Access to order");
+        } catch(UserNotLoggedInException e) {
+            System.out.println("User is not logged in");
+        } catch(OrderedArticleNotUpdatedException e) {
+            System.out.println("Article not updated");
+            System.out.println(e.getNotUpdatedOrderedArticleList());
+        } finally {
+            try {
+                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);  
+                this.hash = null;
+            } catch(RemoteException e) {
+                System.out.println("Error in RMI:");
+                e.printStackTrace();
+            } catch(UserNotLoggedInException e) {
+                System.out.println("User is not logged in");
+            }
         }
     }
     
@@ -458,7 +530,19 @@ public class OrderEditViewController implements Initializable {
             JavaFXViewController.getInstance().setView(orderEdit);
             JavaFXViewController.getInstance().repaint();
         } catch (IOException e) {
-            System.out.println("Error loading fxml: "+e.getMessage());
+            System.out.println("Error loading fxml: ");
+            e.printStackTrace();
+        }
+    }
+    
+    private String getHash() throws RemoteException, UserNotLoggedInException {
+        if(this.hash == null) {
+            System.out.println(this.orderDTO);
+            String newHash = this.orderService.lock(SESSION, this.orderDTO);
+            this.hash = newHash;
+            return newHash;
+        } else {
+            return this.hash;
         }
     }
 }
