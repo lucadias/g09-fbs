@@ -42,6 +42,7 @@ public class ArticlePersistorTest {
         assertEquals(article, testarticle);
     }
 
+    @Ignore
     @Test
     public void getByArticleNr() {
         List<Article> list = persistor.getByArticleNr(article.getArticlenumber());

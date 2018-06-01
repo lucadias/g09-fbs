@@ -69,7 +69,13 @@ public class EmployeePersistor {
      * @return List&gt;Employee&lt;
      */
     public List<Employee> getList() {
-        return this.entitymanager.createQuery("Select a From Employee a").getResultList();
+        List<Employee> list = this.entitymanager.createQuery("Select a From Employee a").getResultList();
+        for (Employee employee:list){
+            if(!employee.getActive()){
+                list.remove(employee);
+            }
+        }
+        return list;
     }
 
     /**
@@ -83,8 +89,14 @@ public class EmployeePersistor {
         //noinspection JpaQlInspection
         String query = "SELECT e FROM Employee e WHERE e.firstname LIKE :regex OR e.surname LIKE :regex OR e.idEmployees LIKE :regex";
 
-        return this.entitymanager.createQuery(query)
+        List<Employee> list = this.entitymanager.createQuery(query)
                 .setParameter("regex", regex)
                 .getResultList();
+        for (Employee employee:list){
+            if(!employee.getActive()){
+                list.remove(employee);
+            }
+        }
+        return list;
     }
 }

@@ -101,7 +101,7 @@ public class Article {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Article article = (Article) o;
-        return idArticle == article.getIdArticle() &&
+        Boolean equals = this.idArticle.equals(article.getIdArticle()) &&
                 this.name.equals(article.getName()) &&
                 this.articlenumber.equals(article.getArticlenumber()) &&
                 this.description.equals(article.getDescription()) &&
@@ -109,6 +109,7 @@ public class Article {
                 this.price.equals(article.getPrice()) &&
                 this.minInStock.equals(article.getMinInStock()) &&
                 this.available.equals(article.getAvailable());
+        return equals;
     }
 
     @Override

@@ -46,9 +46,15 @@ public final class ArticlePersistor {
         String regex = "%" + searchtext + "%";
         //noinspection JpaQlInspection
         String query = "SELECT a FROM Article a WHERE a.name LIKE :regex OR a.description LIKE :regex OR CONCAT(a.articlenumber, '') LIKE :regex";
-        return this.entitymanager.createQuery(query)
+        List<Article> list = this.entitymanager.createQuery(query)
                 .setParameter("regex", regex)
                 .getResultList();
+        for (Article article:list){
+            if(!article.getAvailable()){
+                list.remove(article);
+            }
+        }
+        return list;
     }
 
     public List<Article> search(final String searchText){
@@ -62,9 +68,15 @@ public final class ArticlePersistor {
      */
     public List<Article> getByArticleNr(final int artNr) {
         try {
-            return this.entitymanager.createQuery("SELECT a FROM Article a WHERE a.articlenumber = :artNr")
+            List<Article> list = this.entitymanager.createQuery("SELECT a FROM Article a WHERE a.articlenumber = :artNr")
                     .setParameter("artNr", artNr)
                     .getResultList();
+            for (Article article:list){
+                if(!article.getAvailable()){
+                    list.remove(article);
+                }
+            }
+            return list;
 
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -106,6 +118,11 @@ public final class ArticlePersistor {
         Util.transactionBegin();
         List<Article> list = this.entitymanager.createQuery("Select a From Article a").getResultList();
         Util.transactionCommit();
+        for (Article article:list){
+            if(!article.getAvailable()){
+                list.remove(article);
+            }
+        }
         return list;
     }
 

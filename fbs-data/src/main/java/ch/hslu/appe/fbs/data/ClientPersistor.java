@@ -35,7 +35,6 @@ public class ClientPersistor {
         return client;
     }
 
-
     public Client getByClientNr(int clientNr) { return this.getById(clientNr);}
 
     public FBSFeedback save(Client client) { return Util.save(client); }
@@ -45,7 +44,13 @@ public class ClientPersistor {
      * @return List&gt;Client&lt;
      */
     public List<Client> getList() {
-        return this.entitymanager.createQuery("Select c From Client c").getResultList();
+        List<Client> list = this.entitymanager.createQuery("Select c From Client c").getResultList();
+        for (Client client:list){
+            if(!client.getActive()){
+                list.remove(client);
+            }
+        }
+        return list;
     }
 
     /**
@@ -57,13 +62,14 @@ public class ClientPersistor {
         String regex = "%"+searchText+"%";
         //noinspection JpaQlInspection
         String query = "SELECT c FROM Client c WHERE c.firstname LIKE :regex OR c.surname LIKE :regex OR c.idClients LIKE :regex";
-            return this.entitymanager.createQuery(query)
-                    .setParameter("regex", searchText)
-                    .getResultList();
+        List<Client> list = this.entitymanager.createQuery(query)
+                .setParameter("regex", regex)
+                .getResultList();
+        for (Client client:list){
+            if(!client.getActive()){
+                list.remove(client);
+            }
+        }
+        return list;
     }
-
-    public List<Client> search(String searchText){
-        return this.getList(searchText);
-    }
-
 }
