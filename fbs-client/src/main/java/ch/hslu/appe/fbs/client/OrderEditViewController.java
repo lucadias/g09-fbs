@@ -297,6 +297,15 @@ public class OrderEditViewController implements Initializable {
                 }
                 this.saveDTO();
             }
+            try {  
+                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+            } catch (RemoteException e) {
+                System.out.println("Error in RMI: ");
+                e.printStackTrace();
+            } catch (UserNotLoggedInException ex) {
+                System.out.println("User is not logged in");
+            }
+            this.hash = null;
             this.fillStateChoice();
             this.fillClientChoice();
             this.fillEmployeeChoice();
@@ -494,6 +503,15 @@ public class OrderEditViewController implements Initializable {
         this.orderedArticleList.add(orderedArticle);
         this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
         this.saveDTO();
+        try {  
+            FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+            this.hash = null;
+        } catch (RemoteException e) {
+            System.out.println("Error in RMI: ");
+            e.printStackTrace();
+        } catch (UserNotLoggedInException ex) {
+            System.out.println("User is not logged in");
+        }
         this.refresh();
     }
     
@@ -505,6 +523,15 @@ public class OrderEditViewController implements Initializable {
         this.orderedArticleList.remove(article);
         this.orderDTO.setOrderedArticleDTOList(this.orderedArticleList);
         this.saveDTO();
+        try {  
+            FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);
+            this.hash = null;
+        } catch (RemoteException e) {
+            System.out.println("Error in RMI: ");
+            e.printStackTrace();
+        } catch (UserNotLoggedInException ex) {
+            System.out.println("User is not logged in");
+        }
         this.refresh();
     }
     
@@ -520,7 +547,7 @@ public class OrderEditViewController implements Initializable {
             } else {
                 this.orderDTO = this.orderService.save(SESSION, this.orderDTO, "");
                 this.orderId = this.orderDTO.getId();
-                System.out.println(String.valueOf(this.orderDTO.getId()));
+                System.out.println("saved existing DTO: "+String.valueOf(this.orderDTO.getId()));
             }
         } catch(RemoteException e){
             System.out.println("Error in RMI:");
@@ -532,17 +559,7 @@ public class OrderEditViewController implements Initializable {
         } catch(OrderedArticleNotUpdatedException e) {
             System.out.println("Article not updated");
             System.out.println(e.getNotUpdatedOrderedArticleList());
-        } finally {
-//            try {
-//                FBSFeedback feedback = this.orderService.release(SESSION, this.orderDTO, hash);  
-//                this.hash = null;
-//            } catch(RemoteException e) {
-//                System.out.println("Error in RMI:");
-//                e.printStackTrace();
-//            } catch(UserNotLoggedInException e) {
-//                System.out.println("User is not logged in");
-//            }
-        }
+        } 
     }
     
     /**
