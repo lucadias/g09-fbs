@@ -1,11 +1,6 @@
 package ch.hslu.appe.fbs.business.manager;
 
-import ch.hslu.appe.fbs.business.utils.OrderConverter;
-import ch.hslu.appe.fbs.business.utils.ArticleConverter;
-import ch.hslu.appe.fbs.business.utils.OrderStateConverter;
-import ch.hslu.appe.fbs.business.utils.OrderedArticleConverter;
-import ch.hslu.appe.fbs.business.utils.EmployeeConverter;
-import ch.hslu.appe.fbs.business.utils.ClientConverter;
+import ch.hslu.appe.fbs.business.utils.*;
 
 import ch.hslu.appe.fbs.data.OrderPersistor;
 import ch.hslu.appe.fbs.data.ArticlePersistor;
@@ -84,6 +79,8 @@ public final class OrderManager {
     private SessionManager sessionManager;
     private ArticleManager articleManager;
 
+    private CentralStock centralStock;
+
     /**
      * Returns the singleton instance of the OrderManager.
      * @return single instance
@@ -124,6 +121,8 @@ public final class OrderManager {
 
         this.sessionManager = SessionManager.getInstance();
         this.articleManager = ArticleManager.getInstance();
+
+        this.centralStock = CentralStock.getInstance();
 
         try {
             this.sha256Digest = MessageDigest.getInstance("SHA-256");
@@ -314,13 +313,13 @@ public final class OrderManager {
             FBSFeedback lockCheck = checkLock(orderDTO.getId(), hash);
 
             if (lockCheck == FBSFeedback.SUCCESS || orderDTO.getId() == -1) {
-                System.out.println("sleep for 10 seconds");
+                /*System.out.println("sleep for 10 seconds");
                 try {
                     TimeUnit.SECONDS.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("sleep done");
+                System.out.println("sleep done");*/
 
                 List<OrderedArticleDTO> notSavedOrderedArticleDTOs =
                         saveOrderedArticleDTOList(sessionId, orderDTO.getOrderedArticleDTOList(), orderDTO.getId());
@@ -396,12 +395,28 @@ public final class OrderManager {
                         Article article = articlePersistor.getById(orderedArticleDTO.getArticleDTO().getId());
                         if (article.getInStock() >= amountIncreasedBy) {
                             article.setInStock(article.getInStock() - amountIncreasedBy);
-                            //TODO: implement reorder if under minStock
+
+                            if (article.getInStock() < article.getMinInStock()) {
+                                int amountOfReorder = article.getMinInStock() - article.getInStock();
+                                if (centralStock.getCentralStock(article.getArticlenumber()) > amountOfReorder) {
+                                    centralStock.orderItem(article.getArticlenumber(), amountOfReorder);
+                                    System.out.println("Central Stock: reordered " + amountOfReorder + " amount.");
+                                    //TODO: create new reorder
+                                }
+                            }
                             articlePersistor.save(article);
                         } else {
-                            //TODO: Implement getFromCentralStock
-                            System.out.println("Not enough in stock");
-                            updateOrderedArticle = false;
+                            int centralInStock = centralStock.getCentralStock(article.getArticlenumber());
+                            System.out.println("Central Stock: has " + centralInStock + " amount.");
+                            if (centralStock.getCentralStock(article.getArticlenumber()) >= amountIncreasedBy) {
+                                centralStock.orderItem(article.getArticlenumber(), amountIncreasedBy);
+                                System.out.println("Central Stock: ordered from central stock " + amountIncreasedBy
+                                        + " amount.");
+                                //TODO: create new reorder
+                            } else {
+                                System.out.println("Not enough in stock");
+                                updateOrderedArticle = false;
+                            }
                         }
 
                         FBSFeedback feedbackRelease =
