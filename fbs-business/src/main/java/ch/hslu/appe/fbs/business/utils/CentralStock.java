@@ -83,7 +83,7 @@ public class CentralStock {
        while(Stocknr.length() > 6){
            Stocknr = Stocknr.substring(0, Stocknr.length() - 1);
        }
-        while(Stocknr.length() != 6){
+        while(Stocknr.length() < 6){
             Stocknr = "0" + Stocknr;
         }
 
