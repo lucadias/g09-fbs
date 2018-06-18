@@ -14,7 +14,7 @@ public class EmployeePersistorIT {
 
     @Test
     public void testGetById() {
-        assertEquals(7, persistor.getById(7).getIdEmployees());
+        assertEquals(1, persistor.getById(1).getIdEmployees());
     }
 
     @Test

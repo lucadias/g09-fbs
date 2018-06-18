@@ -35,10 +35,6 @@ public class BillPersistor {
 
 
 
-    public Bill getByBillNr(int billNr) {
-        return this.getById(billNr);
-    }
-
     /**
      * saves or updates an Bill.
      *
