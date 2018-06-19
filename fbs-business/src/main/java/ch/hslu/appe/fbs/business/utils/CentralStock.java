@@ -39,7 +39,7 @@ public class CentralStock {
 
         try {
             count = stock.getItemCount(convertArticleNrtoStockNr(articleNr));
-            System.out.println("Es hat " + count + " Stück an Lager.");
+            //System.out.println("Es hat " + count + " Stück an Lager.");
             return count;
         } catch (StockException e) {
             e.printStackTrace();

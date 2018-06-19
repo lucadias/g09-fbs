@@ -399,7 +399,7 @@ public final class OrderManager {
                             if (article.getInStock() < article.getMinInStock()) {
                                 int amountOfReorder = article.getMinInStock() - article.getInStock();
                                 if (centralStock.getCentralStock(article.getArticlenumber()) > amountOfReorder) {
-                                    centralStock.orderItem(article.getArticlenumber(), amountOfReorder);
+                                    long amountOrdered = centralStock.orderItem(article.getArticlenumber(), amountOfReorder);
                                     System.out.println("Central Stock: reordered " + amountOfReorder + " amount.");
                                     //TODO: create new reorder
                                 }
@@ -409,12 +409,18 @@ public final class OrderManager {
                             int centralInStock = centralStock.getCentralStock(article.getArticlenumber());
                             System.out.println("Central Stock: has " + centralInStock + " amount.");
                             if (centralStock.getCentralStock(article.getArticlenumber()) >= amountIncreasedBy) {
-                                centralStock.orderItem(article.getArticlenumber(), amountIncreasedBy);
-                                System.out.println("Central Stock: ordered from central stock " + amountIncreasedBy
-                                        + " amount.");
+                                long amountOrdered = centralStock.orderItem(article.getArticlenumber(), amountIncreasedBy);
+
+                                if (amountOrdered > 0) {
+                                    System.out.println("Central Stock: ordered from central stock " + amountIncreasedBy
+                                            + " amount.");
+                                } else {
+                                    System.out.println("Not enough in central stock");
+                                    updateOrderedArticle = false;
+                                }
                                 //TODO: create new reorder
                             } else {
-                                System.out.println("Not enough in stock");
+                                System.out.println("Not enough in central stock");
                                 updateOrderedArticle = false;
                             }
                         }
