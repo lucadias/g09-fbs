@@ -29,15 +29,13 @@ public class EmployeeGroupsPersistorIT {
     public void getEmployeeGroupsByEmployeeIdTest(){
 
 
-        assertEquals(4,persistor.getEmployeeGroupsByEmployeeId(7).get(1).getGroupsIdGroups());
+        assertEquals(4,persistor.getEmployeeGroupsByEmployeeId(1).get(0).getGroupsIdGroups());
 
-        assertEquals(3,persistor.getEmployeeGroupsByEmployeeId(7).get(0).getGroupsIdGroups());
+        assertEquals(3,persistor.getEmployeeGroupsByEmployeeId(2).get(0).getGroupsIdGroups());
 
-        assertEquals(3,persistor.getEmployeeGroupsByEmployeeId(8).get(0).getGroupsIdGroups());
+        assertEquals(2,persistor.getEmployeeGroupsByEmployeeId(3).get(0).getGroupsIdGroups());
 
-        assertEquals(2,persistor.getEmployeeGroupsByEmployeeId(9).get(0).getGroupsIdGroups());
-
-        assertEquals(1,persistor.getEmployeeGroupsByEmployeeId(10).get(0).getGroupsIdGroups());
+        assertEquals(1,persistor.getEmployeeGroupsByEmployeeId(4).get(0).getGroupsIdGroups());
 
 
     }
@@ -46,14 +44,13 @@ public class EmployeeGroupsPersistorIT {
     @Test
     public void getEmployeeGroupsByGroupsIdTest(){
 
-        assertEquals(10,persistor.getEmployeeGroupsByGroupId(1).get(0).getEmployeeIdEmployees());
+        assertEquals(4,persistor.getEmployeeGroupsByGroupId(1).get(0).getEmployeeIdEmployees());
 
-        assertEquals(9,persistor.getEmployeeGroupsByGroupId(2).get(0).getEmployeeIdEmployees());
+        assertEquals(3,persistor.getEmployeeGroupsByGroupId(2).get(0).getEmployeeIdEmployees());
 
-        assertEquals(8,persistor.getEmployeeGroupsByGroupId(3).get(1).getEmployeeIdEmployees());
-        assertEquals(7,persistor.getEmployeeGroupsByGroupId(3).get(0).getEmployeeIdEmployees());
+        assertEquals(2,persistor.getEmployeeGroupsByGroupId(3).get(0).getEmployeeIdEmployees());
 
-        assertEquals(7,persistor.getEmployeeGroupsByGroupId(4).get(0).getEmployeeIdEmployees());
+        assertEquals(1,persistor.getEmployeeGroupsByGroupId(4).get(0).getEmployeeIdEmployees());
 
 
 

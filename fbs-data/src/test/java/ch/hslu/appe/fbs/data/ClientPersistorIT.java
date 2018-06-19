@@ -20,19 +20,37 @@ public class ClientPersistorIT {
     @Test
     public void testGetClientFirstname() {
 
-        assertEquals("Peter",persistor.getById(1).getFirstname());
+        assertEquals("Bruce",persistor.getById(1).getFirstname());
     }
 
+    @Test
+    public void testGetByID() {
+
+        assertEquals(1,persistor.getById(1).getIdClients());
+    }
 
     @Test
     public void testGetClientSurname() {
 
-        assertEquals("Parker",persistor.getById(1).getSurname());
+        assertEquals("Banner",persistor.getById(1).getSurname());
     }
+
+    @Test
+    public void testGetListRegex(){
+        assertEquals("Parker",persistor.getList("Parker").get(0).getSurname());
+    }
+
+    @Test
+    public void testGetList(){
+
+        assertEquals("Banner",persistor.getList().get(0).getSurname());
+        assertEquals("Parker",persistor.getList().get(1).getSurname());
+        assertEquals("Rogers",persistor.getList().get(2).getSurname());
+     }
 
     @Test
     public void testGetClientAddress() {
 
-        assertEquals("Musterstrasse 123",persistor.getById(1).getAddress());
+        assertEquals("Avengerweg 3",persistor.getById(1).getAddress());
     }
 }

@@ -61,7 +61,7 @@ public class ClientPersistor {
     public List<Client> getList(String searchText){
         String regex = "%"+searchText+"%";
         //noinspection JpaQlInspection
-        String query = "SELECT c FROM Client c WHERE c.firstname LIKE :regex OR c.surname LIKE :regex OR c.idClients LIKE :regex";
+        String query = "SELECT c FROM Client c WHERE c.firstname LIKE :regex OR c.surname LIKE :regex OR CAST(c.idClients as CHAR(50)) LIKE :regex";
         List<Client> list = this.entitymanager.createQuery(query)
                 .setParameter("regex", regex)
                 .getResultList();
